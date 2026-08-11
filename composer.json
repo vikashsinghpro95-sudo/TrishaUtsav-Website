@@ -1,0 +1,17 @@
+{
+    "name": "festivetreat/festive-treat",
+    "description": "FestiveTreat E-Commerce REST API",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "FestiveTreat\\Includes\\": "includes/",
+            "FestiveTreat\\Models\\": "models/",
+            "FestiveTreat\\Controllers\\": "controllers/",
+            "FestiveTreat\\Middleware\\": "middleware/"
+        }
+    }
+}

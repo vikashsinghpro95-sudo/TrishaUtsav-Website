@@ -1,0 +1,393 @@
+/**
+ * Admin Panel - White & Red Theme
+ * Optimized for maximum visibility, readability and a premium look.
+ */
+
+/* ============================================================
+   1. FORCE LIGHT MODE (Nuclear Override)
+   Prevents dark: Tailwind variants from rendering even if
+   the 'dark' class is mistakenly added to <html>.
+   ============================================================ */
+html, html.dark {
+    color-scheme: light !important;
+}
+html body,
+html.dark body {
+    background-color: #f8f9fb !important;
+    color: #1a202c !important;
+}
+html.dark #app-sidebar,
+html.dark aside {
+    background-color: #ffffff !important;
+    border-color: #fecaca !important;
+}
+html.dark header {
+    background-color: #ffffff !important;
+    border-color: #fecaca !important;
+}
+html.dark .flex-1.flex.flex-col,
+html.dark [class*="dark:bg-slate-9"],
+html.dark [class*="dark:bg-slate-8"] {
+    background-color: #f8f9fb !important;
+}
+html.dark [class*="dark:bg-slate"],
+html.dark .bg-slate-850 {
+    background-color: #ffffff !important;
+}
+html.dark [class*="dark:border-slate"] {
+    border-color: #fecaca !important;
+}
+html.dark .admin-nav-link {
+    color: #374151 !important;
+    background-color: transparent !important;
+}
+html.dark .admin-nav-link:hover {
+    background-color: #fff1f2 !important;
+    color: #dc2626 !important;
+}
+html.dark [class*="dark:text-white"],
+html.dark [class*="dark:text-slate-2"],
+html.dark [class*="dark:text-slate-3"] {
+    color: #1a202c !important;
+}
+html.dark [class*="dark:text-slate-4"],
+html.dark [class*="dark:text-slate-5"] {
+    color: #6b7280 !important;
+}
+
+/* ============================================================
+   2. GLOBAL TYPOGRAPHY & BASE
+   ============================================================ */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1a202c;
+    background-color: #f8f9fb;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #111827;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+p, span, label {
+    color: #374151;
+}
+
+/* ============================================================
+   3. SIDEBAR STYLING
+   ============================================================ */
+#app-sidebar {
+    background-color: #ffffff !important;
+    border-right: 1px solid #fecaca !important;
+    box-shadow: 2px 0 8px rgba(220, 38, 38, 0.04);
+}
+
+/* Sidebar section titles */
+.sidebar-section-title {
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    color: #dc2626 !important;
+    text-transform: uppercase !important;
+    padding-top: 20px !important;
+    padding-bottom: 4px !important;
+    opacity: 0.8;
+}
+
+/* Nav links */
+.admin-nav-link {
+    color: #374151 !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 1px;
+    transition: all 0.15s ease !important;
+}
+.admin-nav-link:hover {
+    background-color: #fff1f2 !important;
+    color: #dc2626 !important;
+}
+.admin-nav-link:hover i {
+    color: #dc2626 !important;
+}
+
+/* Active nav link */
+.admin-nav-link.bg-primary-50,
+.admin-nav-link[class*="bg-primary"] {
+    background-color: #fee2e2 !important;
+    color: #b91c1c !important;
+    font-weight: 600 !important;
+}
+
+/* Sidebar nav icons */
+.admin-nav-link i {
+    font-size: 17px !important;
+    color: #9ca3af;
+    transition: color 0.15s ease;
+    flex-shrink: 0;
+}
+
+/* Sidebar logo area */
+#app-sidebar .h-16 {
+    border-bottom: 1px solid #fecaca !important;
+    background-color: #ffffff;
+}
+
+/* Sidebar logo brand name */
+#app-sidebar .sidebar-logo span {
+    color: #111827 !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em;
+}
+
+/* Sidebar logo icon */
+#app-sidebar .bg-primary-600 {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+}
+
+/* Admin user profile at bottom of sidebar */
+#app-sidebar #admin-profile-name {
+    color: #111827 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+}
+#app-sidebar .border-t {
+    border-color: #fecaca !important;
+    background-color: #fff8f8;
+}
+
+/* ============================================================
+   4. TOP HEADER BAR
+   ============================================================ */
+header {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #fecaca !important;
+    box-shadow: 0 1px 4px rgba(220, 38, 38, 0.06);
+}
+
+#admin-page-title {
+    color: #111827 !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   5. MAIN CONTENT AREA
+   ============================================================ */
+main {
+    background-color: #f8f9fb !important;
+}
+
+/* Cards (white panels) */
+.bg-white {
+    background-color: #ffffff !important;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Table headers */
+thead th,
+.text-xs.text-gray-500,
+.text-xs.font-medium.text-gray-500 {
+    color: #374151 !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    background-color: #f9fafb;
+}
+
+/* Table row text */
+tbody td {
+    color: #1f2937 !important;
+    font-size: 13.5px !important;
+}
+
+/* Table striping */
+tbody tr:hover {
+    background-color: #fff8f8 !important;
+}
+
+/* ============================================================
+   6. FORM ELEMENTS
+   ============================================================ */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+select,
+textarea {
+    background-color: #ffffff !important;
+    border: 1.5px solid #e5e7eb !important;
+    color: #111827 !important;
+    font-size: 13.5px !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+
+label {
+    color: #374151 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase !important;
+}
+
+/* ============================================================
+   7. BUTTONS
+   ============================================================ */
+button[class*="bg-primary"],
+a[class*="bg-primary"],
+.btn-primary {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+button[class*="bg-primary"]:hover,
+a[class*="bg-primary"]:hover {
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   8. BADGES & STATUS PILLS
+   ============================================================ */
+.text-green-600, .text-emerald-600 { color: #059669 !important; }
+.text-red-600 { color: #dc2626 !important; }
+.text-amber-600, .text-yellow-600 { color: #d97706 !important; }
+.text-blue-600 { color: #2563eb !important; }
+.bg-green-50 { background-color: #f0fdf4 !important; }
+.bg-red-50 { background-color: #fff1f2 !important; }
+.bg-amber-50, .bg-yellow-50 { background-color: #fffbeb !important; }
+
+/* ============================================================
+   9. SCROLLBAR STYLING (Red accent)
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #fca5a5;
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #dc2626;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* ============================================================
+   10. LOADER & SKELETON
+   ============================================================ */
+.loader-spinner {
+    border: 2px solid rgba(220, 38, 38, 0.2);
+    border-radius: 50%;
+    border-top: 2px solid #dc2626;
+    width: 1rem;
+    height: 1rem;
+    animation: spin 0.8s linear infinite;
+}
+
+.loader-spinner-dark {
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 50%;
+    border-top: 2px solid #dc2626;
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-loader {
+    background-color: #f1f5f9;
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.6) 20%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: skeleton-shimmer 1.5s infinite linear;
+    border-radius: 6px;
+}
+
+/* ============================================================
+   11. MODAL UTILITY
+   ============================================================ */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Global focus ring reset */
+input:focus, textarea:focus, select:focus, button:focus {
+    outline: none;
+}
+
+/* ============================================================
+   12. SECTION / CARD HEADERS
+   ============================================================ */
+.border-b.border-gray-100,
+.border-b.border-slate-100 {
+    border-color: #f1f5f9 !important;
+}
+
+.text-sm.font-bold.text-gray-700,
+.text-sm.font-bold.text-slate-700 {
+    color: #111827 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.03em;
+}
+
+/* KPI card label */
+.text-\[10px\].font-bold.text-gray-400,
+[class*="text-gray-400"] {
+    color: #9ca3af !important;
+}
+
+/* KPI card value */
+.text-xl.font-black.text-gray-800 {
+    color: #111827 !important;
+    font-size: 22px !important;
+}

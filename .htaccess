@@ -1,0 +1,37 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Block ALL metadata/dotfiles at the web root
+    <FilesMatch "^(composer\.(json|lock)|\.env(\.\w+)?|\.git|README|LICENSE|package\.json|check_dummy\.php)$">
+        Require all denied
+    </FilesMatch>
+
+    # Route /api/... requests to root index.php
+    RewriteRule ^api(/.*)?$ index.php [QSA,L]
+
+    # Don't touch /admin/... if it exists
+    RewriteCond %{REQUEST_URI} ^/admin/ [NC]
+    RewriteRule ^ - [L]
+
+    # Don't touch /uploads/... if it exists
+    RewriteCond %{REQUEST_URI} ^/uploads/ [NC]
+    RewriteRule ^ - [L]
+
+    # If root request / -> serve public/index.php
+    RewriteRule ^$ public/index.php [L]
+
+    # If request is inside public/ already, don't rewrite
+    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    RewriteRule ^ - [L]
+
+    # If requested file exists in public/, rewrite to public/
+    RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Fallback for clean URLs in public storefront
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [QSA,L]
+</IfModule>

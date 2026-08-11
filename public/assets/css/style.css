@@ -1,0 +1,937 @@
+/**
+ * TrishaUtsav — Custom Styles & Mobile-First Design System
+ * =========================================================
+ */
+
+/* =============================================
+   0. CSS Custom Properties (Design Tokens)
+   ============================================= */
+:root {
+    --tu-crimson: #990024;
+    --tu-crimson-dark: #7a001c;
+    --tu-ivory: #fffdf7;
+    --tu-gold: #f59e0b;
+    --tu-gold-light: #fde047;
+    --tu-ink: #12090c;
+    --tu-radius-sm: 0.75rem;
+    --tu-radius-md: 1rem;
+    --tu-radius-lg: 1.5rem;
+    --tu-radius-xl: 2rem;
+    --tu-shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --tu-shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --tu-shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+    --tu-sticky-bottom-height: 72px;
+    --tu-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Global Font Rules: Fraunces for Headings / Display, Plus Jakarta Sans for Body */
+body, button, input, select, textarea, .font-sans {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-display, h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+}
+
+/* =============================================
+   1. Toast Container & Notification Styles
+   ============================================= */
+#toast-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: 24rem;
+    width: calc(100% - 3rem);
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(-1rem);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-success { background-color: #10b981; border-left: 4px solid #047857; }
+.toast-error   { background-color: #ef4444; border-left: 4px solid #b91c1c; }
+.toast-info    { background-color: #3b82f6; border-left: 4px solid #1d4ed8; }
+.toast-warning { background-color: #f59e0b; border-left: 4px solid #b45309; }
+
+/* =============================================
+   2. Spinner and Loaders
+   ============================================= */
+.loader-spinner {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top: 3px solid #ffffff;
+    width: 1.25rem;
+    height: 1.25rem;
+    animation: spin 0.8s linear infinite;
+}
+
+.loader-spinner-dark {
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top: 3px solid #1f2937;
+    width: 2rem;
+    height: 2rem;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* =============================================
+   3. Glassmorphism Utility
+   ============================================= */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-panel-dark {
+    background: rgba(17, 24, 39, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =============================================
+   4. Card & Image Optimization
+   ============================================= */
+.card-zoom:hover img { transform: scale(1.06); }
+.card-zoom img { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+img {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px 300px;
+}
+
+.img-optimized {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* =============================================
+   5. Fluid Typography
+   ============================================= */
+.text-fluid-xs   { font-size: clamp(0.625rem, 0.55rem + 0.3vw, 0.75rem); }
+.text-fluid-sm   { font-size: clamp(0.75rem,  0.65rem + 0.4vw, 0.875rem); }
+.text-fluid-base { font-size: clamp(0.875rem, 0.8rem  + 0.4vw, 1rem); }
+.text-fluid-lg   { font-size: clamp(1.125rem, 1rem    + 0.5vw, 1.5rem); }
+.text-fluid-xl   { font-size: clamp(1.375rem, 1.1rem  + 0.8vw, 2rem); }
+.text-fluid-2xl  { font-size: clamp(1.75rem,  1.4rem  + 1.2vw, 2.5rem); }
+
+/* =============================================
+   6. Touch Target Enforcement
+   ============================================= */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =============================================
+   7. Product Page — Swipe Gallery
+   ============================================= */
+.pdp-gallery-swipe {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+}
+
+.pdp-gallery-swipe::-webkit-scrollbar {
+    display: none;
+}
+
+.pdp-gallery-slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.pdp-gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Gallery dot indicators */
+.pdp-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0;
+}
+
+.pdp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d1d5db;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pdp-dot.active {
+    background: var(--tu-crimson);
+    width: 20px;
+    border-radius: 4px;
+}
+
+/* Thumbnail strip (tablet/desktop) */
+.pdp-thumbs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 4px 0;
+}
+
+.pdp-thumbs::-webkit-scrollbar { display: none; }
+
+.pdp-thumb {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--tu-radius-sm);
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    background: #f9fafb;
+}
+
+.pdp-thumb.active,
+.pdp-thumb:hover {
+    border-color: var(--tu-crimson);
+    transform: scale(1.05);
+}
+
+.pdp-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .pdp-thumb {
+        flex: 0 0 72px;
+        width: 72px;
+        height: 72px;
+    }
+}
+
+/* =============================================
+   8. Product Page — Accordion Sections
+   ============================================= */
+.pdp-accordion {
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.pdp-accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(0.875rem, 0.8rem + 0.3vw, 1.05rem);
+    color: var(--tu-ink);
+    text-align: left;
+    transition: color 0.2s;
+}
+
+.pdp-accordion-trigger:hover {
+    color: var(--tu-crimson);
+}
+
+.pdp-accordion-icon {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 12px;
+}
+
+.pdp-accordion.open .pdp-accordion-icon {
+    transform: rotate(180deg);
+    color: var(--tu-crimson);
+}
+
+.pdp-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    padding: 0;
+}
+
+.pdp-accordion.open .pdp-accordion-body {
+    max-height: 600px;
+    padding-bottom: 16px;
+}
+
+/* =============================================
+   9. Sticky Mobile CTA Bars (Product, Cart, Checkout)
+   ============================================= */
+.sticky-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: rgba(255, 253, 247, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(245, 158, 11, 0.25);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+    padding-bottom: calc(12px + var(--tu-safe-bottom));
+    transform: translateY(0);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+.sticky-cta-bar.hidden-bar {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Only show sticky bars on mobile */
+@media (min-width: 768px) {
+    .sticky-cta-bar.mobile-only {
+        display: none !important;
+    }
+}
+
+/* Add bottom padding to body when sticky bar is visible */
+body.has-sticky-bar {
+    padding-bottom: calc(var(--tu-sticky-bottom-height) + var(--tu-safe-bottom));
+}
+
+@media (min-width: 768px) {
+    body.has-sticky-bar-mobile-only {
+        padding-bottom: 0;
+    }
+}
+
+/* =============================================
+   10. Cart Page — Compact Item Cards
+   ============================================= */
+.cart-item-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    position: relative;
+    box-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+}
+
+.cart-item-card:hover {
+    border-color: rgba(153, 0, 36, 0.3);
+    box-shadow: 0 10px 30px -10px rgba(153, 0, 36, 0.12);
+    transform: translateY(-1px);
+}
+
+.cart-item-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 1rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+}
+@media (min-width: 640px) {
+    .cart-item-img {
+        width: 76px;
+        height: 76px;
+    }
+}
+
+.cart-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cart-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(0,0,0,0.06);
+}
+
+.coupon-input-wrap {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.coupon-input-wrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 700;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.coupon-input-wrap input:focus {
+    border-color: var(--tu-crimson);
+}
+
+.coupon-input-wrap button {
+    padding: 10px 20px;
+    background: var(--tu-crimson);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.coupon-input-wrap button:hover {
+    background: #7a001c;
+}
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+}
+
+.cart-item-remove:hover {
+    background: #fee2e2;
+    transform: scale(1.1);
+}
+
+@media (min-width: 480px) {
+    .cart-item-img {
+        width: 80px;
+        height: 80px;
+    }
+    .qty-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* =============================================
+   11. Cart & Checkout — Order Summary Toggle (Mobile)
+   ============================================= */
+.order-summary-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: var(--tu-radius-lg);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--tu-ink);
+    transition: background 0.2s;
+}
+
+.order-summary-toggle:hover {
+    background: #fefce8;
+}
+
+.order-summary-toggle .toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.7rem;
+    color: #9ca3af;
+}
+
+.order-summary-toggle.open .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.order-summary-collapsible {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-summary-collapsible.expanded {
+    max-height: 800px;
+}
+
+@media (min-width: 1024px) {
+    .order-summary-toggle {
+        display: none;
+    }
+    .order-summary-collapsible {
+        max-height: none !important;
+        overflow: visible;
+    }
+}
+
+/* =============================================
+   12. Checkout — Form Inputs Mobile-First
+   ============================================= */
+.checkout-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: var(--tu-radius-md);
+    font-size: 16px; /* Prevents iOS zoom */
+    font-weight: 500;
+    color: var(--tu-ink);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.checkout-input:focus {
+    border-color: var(--tu-crimson);
+    box-shadow: 0 0 0 3px rgba(153, 0, 36, 0.08);
+}
+
+.checkout-input.input-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+}
+
+.checkout-input.input-success {
+    border-color: #10b981;
+}
+
+.checkout-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+.checkout-error-msg {
+    font-size: 0.7rem;
+    color: #ef4444;
+    font-weight: 600;
+    margin-top: 4px;
+    display: none;
+}
+
+.checkout-error-msg.visible {
+    display: block;
+}
+
+/* =============================================
+   13. Checkout — Payment Method Cards
+   ============================================= */
+.payment-card {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-radius: var(--tu-radius-lg);
+    border: 2px solid #f3f4f6;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    gap: 12px;
+    min-height: 64px;
+}
+
+.payment-card:hover {
+    background: #fff;
+    border-color: #d1d5db;
+    box-shadow: var(--tu-shadow-sm);
+}
+
+.payment-card.selected {
+    border-color: var(--tu-crimson);
+    background: rgba(153, 0, 36, 0.03);
+    box-shadow: 0 0 0 3px rgba(153, 0, 36, 0.06);
+}
+
+.payment-radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.payment-card.selected .payment-radio {
+    border-color: var(--tu-crimson);
+    background: var(--tu-crimson);
+}
+
+.payment-radio-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.payment-card.selected .payment-radio-dot {
+    opacity: 1;
+}
+
+.payment-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--tu-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.15rem;
+}
+
+/* =============================================
+   14. Checkout — Address Radio Cards
+   ============================================= */
+.address-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border-radius: var(--tu-radius-lg);
+    border: 2px solid #f3f4f6;
+    background: #fafafa;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.address-card:hover {
+    background: #fff;
+    border-color: #e5e7eb;
+}
+
+.address-card.selected {
+    border-color: var(--tu-crimson);
+    background: rgba(153, 0, 36, 0.02);
+    box-shadow: 0 0 0 3px rgba(153, 0, 36, 0.06);
+}
+
+/* =============================================
+   15. Related Products — Horizontal Carousel
+   ============================================= */
+.related-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    padding: 4px 0 8px;
+}
+
+.related-carousel::-webkit-scrollbar { display: none; }
+
+.related-carousel-card {
+    flex: 0 0 calc(45% - 6px);
+    scroll-snap-align: start;
+    min-width: 150px;
+    max-width: 220px;
+}
+
+@media (min-width: 480px) {
+    .related-carousel-card {
+        flex: 0 0 calc(38% - 8px);
+    }
+}
+
+@media (min-width: 768px) {
+    .related-carousel-card {
+        flex: 0 0 calc(28% - 10px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .related-carousel {
+        gap: 16px;
+    }
+    .related-carousel-card {
+        flex: 0 0 calc(22% - 12px);
+        max-width: 260px;
+    }
+}
+
+@media (min-width: 1280px) {
+    .related-carousel-card {
+        flex: 0 0 calc(18% - 14px);
+    }
+}
+
+/* =============================================
+   16. Coupon Input
+   ============================================= */
+.coupon-input-wrap {
+    display: flex;
+    gap: 8px;
+}
+
+.coupon-input-wrap input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--tu-ink);
+    outline: none;
+    transition: border-color 0.25s;
+}
+
+.coupon-input-wrap input:focus {
+    border-color: var(--tu-crimson);
+}
+
+.coupon-input-wrap button {
+    padding: 10px 20px;
+    border-radius: 9999px;
+    border: none;
+    background: var(--tu-crimson);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.coupon-input-wrap button:hover {
+    background: var(--tu-crimson-dark);
+}
+
+/* =============================================
+   17. Variant Pill Buttons
+   ============================================= */
+.variant-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    min-height: 44px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.variant-pill:hover {
+    border-color: var(--tu-crimson);
+    color: var(--tu-crimson);
+}
+
+.variant-pill.selected {
+    background: var(--tu-crimson);
+    border-color: var(--tu-crimson);
+    color: #fff;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(153, 0, 36, 0.2);
+}
+
+/* =============================================
+   18. Utility: Fade-in animation
+   ============================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out both;
+}
+
+/* Stagger children */
+.stagger-children > * {
+    animation: fadeInUp 0.35s ease-out both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* =============================================
+   19. CTA Button Styles (Reusable)
+   ============================================= */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 9999px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, var(--tu-crimson), var(--tu-crimson-dark));
+    color: var(--tu-ivory);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(153, 0, 36, 0.25);
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(153, 0, 36, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 9999px;
+    border: 2px solid var(--tu-crimson);
+    background: #fff;
+    color: var(--tu-crimson);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background: rgba(153, 0, 36, 0.04);
+}
+
+.btn-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: #d1d5db;
+    color: #9ca3af;
+}
+
+.btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 24px;
+    border-radius: 9999px;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    background: var(--tu-gold);
+    color: var(--tu-ink);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: none;
+}
+
+.btn-gold:hover {
+    background: var(--tu-gold-light);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.btn-gold:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #d1d5db;
+    box-shadow: none;
+}

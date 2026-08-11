@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block ALL metadata/dotfiles in public folder
+    <FilesMatch "^(composer\.(json|lock)|\.env(\.\w+)?|\.git|README|LICENSE|package\.json|check_dummy\.php)$">
+        Require all denied
+    </FilesMatch>
+
+    # 1. Route API requests to the bridge script
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^api/(.*)$ api.php [QSA,L]
+
+    # 2. Allow direct access to existing files and directories (css, js, images)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # 3. Map clean path to matching PHP file (e.g. /shop -> shop.php)
+    RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+    RewriteRule ^([^/]+)$ $1.php [QSA,L]
+
+    # 4. Fallback missing routes to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
