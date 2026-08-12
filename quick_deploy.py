@@ -98,6 +98,7 @@ FILES = {
     "controllers/AdminOrderController.php":  "controllers/AdminOrderController.php",
     "controllers/OrderController.php":       "controllers/OrderController.php",
     "update_schema_delhivery.php":          "update_schema_delhivery.php",
+    "public/update_schema_delhivery.php":   "public/update_schema_delhivery.php",
 }
 
 def ensure_remote_dir(ftp, remote_dir):

@@ -89,45 +89,119 @@ class Order {
      * @param array $data Order details
      * @return int Created order ID
      */
+    /**
+     * Ensure optional Delhivery tracking columns exist in orders table
+     */
+    private function ensureDelhiveryColumns(): void {
+        static $checked = false;
+        if ($checked) return;
+        $checked = true;
+
+        try {
+            $cols = [
+                'tracking_id' => "VARCHAR(50) DEFAULT NULL",
+                'tracking_status' => "VARCHAR(50) DEFAULT NULL",
+                'delhivery_pincode_verified' => "TINYINT(1) DEFAULT 0",
+                'estimated_delivery_days' => "VARCHAR(50) DEFAULT NULL"
+            ];
+            foreach ($cols as $col => $def) {
+                try {
+                    $chk = $this->db->query("SHOW COLUMNS FROM orders LIKE '$col'");
+                    if (!$chk || $chk->rowCount() === 0) {
+                        $this->db->exec("ALTER TABLE orders ADD COLUMN $col $def");
+                    }
+                } catch (Throwable $t) {}
+            }
+        } catch (Throwable $e) {}
+    }
+
+    /**
+     * Create order record
+     *
+     * @param array $data Order details
+     * @return int Created order ID
+     */
     public function create(array $data): int {
-        $stmt = $this->db->prepare("
-            INSERT INTO orders (
-                order_number, user_id, guest_email, shipping_address_id, billing_address_id,
-                subtotal, tax_amount, shipping_charge, discount, coupon_code, total,
-                payment_method, payment_status, order_status, notes,
-                razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at,
-                tracking_id, tracking_status, delhivery_pincode_verified, estimated_delivery_days
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ");
+        $this->ensureDelhiveryColumns();
 
-        $stmt->execute([
-            $data['order_number'],
-            $data['user_id'] ?? null,
-            $data['guest_email'] ?? null,
-            $data['shipping_address_id'],
-            $data['billing_address_id'] ?? $data['shipping_address_id'],
-            $data['subtotal'],
-            $data['tax_amount'] ?? 0.00,
-            $data['shipping_charge'] ?? 0.00,
-            $data['discount'] ?? 0.00,
-            $data['coupon_code'] ?? null,
-            $data['total'],
-            $data['payment_method'],
-            $data['payment_status'] ?? 'pending',
-            $data['order_status'] ?? 'pending',
-            $data['notes'] ?? null,
-            $data['razorpay_order_id'] ?? null,
-            $data['razorpay_payment_id'] ?? null,
-            $data['razorpay_signature'] ?? null,
-            $data['attempts'] ?? 0,
-            $data['expires_at'] ?? null,
-            $data['tracking_id'] ?? null,
-            $data['tracking_status'] ?? null,
-            $data['delhivery_pincode_verified'] ?? 0,
-            $data['estimated_delivery_days'] ?? null
-        ]);
+        try {
+            $stmt = $this->db->prepare("
+                INSERT INTO orders (
+                    order_number, user_id, guest_email, shipping_address_id, billing_address_id,
+                    subtotal, tax_amount, shipping_charge, discount, coupon_code, total,
+                    payment_method, payment_status, order_status, notes,
+                    razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at,
+                    tracking_id, tracking_status, delhivery_pincode_verified, estimated_delivery_days
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
 
-        return (int)$this->db->lastInsertId();
+            $stmt->execute([
+                $data['order_number'],
+                $data['user_id'] ?? null,
+                $data['guest_email'] ?? null,
+                $data['shipping_address_id'],
+                $data['billing_address_id'] ?? $data['shipping_address_id'],
+                $data['subtotal'],
+                $data['tax_amount'] ?? 0.00,
+                $data['shipping_charge'] ?? 0.00,
+                $data['discount'] ?? 0.00,
+                $data['coupon_code'] ?? null,
+                $data['total'],
+                $data['payment_method'],
+                $data['payment_status'] ?? 'pending',
+                $data['order_status'] ?? 'pending',
+                $data['notes'] ?? null,
+                $data['razorpay_order_id'] ?? null,
+                $data['razorpay_payment_id'] ?? null,
+                $data['razorpay_signature'] ?? null,
+                $data['attempts'] ?? 0,
+                $data['expires_at'] ?? null,
+                $data['tracking_id'] ?? null,
+                $data['tracking_status'] ?? null,
+                $data['delhivery_pincode_verified'] ?? 0,
+                $data['estimated_delivery_days'] ?? null
+            ]);
+
+            return (int)$this->db->lastInsertId();
+        } catch (PDOException $e) {
+            // Fallback to basic INSERT if schema migration hasn't taken effect
+            if (strpos($e->getMessage(), '1054') !== false || strpos($e->getMessage(), 'Unknown column') !== false) {
+                $stmtFallback = $this->db->prepare("
+                    INSERT INTO orders (
+                        order_number, user_id, guest_email, shipping_address_id, billing_address_id,
+                        subtotal, tax_amount, shipping_charge, discount, coupon_code, total,
+                        payment_method, payment_status, order_status, notes,
+                        razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ");
+
+                $stmtFallback->execute([
+                    $data['order_number'],
+                    $data['user_id'] ?? null,
+                    $data['guest_email'] ?? null,
+                    $data['shipping_address_id'],
+                    $data['billing_address_id'] ?? $data['shipping_address_id'],
+                    $data['subtotal'],
+                    $data['tax_amount'] ?? 0.00,
+                    $data['shipping_charge'] ?? 0.00,
+                    $data['discount'] ?? 0.00,
+                    $data['coupon_code'] ?? null,
+                    $data['total'],
+                    $data['payment_method'],
+                    $data['payment_status'] ?? 'pending',
+                    $data['order_status'] ?? 'pending',
+                    $data['notes'] ?? null,
+                    $data['razorpay_order_id'] ?? null,
+                    $data['razorpay_payment_id'] ?? null,
+                    $data['razorpay_signature'] ?? null,
+                    $data['attempts'] ?? 0,
+                    $data['expires_at'] ?? null
+                ]);
+
+                return (int)$this->db->lastInsertId();
+            }
+            throw $e;
+        }
     }
 
     /**
