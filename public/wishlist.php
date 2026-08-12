@@ -127,19 +127,8 @@ const WishlistPage = {
             const mrp = prod.mrp ? parseFloat(prod.mrp).toFixed(2) : null;
             const inStock = parseInt(prod.stock_quantity) > 0;
             
-            // Calculate discount percentage
-            let discountBadge = '';
-            if (mrp && parseFloat(mrp) > parseFloat(price)) {
-                const pct = Math.round(((parseFloat(mrp) - parseFloat(price)) / parseFloat(mrp)) * 100);
-                if (pct > 0) {
-                    discountBadge = `<span class="absolute top-2.5 left-2.5 z-10 bg-[#990024] text-white text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">${pct}% OFF</span>`;
-                }
-            }
-
             return `
                 <div class="group bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden relative">
-                    
-                    ${discountBadge}
 
                     <!-- Remove Button -->
                     <button type="button" 

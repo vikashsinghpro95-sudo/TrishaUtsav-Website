@@ -612,11 +612,6 @@ include_once __DIR__ . '/includes/header.php';
                                     <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#990024] text-[#fffdf7] text-[8px] sm:text-[9px] font-black px-2 py-0.5 sm:py-1 rounded-full uppercase tracking-wider shadow-md flex items-center z-10">
                                         <i class="fas fa-fire mr-1 text-white"></i> HOT
                                     </span>
-                                    ${discount > 0 ? `
-                                        <span class="absolute top-2 sm:top-3 right-2 sm:right-3 bg-[#f59e0b] text-[#12090c] text-[8px] sm:text-[9px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-sm z-10">
-                                            -${discount}%
-                                        </span>
-                                    ` : ''}
                                 </a>
 
                                 <div class="p-3 sm:p-5 flex flex-col flex-grow">
@@ -717,11 +712,6 @@ include_once __DIR__ . '/includes/header.php';
                                     <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#f59e0b] text-[#12090c] text-[8px] sm:text-[9px] font-black px-2 py-0.5 sm:py-1 rounded-full uppercase tracking-wider shadow-md flex items-center z-10">
                                         <i class="fas fa-star mr-1 text-[#990024]"></i> MUST BUY
                                     </span>
-                                    ${discount > 0 ? `
-                                        <span class="absolute top-2 sm:top-3 right-2 sm:right-3 bg-[#990024] text-[#fffdf7] text-[8px] sm:text-[9px] font-black px-1.5 sm:px-2 py-0.5 rounded-full shadow-sm z-10">
-                                            -${discount}%
-                                        </span>
-                                    ` : ''}
                                 </a>
                                 <div class="p-3 sm:p-5 flex flex-col flex-grow">
                                     <h3 class="font-display text-xs sm:text-sm font-bold text-[#12090c] line-clamp-2 hover:text-[#990024] transition flex-grow">

@@ -280,13 +280,8 @@ const Shop = {
                                 ${imgUrl2 ? `
                                     <img src="${imgUrl2}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out">
                                 ` : ''}
-                                ${discount > 0 ? `
-                                    <span class="absolute top-3 left-3 bg-[#990024] text-[#fffdf7] text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md z-10">
-                                        -${discount}% OFF
-                                    </span>
-                                ` : ''}
                                 ${parseInt(prod.stock_quantity) <= 0 ? `
-                                    <span class="absolute top-3 right-3 bg-gray-900/90 text-white font-black text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md z-10">
+                                    <span class="absolute top-3 left-3 bg-gray-900/90 text-white font-black text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md z-10">
                                         Out of Stock
                                     </span>
                                 ` : ''}

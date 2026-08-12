@@ -190,7 +190,15 @@ const ProductPage = {
                 <div class="pdp-gallery">
                     <div class="pdp-main-swipe relative" id="pdp-gallery">
                         ${slidesHtml}
-                        ${discount > 0 ? `<span class="absolute top-4 left-4 bg-[#f59e0b] text-[#12090c] text-xs font-black px-4 py-1.5 rounded-full shadow-lg z-10 uppercase tracking-widest">-${discount}% OFF</span>` : ''}
+                        <button type="button" 
+                            id="pdp-wishlist-btn" 
+                            data-wishlist-id="${prod.id}" 
+                            onclick="WishlistManager.toggle(${prod.id}, this, event)" 
+                            aria-label="${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'Remove from wishlist' : 'Add to wishlist'}" 
+                            title="${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'Remove from wishlist' : 'Add to wishlist'}" 
+                            class="absolute top-4 right-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-gray-100 flex items-center justify-center text-base sm:text-lg hover:scale-110 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#990024]/50">
+                            <i class="${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'fas fa-heart text-[#990024]' : 'far fa-heart text-gray-700 hover:text-[#990024]'}"></i>
+                        </button>
                     </div>
                     ${dotsHtml}
                 </div>
@@ -229,7 +237,6 @@ const ProductPage = {
                     <span id="pdp-price" class="font-display text-4xl sm:text-5xl font-black text-[#990024] tracking-tight">${Utils.formatCurrency(basePrice)}</span>
                     <div class="flex flex-col">
                         ${mrp ? `<span class="text-sm text-gray-400 line-through font-bold">${Utils.formatCurrency(mrp)}</span>` : ''}
-                        ${discount > 0 ? `<span class="text-[#f59e0b] text-xs font-black uppercase tracking-wider mt-0.5">SAVE ${discount}%</span>` : ''}
                     </div>
                 </div>
 
@@ -251,25 +258,14 @@ const ProductPage = {
                         </div>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row items-center gap-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full">
-                            <button id="btn-add-to-cart" onclick="ProductPage.addToCart(false)" ${isOutOfStock ? 'disabled' : ''} class="btn-secondary-massive">
-                                <i class="fas fa-shopping-bag text-lg"></i>
-                                <span>ADD TO CART</span>
-                            </button>
-                            <button id="btn-buy-now" onclick="ProductPage.addToCart(true)" ${isOutOfStock ? 'disabled' : ''} class="btn-primary-massive">
-                                <i class="fas fa-bolt text-lg text-[#f59e0b]"></i>
-                                <span>BUY NOW</span>
-                            </button>
-                        </div>
-                        
-                        <button type="button" 
-                            id="pdp-wishlist-btn" 
-                            data-wishlist-id="${prod.id}" 
-                            onclick="WishlistManager.toggle(${prod.id}, this, event)" 
-                            class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full border-2 ${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'border-[#990024] text-[#990024] bg-red-50/50 hover:bg-red-100/50' : 'border-gray-300 hover:border-[#990024] text-gray-700 hover:text-[#990024] bg-white'} font-bold text-xs uppercase tracking-wider transition duration-300 shadow-sm shrink-0">
-                            <i class="${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'fas fa-heart text-[#990024]' : 'far fa-heart text-gray-700'}"></i>
-                            <span class="wishlist-btn-text">${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button id="btn-add-to-cart" onclick="ProductPage.addToCart(false)" ${isOutOfStock ? 'disabled' : ''} class="btn-secondary-massive">
+                            <i class="fas fa-shopping-bag text-lg"></i>
+                            <span>ADD TO CART</span>
+                        </button>
+                        <button id="btn-buy-now" onclick="ProductPage.addToCart(true)" ${isOutOfStock ? 'disabled' : ''} class="btn-primary-massive">
+                            <i class="fas fa-bolt text-lg text-[#f59e0b]"></i>
+                            <span>BUY NOW</span>
                         </button>
                     </div>
                 </div>

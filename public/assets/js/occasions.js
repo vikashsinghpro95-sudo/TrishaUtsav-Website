@@ -361,11 +361,7 @@ const OccasionPage = {
                                  class="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 group-hover:scale-105">
                         </a>
 
-                        ${hasDiscount ? `
-                            <span class="absolute top-2.5 left-2.5 bg-[#990024] text-white font-black text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md z-10">
-                                -${discountPercent}% OFF
-                            </span>
-                        ` : ''}
+
 
                         ${p.stock_quantity <= 0 ? `
                             <span class="absolute top-2.5 right-2.5 bg-gray-900/90 text-white font-black text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md z-10">
