@@ -926,9 +926,6 @@ include_once __DIR__ . '/includes/header.php';
                             Festive moments on <span class="italic text-[#f59e0b] font-normal">reels</span>
                         </h2>
                     </div>
-                    <a href="https://instagram.com" target="_blank" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
-                        Follow @festivetreat <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
-                    </a>
                 </div>
 
                 <div id="reels-strip-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6 pt-2">
@@ -963,7 +960,7 @@ include_once __DIR__ . '/includes/header.php';
 
                                 <div class="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 text-white space-y-0.5">
                                     <span class="text-[9px] sm:text-[10px] font-bold text-[#f59e0b] uppercase tracking-wider flex items-center">
-                                        <i class="fab fa-instagram mr-1"></i> @festivetreat
+                                        <i class="fab fa-instagram mr-1"></i> @trisha_utsav
                                     </span>
                                     <h4 class="text-xs font-extrabold line-clamp-1">${r.title || 'Festive Unboxing'}</h4>
                                 </div>
