@@ -6,7 +6,7 @@ include_once __DIR__ . '/includes/admin-header.php';
 <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
         <div class="flex items-center gap-2 mb-2">
-            <a href="/admin/orders.php" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+            <a href="/admin/orders" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                 <i class="ph ph-arrow-left text-lg"></i>
             </a>
             <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Back to Orders</span>

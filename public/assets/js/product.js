@@ -63,7 +63,7 @@ const ProductPage = {
                         <i class="fas fa-exclamation-triangle text-red-400 text-4xl mb-4"></i>
                         <h3 class="font-display text-lg text-gray-700">Failed to load product</h3>
                         <p class="text-gray-500 text-sm mt-1">${e.message || 'Product not found.'}</p>
-                        <a href="${BASE_URL}shop.php" class="btn-gold mt-6 inline-flex">Back to Shop</a>
+                        <a href="${BASE_URL}shop" class="btn-gold mt-6 inline-flex">Back to Shop</a>
                     </div>
                 `;
             }
@@ -578,7 +578,7 @@ const ProductPage = {
 
                 html += `
                     <div class="group bg-white rounded-2xl overflow-hidden relative transition-all duration-300 hover:-translate-y-1">
-                        <a href="${BASE_URL}product.php?slug=${p.slug}" class="relative bg-gray-50 aspect-[4/5] overflow-hidden block rounded-2xl">
+                        <a href="${BASE_URL}product?slug=${p.slug}" class="relative bg-gray-50 aspect-[4/5] overflow-hidden block rounded-2xl">
                             <img src="${imgUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='${placeholder}';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
                             ${pDiscount > 0 ? `
                                 <span class="absolute top-3 left-3 bg-[#f59e0b] text-[#12090c] font-black text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm z-10">
@@ -588,7 +588,7 @@ const ProductPage = {
                         </a>
                         <div class="py-4 flex flex-col space-y-1">
                             <h3 class="font-sans font-bold text-sm text-[#12090c] leading-snug line-clamp-2 hover:text-[#990024] transition">
-                                <a href="${BASE_URL}product.php?slug=${p.slug}">${p.name}</a>
+                                <a href="${BASE_URL}product?slug=${p.slug}">${p.name}</a>
                             </h3>
                             <div class="flex items-center gap-2 pt-1">
                                 <span class="text-sm font-black text-[#990024]">${Utils.formatCurrency(price)}</span>
@@ -612,7 +612,7 @@ const ProductPage = {
         
         const title = this.product.name;
         const text = this.product.short_description || `Check out ${title} at Trisha Utsav!`;
-        const url = `${BASE_URL}product.php?slug=${this.product.slug}`;
+        const url = `${BASE_URL}product?slug=${this.product.slug}`;
         
         if (navigator.share) {
             navigator.share({

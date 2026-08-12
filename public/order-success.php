@@ -53,7 +53,7 @@ include_once __DIR__ . '/includes/header.php';
             <a id="btn-track-order" href="#" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-2xl bg-[#990024] hover:bg-[#7a001c] text-white font-bold text-sm shadow-lg shadow-red-900/20 hover:shadow-xl transition duration-200 group">
                 <i class="fas fa-truck-fast mr-2 group-hover:translate-x-0.5 transition-transform"></i> Track Order Details
             </a>
-            <a href="<?php echo BASE_URL; ?>index.php" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition duration-200">
+            <a href="<?php echo BASE_URL; ?>" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm transition duration-200">
                 <i class="fas fa-bag-shopping mr-2"></i> Continue Shopping
             </a>
         </div>
@@ -96,17 +96,17 @@ const OrderSuccess = {
 
     async init() {
         if (!Auth.isLoggedIn()) {
-            window.location.href = BASE_URL + 'login.php';
+            window.location.href = BASE_URL + 'login';
             return;
         }
 
         this.orderId = Utils.getQueryParam('id');
         if (!this.orderId) {
-            window.location.href = BASE_URL + 'index.php';
+            window.location.href = BASE_URL;
             return;
         }
 
-        document.getElementById('btn-track-order').href = BASE_URL + 'order-detail.php?id=' + this.orderId;
+        document.getElementById('btn-track-order').href = BASE_URL + 'order-detail?id=' + this.orderId;
 
         // 1. Trigger Sound Effect
         this.playCelebrationSound();
@@ -349,7 +349,7 @@ const OrderSuccess = {
                         </span>
                         ${ord.payment_method === 'cod' && ord.payment_status !== 'paid' ? `
                             <div class="mt-2.5">
-                                <a href="${BASE_URL}order-detail.php?id=${ord.id}&pay=1" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-[#990024] hover:bg-[#7a001c] text-white font-bold text-xs transition shadow-sm">
+                                <a href="${BASE_URL}order-detail?id=${ord.id}&pay=1" class="inline-flex items-center px-3 py-1.5 rounded-lg bg-[#990024] hover:bg-[#7a001c] text-white font-bold text-xs transition shadow-sm">
                                     <i class="fas fa-credit-card mr-1.5"></i> Pay Online Now
                                 </a>
                             </div>

@@ -29,7 +29,7 @@ const Auth = {
                 Utils.showToast("Authentication successful! Redirecting...", "success");
                 
                 setTimeout(() => {
-                    window.location.replace('/admin/index.php');
+                    window.location.replace('/admin');
                 }, 400);
             }
         } catch (e) {
@@ -54,7 +54,7 @@ const Auth = {
         Utils.showToast("Logged out successfully.", "success");
         
         setTimeout(() => {
-            window.location.href = '/admin/login.php';
+            window.location.href = '/admin/login';
         }, 1000);
     },
 
@@ -82,7 +82,7 @@ const Auth = {
      */
     async checkAuth() {
         if (!this.isLoggedIn()) {
-            window.location.href = '/admin/login.php';
+            window.location.href = '/admin/login';
             return;
         }
 
@@ -100,7 +100,7 @@ const Auth = {
         } catch (e) {
             localStorage.removeItem('admin_token');
             localStorage.removeItem('admin_user');
-            window.location.href = '/admin/login.php';
+            window.location.href = '/admin/login';
         }
     }
 };

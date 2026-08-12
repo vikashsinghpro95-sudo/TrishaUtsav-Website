@@ -85,7 +85,7 @@ const Settings = {
                 document.getElementById('set-timer-headline').value = s.timer_headline || 'Up to 60% off festive collection';
                 document.getElementById('set-timer-description').value = s.timer_description || 'Elevate your home celebrations with authentic brass diyas, handcrafted sweets, pure silver pooja thalis, and royal celebration hampers.';
                 document.getElementById('set-timer-cta-text').value = s.timer_cta_text || 'CLAIM FESTIVE OFFERS';
-                document.getElementById('set-timer-cta-link').value = s.timer_cta_link || 'shop.php';
+                document.getElementById('set-timer-cta-link').value = s.timer_cta_link || 'shop';
 
                 let targetDateVal = s.timer_target_date || '';
                 if (targetDateVal) {

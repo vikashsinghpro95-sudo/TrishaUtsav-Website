@@ -52,7 +52,7 @@ const Api = {
                 if (!window.location.pathname.endsWith('login.php') && !window.location.pathname.endsWith('login')) {
                     Utils.showToast("Your admin session has expired. Please login again.", "warning");
                     setTimeout(() => {
-                        window.location.href = '/admin/login.php';
+                        window.location.href = '/admin/login';
                     }, 1500);
                 }
                 throw { status: 401, message: "Admin session expired" };

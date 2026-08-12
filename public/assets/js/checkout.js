@@ -15,8 +15,8 @@ const CheckoutPage = {
         this.directOrderToken = urlParams.get('direct_order');
 
         if (!Auth.isLoggedIn()) {
-            const redirectTarget = 'checkout.php' + window.location.search;
-            window.location.href = BASE_URL + 'login.php?redirect=' + encodeURIComponent(redirectTarget);
+            const redirectTarget = 'checkout' + window.location.search;
+            window.location.href = BASE_URL + 'login?redirect=' + encodeURIComponent(redirectTarget);
             return;
         }
 
@@ -30,7 +30,7 @@ const CheckoutPage = {
                 } else {
                     Utils.showToast(directRes.message || "Direct order link is invalid or expired.", "warning");
                     setTimeout(() => {
-                        window.location.href = BASE_URL + 'shop.php';
+                        window.location.href = BASE_URL + 'shop';
                     }, 1500);
                     return;
                 }
@@ -41,7 +41,7 @@ const CheckoutPage = {
                     if (!this.cart.items || this.cart.items.length === 0) {
                         Utils.showToast("Your cart is empty.", "warning");
                         setTimeout(() => {
-                            window.location.href = BASE_URL + 'cart.php';
+                            window.location.href = BASE_URL + 'cart';
                         }, 1000);
                         return;
                     }
@@ -340,7 +340,7 @@ const CheckoutPage = {
                 } else {
                     Utils.showToast("Order placed successfully!", "success");
                     setTimeout(() => {
-                        window.location.href = BASE_URL + 'order-success.php?id=' + res.order_id;
+                        window.location.href = BASE_URL + 'order-success?id=' + res.order_id;
                     }, 400);
                 }
             }
@@ -385,7 +385,7 @@ const CheckoutPage = {
                             if (verifyRes.success) {
                                 Utils.showToast("Payment successful! Order confirmed.", "success");
                                 setTimeout(() => {
-                                    window.location.href = BASE_URL + 'order-success.php?id=' + orderId;
+                                    window.location.href = BASE_URL + 'order-success?id=' + orderId;
                                 }, 400);
                             } else {
                                 throw new Error("Verification failed.");
@@ -393,7 +393,7 @@ const CheckoutPage = {
                         } catch (err) {
                             Utils.showToast("Payment verification failed.", "error");
                             setTimeout(() => {
-                                window.location.href = BASE_URL + 'order-detail.php?id=' + orderId;
+                                window.location.href = BASE_URL + 'order-detail?id=' + orderId;
                             }, 1500);
                         }
                     },
@@ -451,13 +451,13 @@ const CheckoutPage = {
                 // If backend already says paid (e.g. duplicate click)
                 Utils.showToast(initRes.message || "Payment initiation failed.", "warning");
                 if (initRes.success === true) {
-                     window.location.href = BASE_URL + 'order-detail.php?id=' + orderId;
+                     window.location.href = BASE_URL + 'order-detail?id=' + orderId;
                 }
             }
         } catch (e) {
             Utils.showToast("Payment gateway error: " + e.message, "error");
             setTimeout(() => {
-                window.location.href = BASE_URL + 'account.php';
+                window.location.href = BASE_URL + 'account';
             }, 1500);
         }
     }

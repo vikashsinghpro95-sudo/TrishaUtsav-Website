@@ -83,8 +83,8 @@
 
     <script>
         // Synchronous auth check
-        if (!localStorage.getItem('admin_token') && !window.location.pathname.includes('login.php')) {
-            window.location.href = '/admin/login.php';
+        if (!localStorage.getItem('admin_token') && !window.location.pathname.endsWith('login.php') && !window.location.pathname.endsWith('login')) {
+            window.location.href = '/admin/login';
         }
     </script>
 </head>
@@ -92,7 +92,7 @@
 
     <!-- Verify Admin Auth Role dynamically -->
     <script>
-        if (!window.location.pathname.includes('login.php')) {
+        if (!window.location.pathname.endsWith('login.php') && !window.location.pathname.endsWith('login')) {
             Auth.checkAuth();
         }
     </script>
@@ -105,7 +105,7 @@
         
         <!-- Logo Area -->
         <div class="h-16 px-5 border-b border-red-100 flex items-center justify-between flex-shrink-0">
-            <a href="/admin/index.php" class="flex items-center space-x-2.5 overflow-hidden sidebar-logo">
+            <a href="/admin" class="flex items-center space-x-2.5 overflow-hidden sidebar-logo">
                 <div class="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0 shadow-sm">
                     <i class="ph ph-package text-white text-lg"></i>
                 </div>
@@ -122,71 +122,71 @@
         <nav class="flex-1 overflow-y-auto overflow-x-hidden p-3 space-y-1 custom-scrollbar">
             
             <div class="sidebar-section-title px-3 pt-3 pb-1 text-[11px] font-semibold text-red-400 uppercase tracking-wider whitespace-nowrap overflow-hidden transition-opacity duration-300">Dashboard</div>
-            <a href="/admin/index.php" id="nav-link-dashboard" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin" id="nav-link-dashboard" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-squares-four text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Overview</span>
             </a>
 
             <div class="sidebar-section-title px-3 pt-5 pb-1 text-[11px] font-semibold text-red-400 uppercase tracking-wider whitespace-nowrap overflow-hidden transition-opacity duration-300">Catalog</div>
-            <a href="/admin/products.php" id="nav-link-products" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/products" id="nav-link-products" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-tag text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Products</span>
             </a>
-            <a href="/admin/categories.php" id="nav-link-categories" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/categories" id="nav-link-categories" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-folders text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Categories</span>
             </a>
-            <a href="/admin/brands.php" id="nav-link-brands" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/brands" id="nav-link-brands" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-star text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Brands</span>
             </a>
 
             <div class="sidebar-section-title px-3 pt-5 pb-1 text-[11px] font-semibold text-red-400 uppercase tracking-wider whitespace-nowrap overflow-hidden transition-opacity duration-300">Sales</div>
-            <a href="/admin/orders.php" id="nav-link-orders" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/orders" id="nav-link-orders" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-shopping-cart text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Orders</span>
             </a>
-            <a href="/admin/customers.php" id="nav-link-customers" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/customers" id="nav-link-customers" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-users text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Customers</span>
             </a>
 
             <div class="sidebar-section-title px-3 pt-5 pb-1 text-[11px] font-semibold text-red-400 uppercase tracking-wider whitespace-nowrap overflow-hidden transition-opacity duration-300">Marketing & CMS</div>
-            <a href="/admin/coupons.php" id="nav-link-coupons" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/coupons" id="nav-link-coupons" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-ticket text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Coupons</span>
             </a>
-            <a href="/admin/newsletter.php" id="nav-link-newsletter" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/newsletter" id="nav-link-newsletter" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-envelope text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Newsletter</span>
             </a>
-            <a href="/admin/banners.php" id="nav-link-banners" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/banners" id="nav-link-banners" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-image text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Banners</span>
             </a>
-            <a href="/admin/reels.php" id="nav-link-reels" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/reels" id="nav-link-reels" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-video text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Reels</span>
             </a>
-            <a href="/admin/occasions.php" id="nav-link-occasions" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/occasions" id="nav-link-occasions" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-sparkle text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Occasions</span>
             </a>
-            <a href="/admin/pages.php" id="nav-link-pages" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/pages" id="nav-link-pages" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-file-text text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Static Pages</span>
             </a>
 
             <div class="sidebar-section-title px-3 pt-5 pb-1 text-[11px] font-semibold text-red-400 uppercase tracking-wider whitespace-nowrap overflow-hidden transition-opacity duration-300">System</div>
-            <a href="/admin/homepage-sections.php" id="nav-link-homepage-sections" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/homepage-sections" id="nav-link-homepage-sections" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-layout text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Homepage Layout</span>
             </a>
-            <a href="/admin/settings.php" id="nav-link-settings" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/settings" id="nav-link-settings" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-gear text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Settings</span>
             </a>
-            <a href="/admin/audit-logs.php" id="nav-link-audit-logs" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
+            <a href="/admin/audit-logs" id="nav-link-audit-logs" class="admin-nav-link flex items-center px-3 py-2 text-sm font-medium rounded-md text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors group">
                 <i class="ph ph-shield-check text-lg text-slate-400 group-hover:text-red-600 mr-3 flex-shrink-0"></i>
                 <span class="whitespace-nowrap flex-1 truncate transition-opacity duration-300">Audit Logs</span>
             </a>

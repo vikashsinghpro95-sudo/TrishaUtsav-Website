@@ -74,7 +74,7 @@ const CartPage = {
                     <i class="fas fa-shopping-bag empty-cart-icon"></i>
                     <h3 class="font-display text-2xl sm:text-3xl font-black text-[#12090c] mb-4">Your bag is empty</h3>
                     <p class="text-gray-500 text-sm max-w-md mx-auto mb-8 font-medium">Looks like you haven't added anything to your cart yet. Let's fix that!</p>
-                    <a href="${BASE_URL}shop.php" class="btn-primary-massive !w-auto inline-flex !px-10">
+                    <a href="${BASE_URL}shop" class="btn-primary-massive !w-auto inline-flex !px-10">
                         <span>START SHOPPING</span>
                     </a>
                 </div>
@@ -90,7 +90,7 @@ const CartPage = {
         // Cart items HTML
         let itemsHtml = '<div class="cart-items-list stagger-children">';
         items.forEach(item => {
-            const itemUrl = BASE_URL + 'product.php?slug=' + (item.product_slug || item.slug || '');
+            const itemUrl = BASE_URL + 'product?slug=' + (item.product_slug || item.slug || '');
             const rawImg = item.primary_image || item.product_image || item.image_url || item.image || (item.images && item.images.length > 0 ? item.images[0].image_url : null);
             const imgUrl = rawImg ? fixFn(rawImg) : placeholder;
 
@@ -167,7 +167,7 @@ const CartPage = {
         }
 
         // Summary HTML
-        const checkoutUrl = !Auth.isLoggedIn() ? BASE_URL + 'login.php?redirect=checkout.php' : BASE_URL + 'checkout.php';
+        const checkoutUrl = !Auth.isLoggedIn() ? BASE_URL + 'login?redirect=checkout' : BASE_URL + 'checkout';
         let summaryHtml = `
             <div class="cart-summary-wrapper">
                 <div class="summary-card">

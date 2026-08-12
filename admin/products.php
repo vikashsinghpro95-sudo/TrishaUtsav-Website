@@ -9,7 +9,7 @@ include_once __DIR__ . '/includes/admin-header.php';
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage your store's inventory and product details.</p>
     </div>
     <div class="flex items-center gap-3">
-        <a href="/admin/product-edit.php" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors shadow-sm">
+        <a href="/admin/product-edit" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors shadow-sm">
             <i class="ph ph-plus mr-2 text-lg"></i> Add Product
         </a>
     </div>

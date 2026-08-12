@@ -32,7 +32,7 @@ const Auth = {
                     setTimeout(() => {
                         const params = new URLSearchParams(window.location.search);
                         const redirect = params.get('redirect');
-                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account.php';
+                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account';
                     }, 1000);
                 }
             }
@@ -64,7 +64,7 @@ const Auth = {
                     setTimeout(() => {
                         const params = new URLSearchParams(window.location.search);
                         const redirect = params.get('redirect');
-                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account.php';
+                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account';
                     }, 1000);
                 }
             }
@@ -146,7 +146,7 @@ const Auth = {
                     setTimeout(() => {
                         const params = new URLSearchParams(window.location.search);
                         const redirect = params.get('redirect');
-                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account.php';
+                        window.location.href = redirect ? BASE_URL + redirect : BASE_URL + 'account';
                     }, 1000);
                 }
             }
@@ -160,8 +160,9 @@ const Auth = {
      */
     showPhoneOtpModal() {
         const modal = document.getElementById('modal-phone-otp');
-        if (!modal) return;
-        modal.classList.remove('hidden');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
         
         const phoneInput = document.getElementById('otp-phone-input');
         const currentUser = this.getCurrentUser();
@@ -356,7 +357,7 @@ const Auth = {
         Utils.showToast("Logged out successfully.", "success");
         
         setTimeout(() => {
-            window.location.href = BASE_URL + 'index.php';
+            window.location.href = BASE_URL;
         }, 1000);
     },
 

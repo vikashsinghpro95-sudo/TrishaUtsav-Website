@@ -288,10 +288,10 @@ if (!defined('BASE_URL')) {
                                 <i class="fas fa-chevron-down text-[9px] text-gray-400"></i>
                             </button>
                             <div class="absolute right-0 w-48 bg-white border border-[#f59e0b]/20 rounded-2xl shadow-xl py-2 mt-2 hidden group-hover:block z-50">
-                                <a href="${BASE_URL}account.php" class="block px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-[#990024]/5 hover:text-[#990024] transition">
+                                <a href="${BASE_URL}account" class="block px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-[#990024]/5 hover:text-[#990024] transition">
                                     <i class="fas fa-th-large mr-2 text-[#f59e0b]"></i> Dashboard
                                 </a>
-                                <a href="${BASE_URL}account.php" onclick="setTimeout(() => { if(window.Account) window.Account.switchTab('orders'); }, 100);" class="block px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-[#990024]/5 hover:text-[#990024] transition">
+                                <a href="${BASE_URL}account" onclick="setTimeout(() => { if(window.Account) window.Account.switchTab('orders'); }, 100);" class="block px-4 py-2.5 text-xs font-semibold text-gray-700 hover:bg-[#990024]/5 hover:text-[#990024] transition">
                                     <i class="fas fa-box-open mr-2 text-[#f59e0b]"></i> My Orders
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
@@ -315,10 +315,10 @@ if (!defined('BASE_URL')) {
                             </div>
                         </div>
                         <div class="space-y-1.5">
-                            <a href="${BASE_URL}account.php" onclick="toggleMobileMenu(false)" class="block p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 font-bold text-sm">
+                            <a href="${BASE_URL}account" onclick="toggleMobileMenu(false)" class="block p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 font-bold text-sm">
                                 <i class="fas fa-th-large text-[#f59e0b] w-5 text-center"></i><span>My Account</span>
                             </a>
-                            <a href="${BASE_URL}account.php" onclick="setTimeout(() => { if(window.Account) window.Account.switchTab('orders'); }, 100); toggleMobileMenu(false);" class="block p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 font-bold text-sm">
+                            <a href="${BASE_URL}account" onclick="setTimeout(() => { if(window.Account) window.Account.switchTab('orders'); }, 100); toggleMobileMenu(false);" class="block p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 font-bold text-sm">
                                 <i class="fas fa-box-open text-[#f59e0b] w-5 text-center"></i><span>Your Orders</span>
                             </a>
                             <button onclick="Auth.logout()" class="w-full p-3 rounded-2xl bg-red-50 hover:bg-red-100 text-red-600 flex items-center space-x-3 font-bold text-sm transition">
@@ -339,7 +339,7 @@ if (!defined('BASE_URL')) {
                 <span class="truncate">✨ Free Shipping ₹499+</span>
             </div>
             <div class="hidden sm:flex items-center space-x-6 text-[11px] text-[#fffdf7]/80">
-                <a href="<?php echo BASE_URL; ?>contact.php" class="hover:text-[#f59e0b] transition"><i class="fas fa-headset mr-1 text-[#f59e0b]"></i> 24/7 Support</a>
+                <a href="<?php echo BASE_URL; ?>contact" class="hover:text-[#f59e0b] transition"><i class="fas fa-headset mr-1 text-[#f59e0b]"></i> 24/7 Support</a>
                 <span>|</span>
                 <span class="text-[#fde047] font-bold"><i class="fas fa-shield-halved mr-1"></i> Handcrafted</span>
             </div>
@@ -358,7 +358,7 @@ if (!defined('BASE_URL')) {
                         <i class="fas fa-bars text-xs text-[#990024]"></i>
                     </button>
 
-                    <a href="<?php echo BASE_URL; ?>index.php" class="flex items-center space-x-2 sm:space-x-3 group min-w-0">
+                    <a href="<?php echo BASE_URL; ?>" class="flex items-center space-x-2 sm:space-x-3 group min-w-0">
                         <div class="relative flex-shrink-0">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#990024] via-[#7a001c] to-[#4a0011] text-white rounded-2xl flex items-center justify-center font-display text-xl sm:text-2xl font-black shadow-lg shadow-[#990024]/20 border border-[#f59e0b]/30 group-hover:scale-105 transition duration-300">
                                 त्रि
@@ -378,36 +378,38 @@ if (!defined('BASE_URL')) {
                 </div>
 
                 <?php
-                $currentScript = basename($_SERVER['SCRIPT_NAME'] ?? $_SERVER['PHP_SELF'] ?? 'index.php');
+                $requestUri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+                $currentClean = trim(str_replace(['/public', '.php'], '', $requestUri), '/');
+                if (empty($currentClean)) $currentClean = 'index';
                 $currentQuery = $_SERVER['QUERY_STRING'] ?? '';
 
-                $isOccasionsActive = ($currentScript === 'occasions.php');
-                $isCategoriesActive = ($currentScript === 'categories.php');
-                $isTrendingActive = ($currentScript === 'shop.php' && str_contains($currentQuery, 'search=trending'));
+                $isOccasionsActive = ($currentClean === 'occasions');
+                $isCategoriesActive = ($currentClean === 'categories');
+                $isTrendingActive = ($currentClean === 'shop' && str_contains($currentQuery, 'search=trending'));
                 $isReelsActive = str_contains($currentQuery, 'reels');
-                $isShopActive = ($currentScript === 'shop.php' && !$isTrendingActive);
-                $isHomeActive = (($currentScript === 'index.php' || $currentScript === '') && !$isReelsActive);
+                $isShopActive = ($currentClean === 'shop' && !$isTrendingActive);
+                $isHomeActive = (($currentClean === 'index' || $currentClean === '') && !$isReelsActive);
                 ?>
 
                 <!-- Navigation Links (Desktop) -->
                 <nav class="hidden lg:flex items-center space-x-4 lg:space-x-6 xl:space-x-10 text-[10px] xl:text-xs font-bold uppercase tracking-widest mx-2 lg:mx-4 xl:mx-8">
-                    <a href="<?php echo BASE_URL; ?>index.php" class="<?php echo $isHomeActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
+                    <a href="<?php echo BASE_URL; ?>" class="<?php echo $isHomeActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
                         <span>Home</span>
                         <span class="absolute bottom-0 left-0 <?php echo $isHomeActive ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-[#990024] rounded-full transition-all duration-300"></span>
                     </a>
-                    <a href="<?php echo BASE_URL; ?>occasions.php" class="<?php echo $isOccasionsActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
+                    <a href="<?php echo BASE_URL; ?>occasions" class="<?php echo $isOccasionsActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
                         <span>Occasions</span>
                         <span class="absolute bottom-0 left-0 <?php echo $isOccasionsActive ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-[#990024] rounded-full transition-all duration-300"></span>
                     </a>
-                    <a href="<?php echo BASE_URL; ?>categories.php" class="<?php echo $isCategoriesActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
+                    <a href="<?php echo BASE_URL; ?>categories" class="<?php echo $isCategoriesActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
                         <span>Categories</span>
                         <span class="absolute bottom-0 left-0 <?php echo $isCategoriesActive ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-[#990024] rounded-full transition-all duration-300"></span>
                     </a>
-                    <a href="<?php echo BASE_URL; ?>shop.php" class="<?php echo $isShopActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
+                    <a href="<?php echo BASE_URL; ?>shop" class="<?php echo $isShopActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
                         <span>Shop</span>
                         <span class="absolute bottom-0 left-0 <?php echo $isShopActive ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-[#990024] rounded-full transition-all duration-300"></span>
                     </a>
-                    <a href="<?php echo BASE_URL; ?>shop.php?search=trending" class="<?php echo $isTrendingActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
+                    <a href="<?php echo BASE_URL; ?>shop?search=trending" class="<?php echo $isTrendingActive ? 'text-[#990024] font-extrabold' : 'text-gray-700 hover:text-[#990024]'; ?> transition relative py-1 group">
                         <span>Trending</span>
                         <span class="absolute bottom-0 left-0 <?php echo $isTrendingActive ? 'w-full' : 'w-0 group-hover:w-full'; ?> h-0.5 bg-[#990024] rounded-full transition-all duration-300"></span>
                     </a>
@@ -470,13 +472,13 @@ if (!defined('BASE_URL')) {
                 <div class="hidden lg:flex items-center space-x-2 sm:space-x-3 ml-auto">
                     <!-- User Profile Button -->
                     <div class="header-user-section-target">
-                        <a href="<?php echo BASE_URL; ?>login.php" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#f59e0b]/30 bg-white hover:bg-[#990024]/5 text-[#12090c] flex items-center justify-center transition shadow-sm" title="Sign In">
+                        <a href="<?php echo BASE_URL; ?>login" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#f59e0b]/30 bg-white hover:bg-[#990024]/5 text-[#12090c] flex items-center justify-center transition shadow-sm" title="Sign In">
                             <i class="far fa-user text-xs sm:text-sm"></i>
                         </a>
                     </div>
 
                     <!-- Primary Cart Button with Badge -->
-                    <a href="<?php echo BASE_URL; ?>cart.php" class="bg-gradient-to-r from-[#990024] via-[#7a001c] to-[#5c0015] text-[#fffdf7] font-extrabold text-[10px] xl:text-xs uppercase tracking-widest px-3 lg:px-4 xl:px-5 py-2 lg:py-2.5 rounded-full shadow-md flex items-center space-x-1.5 transition border border-[#f59e0b]/40 relative flex-shrink-0">
+                    <a href="<?php echo BASE_URL; ?>cart" class="bg-gradient-to-r from-[#990024] via-[#7a001c] to-[#5c0015] text-[#fffdf7] font-extrabold text-[10px] xl:text-xs uppercase tracking-widest px-3 lg:px-4 xl:px-5 py-2 lg:py-2.5 rounded-full shadow-md flex items-center space-x-1.5 transition border border-[#f59e0b]/40 relative flex-shrink-0">
                         <i class="fas fa-shopping-bag text-xs sm:text-sm text-white"></i>
                         <span class="hidden sm:inline">Cart</span>
                         <span class="cart-badge-count-target bg-white text-[#990024] text-[9px] font-black h-4 w-4 sm:h-5 sm:w-5 rounded-full flex items-center justify-center shadow-md hidden ml-0.5 sm:ml-1">0</span>
@@ -502,26 +504,26 @@ if (!defined('BASE_URL')) {
             </div>
             
             <div class="py-4 shrink-0">
-                <form action="<?php echo BASE_URL; ?>shop.php" method="GET" class="relative">
+                <form action="<?php echo BASE_URL; ?>shop" method="GET" class="relative">
                     <input type="text" name="search" placeholder="Search products..." class="w-full bg-white border border-gray-200 rounded-2xl py-3 pl-11 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#990024]/20 focus:border-[#990024]/40 transition shadow-sm">
                     <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
                 </form>
             </div>
 
             <nav class="flex flex-col space-y-1.5 font-bold text-sm flex-1">
-                <a href="<?php echo BASE_URL; ?>index.php" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isHomeActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
+                <a href="<?php echo BASE_URL; ?>" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isHomeActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
                     <i class="fas fa-house <?php echo $isHomeActive ? 'text-[#990024]' : 'text-gray-400'; ?> w-5 text-center"></i><span>Home</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>occasions.php" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isOccasionsActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
+                <a href="<?php echo BASE_URL; ?>occasions" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isOccasionsActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
                     <i class="fas fa-glass-cheers <?php echo $isOccasionsActive ? 'text-[#990024]' : 'text-[#f59e0b]'; ?> w-5 text-center"></i><span>Occasions</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>categories.php" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isCategoriesActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
+                <a href="<?php echo BASE_URL; ?>categories" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isCategoriesActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
                     <i class="fas fa-th-large <?php echo $isCategoriesActive ? 'text-[#990024]' : 'text-[#f59e0b]'; ?> w-5 text-center"></i><span>Categories</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>shop.php" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isShopActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
+                <a href="<?php echo BASE_URL; ?>shop" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl <?php echo $isShopActive ? 'bg-[#990024]/10 text-[#990024]' : 'hover:bg-gray-50 text-gray-800'; ?> flex items-center space-x-3 transition">
                     <i class="fas fa-store <?php echo $isShopActive ? 'text-[#990024]' : 'text-[#f59e0b]'; ?> w-5 text-center"></i><span>Shop Catalog</span>
                 </a>
-                <a href="<?php echo BASE_URL; ?>cart.php" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 transition">
+                <a href="<?php echo BASE_URL; ?>cart" onclick="toggleMobileMenu(false)" class="p-3 rounded-2xl hover:bg-gray-50 text-gray-800 flex items-center space-x-3 transition">
                     <i class="fas fa-shopping-bag text-[#f59e0b] w-5 text-center"></i><span>My Cart</span>
                     <span class="cart-badge-count-target ml-auto bg-[#990024] text-white text-[10px] px-2 py-0.5 rounded-full hidden">0</span>
                 </a>
@@ -530,7 +532,7 @@ if (!defined('BASE_URL')) {
             <div class="mt-4 pt-4 border-t border-gray-100 shrink-0">
                 <div class="mobile-drawer-user-target">
                     <!-- Default Logged Out State -->
-                    <a href="<?php echo BASE_URL; ?>login.php" class="block w-full py-3.5 bg-gradient-to-r from-[#990024] to-[#7a001c] text-white text-center rounded-2xl text-sm font-extrabold tracking-wide shadow-md hover:shadow-lg transition">
+                    <a href="<?php echo BASE_URL; ?>login" class="block w-full py-3.5 bg-gradient-to-r from-[#990024] to-[#7a001c] text-white text-center rounded-2xl text-sm font-extrabold tracking-wide shadow-md hover:shadow-lg transition">
                         Login / Sign Up
                     </a>
                 </div>

@@ -57,7 +57,7 @@
                 <!-- Col 1: Brand & Logo (2 Spans) -->
                 <div class="lg:col-span-2 space-y-5">
                     <div id="footer-logo-box" class="flex items-center space-x-3">
-                        <a href="<?php echo BASE_URL; ?>index.php" class="flex items-center space-x-3 group">
+                        <a href="<?php echo BASE_URL; ?>" class="flex items-center space-x-3 group">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#990024] via-[#7a001c] to-[#4a0011] text-[#f59e0b] font-display text-xl font-black flex items-center justify-center border border-[#f59e0b]/40 shadow-lg">
                                 त्रि
                             </div>
@@ -88,29 +88,29 @@
 
                 <!-- Col 2: Quick Links -->
                 <div>
-                    <h4 class="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center">
+                    <h4 class="text-xs font-black text-[#fff] uppercase tracking-widest mb-4 flex items-center">
                         <i class="fas fa-compass text-[#f59e0b] mr-2"></i> Explore
                     </h4>
                     <ul class="space-y-2.5 text-xs text-slate-400 font-medium">
-                        <li><a href="<?php echo BASE_URL; ?>index.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Home</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>shop.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Shop Catalog</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>shop.php?sort=newest" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> New Arrivals</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>about.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> About Us</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>contact.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Contact Us</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Home</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>shop" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Shop Catalog</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>shop?sort=newest" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> New Arrivals</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>about" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> About Us</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>contact" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Contact Us</a></li>
                     </ul>
                 </div>
 
                 <!-- Col 3: Customer Care & Policies -->
                 <div>
-                    <h4 class="text-xs font-black text-white uppercase tracking-widest mb-4 flex items-center">
+                    <h4 class="text-xs font-black text-[#fff] uppercase tracking-widest mb-4 flex items-center">
                         <i class="fas fa-shield-alt text-[#f59e0b] mr-2"></i> Policies & Support
                     </h4>
                     <ul class="space-y-2.5 text-xs text-slate-400 font-medium">
-                        <li><a href="<?php echo BASE_URL; ?>returns.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Return & Refund Policy</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>shipping.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Shipping Policy</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>privacy.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Privacy Policy</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>terms.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Terms & Conditions</a></li>
-                        <li><a href="<?php echo BASE_URL; ?>account.php" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> My Account</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>returns" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Return & Refund Policy</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>shipping" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Shipping Policy</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>privacy" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Privacy Policy</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>terms" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> Terms & Conditions</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>account" class="hover:text-[#f59e0b] transition flex items-center"><i class="fas fa-chevron-right text-[8px] mr-2 text-slate-600"></i> My Account</a></li>
                     </ul>
                 </div>
 
@@ -167,7 +167,7 @@
     <!-- Mobile App-Like Down Navigation Bar -->
     <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#12090c]/95 backdrop-blur-xl border-t border-[#f59e0b]/30 shadow-[0_-8px_30px_rgba(0,0,0,0.8)] px-2 py-2 flex justify-around items-center">
         <!-- Home Link -->
-        <a href="<?php echo BASE_URL; ?>index.php" data-nav="index" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
+        <a href="<?php echo BASE_URL; ?>" data-nav="index" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base">
                 <i class="fas fa-house"></i>
             </div>
@@ -175,7 +175,7 @@
         </a>
 
         <!-- Shop Catalog Link -->
-        <a href="<?php echo BASE_URL; ?>shop.php" data-nav="shop" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
+        <a href="<?php echo BASE_URL; ?>shop" data-nav="shop" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base">
                 <i class="fas fa-store"></i>
             </div>
@@ -183,7 +183,7 @@
         </a>
 
         <!-- Festive Occasions Link -->
-        <a href="<?php echo BASE_URL; ?>shop.php?sort=newest" data-nav="festive" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
+        <a href="<?php echo BASE_URL; ?>shop?sort=newest" data-nav="festive" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base">
                 <i class="fas fa-glass-cheers"></i>
             </div>
@@ -191,7 +191,7 @@
         </a>
 
         <!-- Cart Link with Badge -->
-        <a href="<?php echo BASE_URL; ?>cart.php" data-nav="cart" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl relative">
+        <a href="<?php echo BASE_URL; ?>cart" data-nav="cart" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl relative">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base relative">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="mobile-cart-badge" class="absolute -top-1 -right-1.5 bg-[#f59e0b] text-[#12090c] text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-md hidden">0</span>
@@ -200,7 +200,7 @@
         </a>
 
         <!-- Profile / Account Link -->
-        <a href="<?php echo BASE_URL; ?>account.php" data-nav="account" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
+        <a href="<?php echo BASE_URL; ?>account" data-nav="account" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base">
                 <i class="fas fa-user-circle"></i>
             </div>
@@ -215,17 +215,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             // Highlight active mobile bottom navigation icon based on current page
-            const path = window.location.pathname.toLowerCase();
+            const rawPath = window.location.pathname.toLowerCase();
+            const path = rawPath.replace(/\/+$/, '').replace('/public', '');
             const navBtns = document.querySelectorAll('.mobile-nav-btn');
             
             navBtns.forEach(btn => {
                 const target = btn.getAttribute('data-nav');
                 if (
-                    (target === 'index' && (path.endsWith('index.php') || path === '/' || path.endsWith('/public/'))) ||
-                    (target === 'shop' && path.includes('shop.php') && !window.location.search.includes('sort=newest')) ||
+                    (target === 'index' && (path.endsWith('index') || path === '' || path === '/public')) ||
+                    (target === 'shop' && path.endsWith('shop') && !window.location.search.includes('sort=newest')) ||
                     (target === 'festive' && window.location.search.includes('sort=newest')) ||
-                    (target === 'cart' && path.includes('cart.php')) ||
-                    (target === 'account' && (path.includes('account.php') || path.includes('login.php')))
+                    (target === 'cart' && path.endsWith('cart')) ||
+                    (target === 'account' && (path.endsWith('account') || path.endsWith('login')))
                 ) {
                     btn.classList.remove('text-slate-400');
                     btn.classList.add('text-[#f59e0b]', 'bg-[#990024]/40', 'shadow-inner');
@@ -254,7 +255,7 @@
                         const logoBox = document.getElementById('footer-logo-box');
                         if (logoBox) {
                             logoBox.innerHTML = `
-                                <a href="${BASE_URL}index.php" class="inline-block">
+                                <a href="${BASE_URL}" class="inline-block">
                                     <img src="${d.store_logo.startsWith('http') ? d.store_logo : BASE_URL + d.store_logo}" alt="${d.store_name || 'Store Logo'}" class="h-10 object-contain">
                                 </a>
                             `;

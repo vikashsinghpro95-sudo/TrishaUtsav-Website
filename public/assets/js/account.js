@@ -11,7 +11,7 @@ const Account = {
      */
     async init() {
         if (!Auth.isLoggedIn()) {
-            window.location.href = BASE_URL + 'login.php';
+            window.location.href = BASE_URL + 'login';
             return;
         }
 
@@ -522,14 +522,14 @@ const Account = {
             }
             
             let actionHtml = `
-                <a href="${BASE_URL}order-detail.php?id=${ord.id}" class="bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white font-semibold px-3 py-1.5 rounded-lg border border-indigo-100 hover:border-indigo-600 transition">
+                <a href="${BASE_URL}order-detail?id=${ord.id}" class="bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white font-semibold px-3 py-1.5 rounded-lg border border-indigo-100 hover:border-indigo-600 transition">
                     Details
                 </a>
             `;
 
             if ((ord.payment_status === 'pending_payment' || ord.payment_status === 'pending' || ord.payment_status === 'failed') && ord.order_status !== 'expired' && ord.order_status !== 'cancelled') {
                  actionHtml = `
-                    <a href="${BASE_URL}order-detail.php?id=${ord.id}&pay=1" class="bg-[#990024] hover:bg-[#7a001c] text-white font-semibold px-3 py-1.5 rounded-lg border border-[#990024] mr-2 transition">
+                    <a href="${BASE_URL}order-detail?id=${ord.id}&pay=1" class="bg-[#990024] hover:bg-[#7a001c] text-white font-semibold px-3 py-1.5 rounded-lg border border-[#990024] mr-2 transition">
                         Pay Online
                     </a>
                     ${actionHtml}

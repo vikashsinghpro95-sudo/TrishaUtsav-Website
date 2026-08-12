@@ -64,7 +64,7 @@ include_once __DIR__ . '/includes/header.php';
 
                 <!-- CTA Buttons -->
                 <div class="animate-fade-in-up delay-600 pt-1 sm:pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4 w-full">
-                    <a id="hero-cta-btn" href="shop.php" class="bg-[#fffdf7] hover:bg-[#fde047] text-[#990024] font-extrabold text-[11px] sm:text-xs uppercase tracking-widest py-3.5 sm:py-4 px-7 sm:px-9 rounded-full shadow-2xl hover:scale-105 transition duration-300 border border-[#f59e0b]/30 flex items-center justify-center space-x-2 w-full sm:w-auto">
+                    <a id="hero-cta-btn" href="shop" class="bg-[#fffdf7] hover:bg-[#fde047] text-[#990024] font-extrabold text-[11px] sm:text-xs uppercase tracking-widest py-3.5 sm:py-4 px-7 sm:px-9 rounded-full shadow-2xl hover:scale-105 transition duration-300 border border-[#f59e0b]/30 flex items-center justify-center space-x-2 w-full sm:w-auto">
                         <span>SHOP FESTIVITIES</span>
                         <i class="fas fa-arrow-right text-xs ml-1"></i>
                     </a>
@@ -94,7 +94,7 @@ include_once __DIR__ . '/includes/header.php';
         </div>
 
         <!-- Floating Glass Bestseller Product Card (Bottom-Right Dynamic Feature) -->
-        <a href="shop.php" id="hero-bestseller-card" class="hidden lg:flex absolute bottom-8 right-12 z-30 bg-[#12090c]/85 backdrop-blur-xl border border-[#f59e0b]/40 p-4 rounded-3xl shadow-2xl items-center space-x-4 max-w-xs hover:scale-105 transition duration-300 group cursor-pointer">
+        <a href="shop" id="hero-bestseller-card" class="hidden lg:flex absolute bottom-8 right-12 z-30 bg-[#12090c]/85 backdrop-blur-xl border border-[#f59e0b]/40 p-4 rounded-3xl shadow-2xl items-center space-x-4 max-w-xs hover:scale-105 transition duration-300 group cursor-pointer">
             <div class="w-16 h-16 rounded-2xl bg-[#990024] p-1 flex-shrink-0 relative overflow-hidden border border-[#f59e0b]/30">
                 <img src="https://images.unsplash.com/photo-1605888967806-444427501ff2?w=200&auto=format&fit=crop&q=80" alt="Royal Brass Diya" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-xl group-hover:scale-110 transition duration-500">
                 <span class="absolute top-1 left-1 bg-[#f59e0b] text-[#12090c] text-[8px] font-black px-1.5 rounded-full shadow-sm">MUST BUY</span>
@@ -360,7 +360,7 @@ include_once __DIR__ . '/includes/header.php';
                             Shop by <span class="italic text-[#f59e0b] font-normal">occasion</span>
                         </h2>
                     </div>
-                    <a href="${BASE_URL}occasions.php" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
+                    <a href="${BASE_URL}occasions" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
                         View All <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
                     </a>
                 </div>
@@ -431,7 +431,7 @@ include_once __DIR__ . '/includes/header.php';
                             Explore festive <span class="italic text-[#f59e0b] font-normal">categories</span>
                         </h2>
                     </div>
-                    <a href="${BASE_URL}categories.php" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
+                    <a href="${BASE_URL}categories" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
                         Browse All <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
                     </a>
                 </div>
@@ -466,7 +466,7 @@ include_once __DIR__ . '/includes/header.php';
                         const imgUrl = imagePath ? fixFn(imagePath) : fallbackImgs[idx % fallbackImgs.length];
 
                         html += `
-                            <a href="${BASE_URL}categories.php?slug=${cat.slug}" class="relative rounded-3xl overflow-hidden shadow-xl h-[260px] sm:h-[320px] bg-[#12090c] border border-[#f59e0b]/30 group cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between p-5 sm:p-6">
+                            <a href="${BASE_URL}categories?slug=${cat.slug}" class="relative rounded-3xl overflow-hidden shadow-xl h-[260px] sm:h-[320px] bg-[#12090c] border border-[#f59e0b]/30 group cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between p-5 sm:p-6">
                                 <!-- Full Background Image -->
                                 <img src="${imgUrl}" alt="${cat.name}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
                                 
@@ -516,7 +516,7 @@ include_once __DIR__ . '/includes/header.php';
                     ];
                     defaultCats.forEach((cat) => {
                         html += `
-                            <a href="${BASE_URL}shop.php" class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg aspect-[4/5] bg-[#12090c] border border-[#f59e0b]/30 group cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-end p-4 sm:p-5">
+                            <a href="${BASE_URL}shop" class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg aspect-[4/5] bg-[#12090c] border border-[#f59e0b]/30 group cursor-pointer transform hover:-translate-y-2 transition duration-300 flex flex-col justify-end p-4 sm:p-5">
                                 <img src="${cat.img}" alt="${cat.name}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-[#12090c] via-[#12090c]/50 to-transparent"></div>
                                 <span class="absolute top-2.5 right-2.5 bg-[#990024]/85 backdrop-blur-md text-[#f59e0b] text-[9px] sm:text-[10px] font-black px-2.5 py-1 rounded-full border border-[#f59e0b]/30 shadow-md">
@@ -554,7 +554,7 @@ include_once __DIR__ . '/includes/header.php';
                             Hot right <span class="italic text-[#f59e0b] font-normal">now</span>
                         </h2>
                     </div>
-                    <a href="${BASE_URL}shop.php?is_trending=1" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
+                    <a href="${BASE_URL}shop?is_trending=1" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
                         View All <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
                     </a>
                 </div>
@@ -594,7 +594,7 @@ include_once __DIR__ . '/includes/header.php';
 
                         html += `
                             <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
-                                <a href="${BASE_URL}product.php?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
+                                <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
                                     <img src="${imgUrl1}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-110 ${imgUrl2 ? 'group-hover:opacity-0' : ''}">
                                     ${imgUrl2 ? `
                                         <img src="${imgUrl2}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out">
@@ -617,7 +617,7 @@ include_once __DIR__ . '/includes/header.php';
                                     </div>
 
                                     <h3 class="font-display text-xs sm:text-sm font-bold text-[#12090c] line-clamp-2 hover:text-[#990024] transition flex-grow">
-                                        <a href="${BASE_URL}product.php?slug=${prod.slug}">${prod.name}</a>
+                                        <a href="${BASE_URL}product?slug=${prod.slug}">${prod.name}</a>
                                     </h3>
 
                                     <div class="mt-2.5 pt-2 sm:pt-2.5 border-t border-gray-100 space-y-2">
@@ -658,7 +658,7 @@ include_once __DIR__ . '/includes/header.php';
                             Must buy <span class="italic text-[#f59e0b] font-normal">selection</span>
                         </h2>
                     </div>
-                    <a href="${BASE_URL}shop.php" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
+                    <a href="${BASE_URL}shop" class="text-[11px] sm:text-xs text-[#990024] font-extrabold hover:underline flex items-center uppercase tracking-wider">
                         Explore All <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
                     </a>
                 </div>
@@ -698,7 +698,7 @@ include_once __DIR__ . '/includes/header.php';
 
                         html += `
                             <div class="bg-white rounded-2xl sm:rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
-                                <a href="${BASE_URL}product.php?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
+                                <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
                                     <img src="${imgUrl1}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-110 ${imgUrl2 ? 'group-hover:opacity-0' : ''}">
                                     ${imgUrl2 ? `
                                         <img src="${imgUrl2}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 ease-out">
@@ -714,7 +714,7 @@ include_once __DIR__ . '/includes/header.php';
                                 </a>
                                 <div class="p-3 sm:p-5 flex flex-col flex-grow">
                                     <h3 class="font-display text-xs sm:text-sm font-bold text-[#12090c] line-clamp-2 hover:text-[#990024] transition flex-grow">
-                                        <a href="${BASE_URL}product.php?slug=${prod.slug}">${prod.name}</a>
+                                        <a href="${BASE_URL}product?slug=${prod.slug}">${prod.name}</a>
                                     </h3>
                                     <div class="mt-2.5 pt-2 sm:pt-2.5 border-t border-gray-100 space-y-2">
                                         <div class="flex justify-between items-center">
@@ -764,7 +764,7 @@ include_once __DIR__ . '/includes/header.php';
             const headline = s.timer_headline || 'Up to 60% off festive <span class="italic text-[#f59e0b] font-normal">collection</span>';
             const description = s.timer_description || 'Elevate your home celebrations with authentic brass diyas, handcrafted sweets, pure silver pooja thalis, and royal celebration hampers.';
             const ctaText = s.timer_cta_text || 'CLAIM FESTIVE OFFERS';
-            let ctaLink = s.timer_cta_link || 'shop.php';
+            let ctaLink = s.timer_cta_link || 'shop';
             if (ctaLink && !ctaLink.startsWith('http') && !ctaLink.startsWith('/')) {
                 ctaLink = BASE_URL + ctaLink;
             }
@@ -892,7 +892,7 @@ include_once __DIR__ . '/includes/header.php';
                             : `${BASE_URL}assets/images/product_placeholder.jpg`;
                         
                         html += `
-                            <a href="${BASE_URL}product.php?slug=${prod.slug}" class="bg-[#12090c]/80 border border-[#f59e0b]/30 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-300 block group">
+                            <a href="${BASE_URL}product?slug=${prod.slug}" class="bg-[#12090c]/80 border border-[#f59e0b]/30 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl hover:scale-105 transition duration-300 block group">
                                 <div class="aspect-square w-full overflow-hidden relative">
                                     <img src="${pImg}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                 </div>
@@ -1077,7 +1077,7 @@ include_once __DIR__ . '/includes/header.php';
                         <div class="space-y-2">
                             <h3 class="font-display text-base font-bold text-gray-900">${r.title || 'Festive Reel'}</h3>
                             <p class="text-xs text-gray-500">${r.description || ''}</p>
-                            <a href="${BASE_URL}shop.php" class="w-full block text-center bg-[#990024] text-white font-extrabold text-xs uppercase tracking-widest py-3 rounded-full shadow-md hover:bg-[#7a001c] transition">
+                            <a href="${BASE_URL}shop" class="w-full block text-center bg-[#990024] text-white font-extrabold text-xs uppercase tracking-widest py-3 rounded-full shadow-md hover:bg-[#7a001c] transition">
                                 Shop Featured Products
                             </a>
                         </div>

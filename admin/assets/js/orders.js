@@ -104,7 +104,7 @@ const Orders = {
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/admin/order-detail.php?id=${ord.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="Manage Order">
+                                <a href="/admin/order-detail?id=${ord.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="Manage Order">
                                     <i class="ph ph-arrow-square-out text-lg"></i>
                                 </a>
                             </td>
@@ -131,7 +131,7 @@ const Orders = {
     async initDetail() {
         this.currentOrderId = Utils.getQueryParam('id');
         if (!this.currentOrderId) {
-            window.location.href = '/admin/orders.php';
+            window.location.href = '/admin/orders';
             return;
         }
 

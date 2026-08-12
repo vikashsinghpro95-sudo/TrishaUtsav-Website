@@ -7,7 +7,7 @@ include_once __DIR__ . '/includes/header.php';
     
     <!-- Top Navigation & Action Header -->
     <div class="flex items-center justify-between flex-wrap gap-4 print:hidden">
-        <a href="<?php echo BASE_URL; ?>account.php" class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-[#990024] bg-white border border-slate-200/80 hover:border-[#990024]/30 px-3.5 py-2 rounded-xl transition duration-200 shadow-xs">
+        <a href="<?php echo BASE_URL; ?>account" class="inline-flex items-center text-xs font-bold text-slate-500 hover:text-[#990024] bg-white border border-slate-200/80 hover:border-[#990024]/30 px-3.5 py-2 rounded-xl transition duration-200 shadow-xs">
             <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
         </a>
         <button onclick="window.print()" class="inline-flex items-center text-xs font-bold text-slate-700 hover:text-[#990024] bg-white border border-slate-200/80 hover:border-[#990024]/30 px-3.5 py-2 rounded-xl transition duration-200 shadow-xs">
@@ -57,13 +57,13 @@ include_once __DIR__ . '/includes/header.php';
 
         async init() {
             if (!Auth.isLoggedIn()) {
-                window.location.href = BASE_URL + 'login.php';
+                window.location.href = BASE_URL + 'login';
                 return;
             }
 
             this.orderId = Utils.getQueryParam('id');
             if (!this.orderId) {
-                window.location.href = BASE_URL + '404.php';
+                window.location.href = BASE_URL + '404';
                 return;
             }
 
@@ -91,7 +91,7 @@ include_once __DIR__ . '/includes/header.php';
                     this.order = res.data;
                     this.renderOrder();
                 } else {
-                    window.location.href = BASE_URL + '404.php';
+                    window.location.href = BASE_URL + '404';
                 }
             } catch (e) {
                 container.innerHTML = `
@@ -101,7 +101,7 @@ include_once __DIR__ . '/includes/header.php';
                         </div>
                         <h3 class="text-lg font-black text-slate-800">Failed to Load Order Details</h3>
                         <p class="text-slate-500 text-xs max-w-sm mx-auto">${e.message || 'Access denied or order record not found.'}</p>
-                        <a href="${BASE_URL}account.php" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#990024] text-white font-bold text-xs shadow-md hover:bg-[#7a001c] transition mt-2">
+                        <a href="${BASE_URL}account" class="inline-flex items-center px-5 py-2.5 rounded-xl bg-[#990024] text-white font-bold text-xs shadow-md hover:bg-[#7a001c] transition mt-2">
                             Return to Dashboard
                         </a>
                     </div>

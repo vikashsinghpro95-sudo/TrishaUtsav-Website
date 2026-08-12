@@ -273,7 +273,7 @@ const Shop = {
 
                     html += `
                         <div class="product-card group bg-white rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl hover:border-[#990024]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative">
-                            <a href="${BASE_URL}product.php?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
+                            <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
                                 <img src="${imgUrl1}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-105 ${imgUrl2 ? 'group-hover:opacity-0' : ''}">
                                 ${imgUrl2 ? `
                                     <img src="${imgUrl2}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out">
@@ -296,7 +296,7 @@ const Shop = {
                                         <span class="text-gray-400 font-bold ml-1">(4.9)</span>
                                     </div>
                                     <h3 class="font-sans font-extrabold text-xs sm:text-sm text-[#12090c] leading-snug line-clamp-2 hover:text-[#990024] transition">
-                                        <a href="${BASE_URL}product.php?slug=${prod.slug}">${prod.name}</a>
+                                        <a href="${BASE_URL}product?slug=${prod.slug}">${prod.name}</a>
                                     </h3>
                                 </div>
                                 <div class="mt-2.5 pt-2 sm:pt-2.5 border-t border-gray-100 space-y-2">
@@ -391,7 +391,7 @@ const Shop = {
         if (!Auth.isLoggedIn()) {
             Utils.showToast("Please login to add items to your cart.", "info");
             setTimeout(() => {
-                window.location.href = BASE_URL + 'login?redirect=shop.php';
+                window.location.href = BASE_URL + 'login?redirect=shop';
             }, 1000);
             return;
         }
@@ -413,7 +413,7 @@ const Shop = {
     },
 
     clearAllFilters() {
-        window.location.href = BASE_URL + 'shop.php';
+        window.location.href = BASE_URL + 'shop';
     },
 
     updateQueryParam(key, value) {

@@ -195,7 +195,7 @@ const Utils = {
                 } catch (eG) {}
 
                 const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : '/';
-                window.location.href = baseUrl + 'login.php?redirect=checkout.php';
+                window.location.href = baseUrl + 'login?redirect=checkout';
                 return;
             }
 
@@ -209,7 +209,7 @@ const Utils = {
             const res = await Api.post('/cart/add', payload);
             if (res.success) {
                 const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : '/';
-                window.location.href = baseUrl + 'checkout.php';
+                window.location.href = baseUrl + 'checkout';
             } else {
                 throw new Error(res.message || "Failed to add item to cart.");
             }

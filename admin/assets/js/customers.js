@@ -96,7 +96,7 @@ const Customers = {
                                 <div class="text-sm text-slate-900 dark:text-white font-semibold">${Utils.formatCurrency(cust.total_spent)}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="/admin/customer-detail.php?id=${cust.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="View Profile">
+                                <a href="/admin/customer-detail?id=${cust.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="View Profile">
                                     <i class="ph ph-user-circle text-lg"></i>
                                 </a>
                             </td>
@@ -116,7 +116,7 @@ const Customers = {
     async initDetail() {
         this.currentCustomerId = Utils.getQueryParam('id');
         if (!this.currentCustomerId) {
-            window.location.href = '/admin/customers.php';
+            window.location.href = '/admin/customers';
             return;
         }
 
@@ -250,7 +250,7 @@ const Customers = {
                         ${Utils.formatCurrency(ord.total)}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/admin/order-detail.php?id=${ord.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="View Order">
+                        <a href="/admin/order-detail?id=${ord.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="View Order">
                             <i class="ph ph-arrow-square-out text-lg"></i>
                         </a>
                     </td>

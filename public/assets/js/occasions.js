@@ -335,7 +335,7 @@ const OccasionPage = {
             const origPrice = parseFloat(p.mrp || p.original_price || p.compare_at_price || 0);
             const hasDiscount = origPrice > price;
             const discountPercent = hasDiscount ? Math.round(((origPrice - price) / origPrice) * 100) : 0;
-            const productUrl = `${BASE_URL}product.php?slug=${p.slug}`;
+            const productUrl = `${BASE_URL}product?slug=${p.slug}`;
 
             return `
                 <div class="product-card group bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-2xs hover:shadow-xl hover:border-[#990024]/30 transition-all duration-300 flex flex-col justify-between overflow-hidden relative animate-fade-in">
@@ -513,7 +513,7 @@ const OccasionPage = {
     async addToCart(productId) {
         if (!localStorage.getItem('auth_token')) {
             Utils.showToast("Please login to add items to your cart.", "info");
-            setTimeout(() => { window.location.href = `${BASE_URL}login.php`; }, 1000);
+            setTimeout(() => { window.location.href = `${BASE_URL}login`; }, 1000);
             return;
         }
 

@@ -153,7 +153,7 @@ const Products = {
                                     <button onclick="Products.adjustStock(${prod.id}, ${prod.stock_quantity})" class="p-1.5 text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-amber-500" title="Adjust Stock">
                                         <i class="ph ph-warehouse text-lg"></i>
                                     </button>
-                                    <a href="/admin/product-edit.php?id=${prod.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="Edit Product">
+                                    <a href="/admin/product-edit?id=${prod.id}" class="p-1.5 text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-primary-500" title="Edit Product">
                                         <i class="ph ph-pencil-simple text-lg"></i>
                                     </a>
                                     <button onclick="Products.deleteProduct(${prod.id})" class="p-1.5 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-red-500" title="Delete Product">
@@ -1067,7 +1067,7 @@ const Products = {
                 Utils.showToast("Product created successfully! Upload images next.", "success");
                 
                 setTimeout(() => {
-                    window.location.href = `/admin/product-edit.php?id=${res.product_id}`;
+                    window.location.href = `/admin/product-edit?id=${res.product_id}`;
                 }, 1000);
                 return;
             }

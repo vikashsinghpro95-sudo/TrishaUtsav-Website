@@ -14,11 +14,19 @@ LOCAL_ROOT = "/Users/macbookpro/Developement/FestiveTreat"
 
 # Local file -> remote path relative to public_html
 FILES = {
+    ".htaccess":                            ".htaccess",
+    "public/.htaccess":                     "public/.htaccess",
     "admin/assets/css/admin.css":           "admin/assets/css/admin.css",
     "admin/includes/admin-header.php":      "admin/includes/admin-header.php",
     "admin/includes/admin-footer.php":      "admin/includes/admin-footer.php",
+    "admin/assets/js/api.js":               "admin/assets/js/api.js",
+    "admin/assets/js/auth.js":              "admin/assets/js/auth.js",
     "admin/assets/js/products.js":          "admin/assets/js/products.js",
+    "admin/assets/js/orders.js":            "admin/assets/js/orders.js",
+    "admin/assets/js/customers.js":         "admin/assets/js/customers.js",
+    "admin/assets/js/dashboard.js":         "admin/assets/js/dashboard.js",
     "admin/assets/js/settings.js":          "admin/assets/js/settings.js",
+    "admin/order-detail.php":               "admin/order-detail.php",
     "admin/product-edit.php":               "admin/product-edit.php",
     "admin/products.php":                   "admin/products.php",
     "admin/login.php":                      "admin/login.php",
@@ -58,6 +66,8 @@ FILES = {
     "public/order-success.php":             "public/order-success.php",
     "public/order-detail.php":              "public/order-detail.php",
     "public/update_reels.php":              "public/update_reels.php",
+    "public/assets/js/cart.js":             "public/assets/js/cart.js",
+    "public/assets/js/auth.js":             "public/assets/js/auth.js",
     "public/assets/js/checkout.js":         "public/assets/js/checkout.js",
     "public/assets/js/account.js":          "public/assets/js/account.js",
     "public/assets/js/product.js":          "public/assets/js/product.js",

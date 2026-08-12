@@ -93,7 +93,7 @@ const Dashboard = {
 
             html += `
                 <li class="p-3 sm:p-4 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group">
-                    <a href="/admin/order-detail.php?id=${ord.id}" class="flex items-center justify-between">
+                    <a href="/admin/order-detail?id=${ord.id}" class="flex items-center justify-between">
                         <div class="flex items-center space-x-3 sm:space-x-4">
                             <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 font-semibold flex-shrink-0">
                                 ${initial}

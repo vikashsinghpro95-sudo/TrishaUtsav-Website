@@ -7,30 +7,56 @@
         Require all denied
     </FilesMatch>
 
+    # ----------------------------------------------------------------------
+    # 1. PRESERVE ASSETS, UPLOADS & API ENDPOINTS
+    # ----------------------------------------------------------------------
     # Route /api/... requests to root index.php
     RewriteRule ^api(/.*)?$ index.php [QSA,L]
 
-    # Don't touch /admin/... if it exists
-    RewriteCond %{REQUEST_URI} ^/admin/ [NC]
+    # Exclude direct asset and upload directories
+    RewriteCond %{REQUEST_URI} ^/(uploads|assets)/ [NC]
     RewriteRule ^ - [L]
 
-    # Don't touch /uploads/... if it exists
-    RewriteCond %{REQUEST_URI} ^/uploads/ [NC]
-    RewriteRule ^ - [L]
+    # ----------------------------------------------------------------------
+    # 2. 301 PERMANENT REDIRECTS FOR DIRECT .php REQUESTS TO CLEAN URLs
+    # ----------------------------------------------------------------------
+    # Redirect /index.php or /public/index.php -> /
+    RewriteCond %{THE_REQUEST} \s/+(public/)?index\.php[\s?] [NC]
+    RewriteRule ^(public/)?index\.php$ / [R=301,L]
 
-    # If root request / -> serve public/index.php
+    # Redirect /admin/page.php -> /admin/page
+    RewriteCond %{THE_REQUEST} \s/+admin/([^\s?]+)\.php[\s?] [NC]
+    RewriteRule ^admin/(.+)\.php$ /admin/$1 [R=301,L]
+
+    # Redirect /public/page.php or /page.php -> /page
+    RewriteCond %{THE_REQUEST} \s/+public/([^\s?]+)\.php[\s?] [NC]
+    RewriteRule ^public/(.+)\.php$ /$1 [R=301,L]
+
+    RewriteCond %{THE_REQUEST} \s/+([^\s?]+)\.php[\s?] [NC]
+    RewriteCond %{REQUEST_URI} !^/api/
+    RewriteCond %{REQUEST_URI} !^/admin/
+    RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+
+    # ----------------------------------------------------------------------
+    # 3. INTERNAL REWRITES FOR CLEAN EXTENSIONLESS URLs
+    # ----------------------------------------------------------------------
+    # Root URL / -> serve public/index.php
     RewriteRule ^$ public/index.php [L]
 
-    # If request is inside public/ already, don't rewrite
-    RewriteCond %{REQUEST_URI} ^/public/ [NC]
+    # Allow direct access to existing physical files and directories
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # If requested file exists in public/, rewrite to public/
-    RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -f [OR]
-    RewriteCond %{DOCUMENT_ROOT}/public/%{REQUEST_URI} -d
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Admin section clean URLs: e.g. /admin/login -> admin/login.php
+    RewriteCond %{DOCUMENT_ROOT}/admin/$1.php -f
+    RewriteRule ^admin/(.+)$ admin/$1.php [QSA,L]
 
-    # Fallback for clean URLs in public storefront
+    # Public storefront clean URLs: e.g. /about -> public/about.php
+    RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
+    RewriteRule ^([^/]+)$ public/$1.php [QSA,L]
+
+    # Fallback missing routes in public storefront to public/index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/index.php [QSA,L]

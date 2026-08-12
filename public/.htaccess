@@ -1,7 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
 
-    # Block ALL metadata/dotfiles in public folder
+    # Block sensitive dotfiles
     <FilesMatch "^(composer\.(json|lock)|\.env(\.\w+)?|\.git|README|LICENSE|package\.json|check_dummy\.php)$">
         Require all denied
     </FilesMatch>
@@ -10,16 +11,24 @@
     RewriteCond %{REQUEST_URI} ^/api/
     RewriteRule ^api/(.*)$ api.php [QSA,L]
 
-    # 2. Allow direct access to existing files and directories (css, js, images)
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # 2. Redirect direct .php requests to clean URLs
+    RewriteCond %{THE_REQUEST} \s/+(public/)?index\.php[\s?] [NC]
+    RewriteRule ^index\.php$ / [R=301,L]
 
-    # 3. Map clean path to matching PHP file (e.g. /shop -> shop.php)
-    RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+    RewriteCond %{THE_REQUEST} \s/+(public/)?([^\s?]+)\.php[\s?] [NC]
+    RewriteRule ^(.+)\.php$ /$1 [R=301,L]
+
+    # 3. Allow direct access to existing static files (css, js, images)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 4. Map clean path to matching PHP file (e.g. /shop -> shop.php)
+    RewriteCond %{REQUEST_FILENAME}.php -f
     RewriteRule ^([^/]+)$ $1.php [QSA,L]
 
-    # 4. Fallback missing routes to index.php
+    # 5. Fallback missing routes to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+    RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
