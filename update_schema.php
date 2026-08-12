@@ -46,6 +46,8 @@ try {
 
     // Check and add missing Razorpay and payment fields to orders table
     $orderColumns = [
+        'guest_email'         => "ALTER TABLE orders ADD COLUMN guest_email VARCHAR(191) NULL AFTER user_id",
+        'notes'               => "ALTER TABLE orders ADD COLUMN notes TEXT NULL AFTER order_status",
         'razorpay_order_id'   => "ALTER TABLE orders ADD COLUMN razorpay_order_id VARCHAR(255) NULL AFTER notes",
         'razorpay_payment_id' => "ALTER TABLE orders ADD COLUMN razorpay_payment_id VARCHAR(255) NULL AFTER razorpay_order_id",
         'razorpay_signature'  => "ALTER TABLE orders ADD COLUMN razorpay_signature VARCHAR(255) NULL AFTER razorpay_payment_id",

@@ -16,7 +16,8 @@ class Helper {
             ob_end_clean();
         }
 
-        // Mitigate verbose SQL error disclosure globally
+        // Expose exact message for error resolution
+        /*
         if (isset($data['message']) && is_string($data['message'])) {
             $badWords = ['SQLSTATE', 'PDOException', 'syntax error', 'MySQL', 'database', 'column', 'table'];
             foreach ($badWords as $word) {
@@ -26,6 +27,7 @@ class Helper {
                 }
             }
         }
+        */
 
         header('Content-Type: application/json; charset=utf-8');
         http_response_code($statusCode);

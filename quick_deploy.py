@@ -62,8 +62,15 @@ FILES = {
     "public/assets/js/account.js":          "public/assets/js/account.js",
     "public/assets/js/product.js":          "public/assets/js/product.js",
     "public/assets/js/utils.js":            "public/assets/js/utils.js",
+    "includes/Helper.php":                  "includes/Helper.php",
+    "includes/Database.php":                "includes/Database.php",
+    "includes/Auth.php":                    "includes/Auth.php",
+    "includes/Validator.php":               "includes/Validator.php",
+    "models/Address.php":                   "models/Address.php",
     "models/Cart.php":                      "models/Cart.php",
     "models/Order.php":                     "models/Order.php",
+    "models/OrderItem.php":                 "models/OrderItem.php",
+    "models/OrderStatusHistory.php":        "models/OrderStatusHistory.php",
     "controllers/PaymentController.php":    "controllers/PaymentController.php",
 }
 
