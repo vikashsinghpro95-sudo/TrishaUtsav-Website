@@ -297,7 +297,7 @@ include_once __DIR__ . '/includes/header.php';
                         : (p => (BASE_URL + p.replace(/^\/+/, '')));
                     const imgUrl = rawImg ? fixFn(rawImg) : `${BASE_URL}assets/images/product_placeholder.jpg`;
 
-                    card.href = `${BASE_URL}product.php?slug=${prod.slug}`;
+                    card.href = `${BASE_URL}product?slug=${prod.slug}`;
                     card.innerHTML = `
                         <div class="w-16 h-16 rounded-2xl bg-[#990024] p-1 flex-shrink-0 relative overflow-hidden border border-[#f59e0b]/30">
                             <img src="${imgUrl}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="w-full h-full object-cover rounded-xl group-hover:scale-110 transition duration-500">
@@ -318,33 +318,40 @@ include_once __DIR__ . '/includes/header.php';
 
         async loadSectionsOrder() {
             const container = document.getElementById('dynamic-sections-container');
+            if (!container) return;
             try {
                 const res = await Api.get('/homepage/sections');
-                if (res.success && res.data) {
+                if (res.success && Array.isArray(res.data)) {
                     this.sectionsOrder = res.data.filter(s => s.enabled !== false);
                     container.innerHTML = '';
 
                     for (const sec of this.sectionsOrder) {
-                        const secNode = document.createElement('div');
-                        secNode.id = `sec-${sec.id}`;
-                        secNode.className = 'space-y-4 sm:space-y-6';
-                        container.appendChild(secNode);
+                        try {
+                            const secNode = document.createElement('div');
+                            secNode.id = `sec-${sec.id}`;
+                            secNode.className = 'space-y-4 sm:space-y-6';
+                            container.appendChild(secNode);
 
-                        if (sec.id === 'occasions') await this.renderOccasions(secNode);
-                        else if (sec.id === 'categories') await this.renderCategories(secNode);
-                        else if (sec.id === 'trending') await this.renderTrending(secNode);
-                        else if (sec.id === 'must_buy') await this.renderMustBuy(secNode);
-                        else if (sec.id === 'mega_sale') await this.renderMegaSale(secNode);
+                            if (sec.id === 'occasions') await this.renderOccasions(secNode);
+                            else if (sec.id === 'categories') await this.renderCategories(secNode);
+                            else if (sec.id === 'trending') await this.renderTrending(secNode);
+                            else if (sec.id === 'must_buy') await this.renderMustBuy(secNode);
+                            else if (sec.id === 'mega_sale') await this.renderMegaSale(secNode);
+                            else if (sec.id === 'reels') await this.renderReels(secNode);
+                        } catch (secErr) {
+                            console.error(`Error rendering section ${sec.id}:`, secErr);
+                        }
                     }
 
                     if (!this.sectionsOrder.some(s => s.id === 'mega_sale')) {
-                        await this.renderMegaSale(container);
+                        try { await this.renderMegaSale(container); } catch(e){}
                     }
-                    this.renderUSPBar(container);
-                    this.renderNewsletter(container);
+                    try { this.renderUSPBar(container); } catch(e){}
+                    try { this.renderNewsletter(container); } catch(e){}
                 }
             } catch(e) {
-                container.innerHTML = `<div class="text-center py-8 text-red-500 text-xs font-bold">Failed to load homepage layout.</div>`;
+                console.error("Homepage load error:", e);
+                container.innerHTML = `<div class="text-center py-8 text-red-500 text-xs font-bold">Failed to load homepage layout: ${e.message || 'Unknown error'}</div>`;
             }
         },
 
@@ -382,7 +389,7 @@ include_once __DIR__ . '/includes/header.php';
                         const numStr = `#0${idx + 1}`;
 
                         html += `
-                            <a href="${BASE_URL}occasions.php?slug=${occ.slug}" class="group relative rounded-3xl sm:rounded-[2rem] overflow-hidden shadow-xl border border-[#f59e0b]/30 h-[300px] sm:h-[380px] flex flex-col justify-between p-5 sm:p-6 transform hover:-translate-y-2 transition duration-300">
+                            <a href="${BASE_URL}occasions?slug=${occ.slug}" class="group relative rounded-3xl sm:rounded-[2rem] overflow-hidden shadow-xl border border-[#f59e0b]/30 h-[300px] sm:h-[380px] flex flex-col justify-between p-5 sm:p-6 transform hover:-translate-y-2 transition duration-300">
                                 <img src="${bgImg}" alt="${occ.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
                                 <div class="absolute inset-0 bg-gradient-to-t from-[#12090c] via-[#12090c]/40 to-transparent"></div>
 
