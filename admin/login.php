@@ -60,7 +60,12 @@
 
             <div>
                 <label for="admin-password" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Password</label>
-                <input type="password" id="admin-password" required class="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none transition" placeholder="••••••••">
+                <div class="relative">
+                    <input type="password" id="admin-password" required class="w-full px-4 py-2 pr-10 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none transition" placeholder="••••••••">
+                    <button type="button" onclick="togglePasswordVisibility('admin-password', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                        <i class="far fa-eye text-sm"></i>
+                    </button>
+                </div>
             </div>
 
             <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-lg transition duration-200 focus:outline-none">

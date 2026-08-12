@@ -247,15 +247,30 @@ include_once __DIR__ . '/includes/header.php';
                 <form id="frm-account-password" class="space-y-4">
                     <div>
                         <label for="pass-current" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Current Password</label>
-                        <input type="password" id="pass-current" required placeholder="••••••••" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                        <div class="relative">
+                            <input type="password" id="pass-current" required placeholder="••••••••" class="w-full px-4 py-2 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                            <button type="button" onclick="togglePasswordVisibility('pass-current', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                                <i class="far fa-eye text-sm"></i>
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label for="pass-new" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">New Password</label>
-                        <input type="password" id="pass-new" required placeholder="Min. 8 characters" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                        <div class="relative">
+                            <input type="password" id="pass-new" required placeholder="Min. 8 characters" class="w-full px-4 py-2 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                            <button type="button" onclick="togglePasswordVisibility('pass-new', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                                <i class="far fa-eye text-sm"></i>
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <label for="pass-confirm" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Confirm New Password</label>
-                        <input type="password" id="pass-confirm" required placeholder="Repeat new password" class="w-full px-4 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                        <div class="relative">
+                            <input type="password" id="pass-confirm" required placeholder="Repeat new password" class="w-full px-4 py-2 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024]">
+                            <button type="button" onclick="togglePasswordVisibility('pass-confirm', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                                <i class="far fa-eye text-sm"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <button type="submit" class="bg-[#990024] hover:bg-[#7a001c] text-white font-extrabold text-xs uppercase tracking-wider py-3 px-6 rounded-full shadow-md transition duration-200 border border-[#f59e0b]/30">

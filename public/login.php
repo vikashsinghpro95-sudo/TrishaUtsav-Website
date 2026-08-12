@@ -58,7 +58,12 @@ include_once __DIR__ . '/includes/header.php';
                         <label for="login-password" class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Password</label>
                         <a href="#" class="text-[10px] text-[#990024] font-bold hover:underline">Forgot password?</a>
                     </div>
-                    <input type="password" id="login-password" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="••••••••">
+                    <div class="relative">
+                        <input type="password" id="login-password" required class="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="••••••••">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="flex items-center">
@@ -99,12 +104,22 @@ include_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label for="reg-password" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Password</label>
-                    <input type="password" id="reg-password" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="Min. 8 characters">
+                    <div class="relative">
+                        <input type="password" id="reg-password" required class="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="Min. 8 characters">
+                        <button type="button" onclick="togglePasswordVisibility('reg-password', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div>
                     <label for="reg-confirm-password" class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Confirm Password</label>
-                    <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="Repeat password">
+                    <div class="relative">
+                        <input type="password" id="reg-confirm-password" required class="w-full px-4 py-2.5 pr-10 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] transition" placeholder="Repeat password">
+                        <button type="button" onclick="togglePasswordVisibility('reg-confirm-password', this)" class="password-toggle-btn absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-[#990024] transition-colors focus:outline-none cursor-pointer" aria-label="Show password" title="Show password">
+                            <i class="far fa-eye text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <button type="submit" class="w-full bg-[#990024] hover:bg-[#7a001c] text-[#fffdf7] font-extrabold text-xs uppercase tracking-widest py-3.5 px-4 rounded-full shadow-lg transition duration-200 border border-[#f59e0b]/30">
