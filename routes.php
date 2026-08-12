@@ -24,6 +24,10 @@ return [
         // Cart
         '/^\/api\/cart\/add$/' => 'CartController@add',
         '/^\/api\/cart\/apply-coupon$/' => 'CartController@applyCoupon',
+
+        // Wishlist
+        '/^\/api\/wishlist\/toggle$/' => 'WishlistController@toggle',
+        '/^\/api\/wishlist\/move-to-cart$/' => 'WishlistController@moveToCart',
         
         // Addresses
         '/^\/api\/addresses$/' => 'AddressController@store',
@@ -88,6 +92,10 @@ return [
         '/^\/api\/cart$/' => 'CartController@index',
         '/^\/api\/cart\/count$/' => 'CartController@count',
         '/^\/api\/checkout\/direct-summary$/' => 'CheckoutController@getDirectSummary',
+        
+        // Wishlist
+        '/^\/api\/wishlist$/' => 'WishlistController@index',
+        '/^\/api\/wishlist\/count$/' => 'WishlistController@count',
         
         // Addresses
         '/^\/api\/addresses$/' => 'AddressController@index',

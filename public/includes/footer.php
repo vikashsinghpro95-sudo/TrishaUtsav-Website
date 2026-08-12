@@ -183,11 +183,19 @@
         </a>
 
         <!-- Festive Occasions Link -->
-        <a href="<?php echo BASE_URL; ?>shop?sort=newest" data-nav="festive" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2.5 rounded-2xl">
+        <a href="<?php echo BASE_URL; ?>shop?sort=newest" data-nav="festive" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2 rounded-2xl">
             <div class="w-7 h-7 rounded-full flex items-center justify-center text-base">
                 <i class="fas fa-glass-cheers"></i>
             </div>
             <span class="text-[9px] font-black uppercase tracking-wider">Festive</span>
+        </a>
+
+        <!-- Wishlist Link -->
+        <a href="<?php echo BASE_URL; ?>wishlist" data-nav="wishlist" class="mobile-nav-btn text-center flex flex-col items-center space-y-0.5 text-slate-400 hover:text-[#f59e0b] transition py-1 px-2 rounded-2xl relative">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-base relative">
+                <i class="far fa-heart"></i>
+            </div>
+            <span class="text-[9px] font-black uppercase tracking-wider">Wishlist</span>
         </a>
 
         <!-- Cart Link with Badge -->

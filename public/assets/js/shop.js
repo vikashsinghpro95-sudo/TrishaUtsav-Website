@@ -273,6 +273,8 @@ const Shop = {
 
                     html += `
                         <div class="product-card group bg-white rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl hover:border-[#990024]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative">
+                            <!-- Wishlist Heart Icon Overlay -->
+                            ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(prod.id) : ''}
                             <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
                                 <img src="${imgUrl1}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-105 ${imgUrl2 ? 'group-hover:opacity-0' : ''}">
                                 ${imgUrl2 ? `

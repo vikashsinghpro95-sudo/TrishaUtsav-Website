@@ -82,8 +82,14 @@ FILES = {
     "models/Cart.php":                      "models/Cart.php",
     "models/Order.php":                     "models/Order.php",
     "models/OrderItem.php":                 "models/OrderItem.php",
-    "models/OrderStatusHistory.php":        "models/OrderStatusHistory.php",
+    "models/Wishlist.php":                  "models/Wishlist.php",
+    "includes/WishlistHelper.php":          "includes/WishlistHelper.php",
+    "controllers/WishlistController.php":    "controllers/WishlistController.php",
+    "controllers/AuthController.php":        "controllers/AuthController.php",
     "controllers/PaymentController.php":    "controllers/PaymentController.php",
+    "update_schema_wishlist.php":           "update_schema_wishlist.php",
+    "public/assets/js/wishlist.js":         "public/assets/js/wishlist.js",
+    "public/wishlist.php":                  "public/wishlist.php",
 }
 
 def ensure_remote_dir(ftp, remote_dir):

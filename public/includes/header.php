@@ -2,6 +2,13 @@
 if (!defined('BASE_URL')) {
     require_once __DIR__ . '/config.php';
 }
+require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../includes/Database.php';
+require_once __DIR__ . '/../../includes/Auth.php';
+require_once __DIR__ . '/../../models/Wishlist.php';
+require_once __DIR__ . '/../../includes/WishlistHelper.php';
+
+$wishlistIds = WishlistHelper::getWishlistProductIds();
 ?>
 <!DOCTYPE html>
 <html lang="en" class="overflow-x-hidden">
@@ -146,12 +153,14 @@ if (!defined('BASE_URL')) {
     <script>
         const BASE_URL = '<?php echo BASE_URL; ?>';
         const API_BASE_URL = '<?php echo API_BASE_URL; ?>';
+        window.wishlistIds = <?php echo json_encode(array_map('intval', $wishlistIds)); ?>;
     </script>
 
     <!-- Base Libraries -->
     <script src="<?php echo BASE_URL; ?>assets/js/utils.js?v=<?php echo time(); ?>"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/api.js?v=<?php echo time(); ?>"></script>
     <script src="<?php echo BASE_URL; ?>assets/js/auth.js?v=<?php echo time(); ?>"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/wishlist.js?v=<?php echo time(); ?>"></script>
 </head>
 <body class="bg-[#fffdf7] text-gray-800 font-sans min-h-screen flex flex-col antialiased selection:bg-[#990024] selection:text-white overflow-x-hidden w-full max-w-full">
 
@@ -470,6 +479,14 @@ if (!defined('BASE_URL')) {
 
                 <!-- Controls (Far Most Right) -->
                 <div class="hidden lg:flex items-center space-x-2 sm:space-x-3 ml-auto">
+                    <!-- Wishlist Button -->
+                    <a href="<?php echo BASE_URL; ?>wishlist" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#f59e0b]/30 bg-white hover:bg-[#990024]/5 text-[#12090c] hover:text-[#990024] flex items-center justify-center transition shadow-sm relative group" title="View Wishlist">
+                        <i class="far fa-heart text-xs sm:text-sm"></i>
+                        <span id="header-wishlist-count" class="absolute -top-1 -right-1 bg-[#f59e0b] text-[#12090c] text-[9px] font-black rounded-full h-4 w-4 sm:h-4.5 sm:w-4.5 flex items-center justify-center border border-white shadow-sm font-sans">
+                            <?php echo count($wishlistIds); ?>
+                        </span>
+                    </a>
+
                     <!-- User Profile Button -->
                     <div class="header-user-section-target">
                         <a href="<?php echo BASE_URL; ?>login" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#f59e0b]/30 bg-white hover:bg-[#990024]/5 text-[#12090c] flex items-center justify-center transition shadow-sm" title="Sign In">

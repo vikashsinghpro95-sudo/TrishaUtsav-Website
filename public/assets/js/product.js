@@ -251,14 +251,25 @@ const ProductPage = {
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <button id="btn-add-to-cart" onclick="ProductPage.addToCart(false)" ${isOutOfStock ? 'disabled' : ''} class="btn-secondary-massive">
-                            <i class="fas fa-shopping-bag text-lg"></i>
-                            <span>ADD TO CART</span>
-                        </button>
-                        <button id="btn-buy-now" onclick="ProductPage.addToCart(true)" ${isOutOfStock ? 'disabled' : ''} class="btn-primary-massive">
-                            <i class="fas fa-bolt text-lg text-[#f59e0b]"></i>
-                            <span>BUY NOW</span>
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1 w-full">
+                            <button id="btn-add-to-cart" onclick="ProductPage.addToCart(false)" ${isOutOfStock ? 'disabled' : ''} class="btn-secondary-massive">
+                                <i class="fas fa-shopping-bag text-lg"></i>
+                                <span>ADD TO CART</span>
+                            </button>
+                            <button id="btn-buy-now" onclick="ProductPage.addToCart(true)" ${isOutOfStock ? 'disabled' : ''} class="btn-primary-massive">
+                                <i class="fas fa-bolt text-lg text-[#f59e0b]"></i>
+                                <span>BUY NOW</span>
+                            </button>
+                        </div>
+                        
+                        <button type="button" 
+                            id="pdp-wishlist-btn" 
+                            data-wishlist-id="${prod.id}" 
+                            onclick="WishlistManager.toggle(${prod.id}, this, event)" 
+                            class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full border-2 ${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'border-[#990024] text-[#990024] bg-red-50/50 hover:bg-red-100/50' : 'border-gray-300 hover:border-[#990024] text-gray-700 hover:text-[#990024] bg-white'} font-bold text-xs uppercase tracking-wider transition duration-300 shadow-sm shrink-0">
+                            <i class="${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'fas fa-heart text-[#990024]' : 'far fa-heart text-gray-700'}"></i>
+                            <span class="wishlist-btn-text">${typeof WishlistManager !== 'undefined' && WishlistManager.isWishlisted(prod.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
                         </button>
                     </div>
                 </div>

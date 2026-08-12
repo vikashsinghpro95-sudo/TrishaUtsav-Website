@@ -339,6 +339,9 @@ const OccasionPage = {
 
             return `
                 <div class="product-card group bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-2xs hover:shadow-xl hover:border-[#990024]/30 transition-all duration-300 flex flex-col justify-between overflow-hidden relative animate-fade-in">
+                    <!-- Wishlist Heart Button -->
+                    ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(p.id) : ''}
+
                     <!-- Image Container with Aspect Ratio -->
                     <div class="relative overflow-hidden aspect-square bg-gray-50">
                         <a href="${productUrl}" class="block w-full h-full">

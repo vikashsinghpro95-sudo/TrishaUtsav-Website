@@ -74,6 +74,21 @@ class AuthController {
                 ], 401);
             }
 
+            // Merge guest session wishlist into account wishlist if present
+            if (session_status() === PHP_SESSION_NONE) {
+                @session_start();
+            }
+            if (!empty($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
+                try {
+                    $user = Auth::getCurrentUser();
+                    if ($user && !empty($user['id'])) {
+                        $wishlistModel = new Wishlist();
+                        $wishlistModel->mergeSessionWishlist((int)$user['id'], $_SESSION['wishlist']);
+                        $_SESSION['wishlist'] = [];
+                    }
+                } catch (Exception $eWish) {}
+            }
+
             Helper::jsonResponse([
                 'success' => true,
                 'message' => 'Authentication successful.',
