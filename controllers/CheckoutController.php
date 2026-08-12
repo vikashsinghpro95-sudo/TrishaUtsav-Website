@@ -372,7 +372,7 @@ class CheckoutController {
         $itemTotal = $unitPrice * $quantity;
 
         // Dynamic Shipping Calculation (per product from database)
-        $shippingFee = (float)($product['shipping_fee'] ?? 0);
+        $shippingFee = (float)($product['shipping_charge'] ?? 0);
         $totalShipping = $shippingFee * $quantity;
         
         $tax = 0.00;
@@ -452,7 +452,7 @@ class CheckoutController {
         $this->db->beginTransaction();
         try {
             // Row lock stock check
-            $stmtLock = $this->db->prepare("SELECT id, name, sku, price, stock_quantity, status, shipping_fee FROM products WHERE id = ? FOR UPDATE");
+            $stmtLock = $this->db->prepare("SELECT id, name, sku, price, stock_quantity, status, shipping_charge FROM products WHERE id = ? FOR UPDATE");
             $stmtLock->execute([$productId]);
             $prod = $stmtLock->fetch();
 

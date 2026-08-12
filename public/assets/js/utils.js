@@ -133,7 +133,7 @@ const Utils = {
     },
 
     /**
-     * Trigger direct "Buy Now" checkout bypassing normal cart
+     * Trigger direct "Buy Now" checkout using standard Cart flow
      *
      * @param {number|string} productId
      * @param {number} quantity
@@ -149,19 +149,69 @@ const Utils = {
         }
 
         try {
+            const pId = parseInt(productId);
+            const qty = parseInt(quantity) || 1;
+
+            if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+                // If not logged in, add to local guest cart and redirect to checkout
+                let guestCart = JSON.parse(localStorage.getItem('guest_cart')) || [];
+                
+                try {
+                    const res = await Api.get('/products/' + pId);
+                    if (res.success && res.data) {
+                        const prod = res.data;
+                        let price = parseFloat(prod.price);
+                        if (attributes && prod.attributes) {
+                            for (let k in attributes) {
+                                const val = attributes[k];
+                                const match = prod.attributes.find(a => a.attribute_name === k && a.attribute_value === val);
+                                if (match) price += parseFloat(match.extra_price);
+                            }
+                        }
+                        const primaryImg = prod.primary_image || (prod.images && prod.images.length > 0 ? prod.images[0].image_url : '');
+                        
+                        const existingIndex = guestCart.findIndex(item => {
+                            if (item.product_id !== pId) return false;
+                            return JSON.stringify(item.attributes) === JSON.stringify(attributes);
+                        });
+
+                        if (existingIndex > -1) {
+                            guestCart[existingIndex].quantity += qty;
+                        } else {
+                            guestCart.push({
+                                id: Date.now() + Math.floor(Math.random() * 1000),
+                                product_id: pId,
+                                product_name: prod.name,
+                                product_image: primaryImg,
+                                sku: prod.sku,
+                                price: price,
+                                quantity: qty,
+                                attributes: attributes
+                            });
+                        }
+
+                        localStorage.setItem('guest_cart', JSON.stringify(guestCart));
+                    }
+                } catch (eG) {}
+
+                const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : '/';
+                window.location.href = baseUrl + 'login.php?redirect=checkout.php';
+                return;
+            }
+
+            // Logged in user: Add item to backend Cart
             const payload = {
-                product_id: parseInt(productId),
-                quantity: parseInt(quantity) || 1
+                product_id: pId,
+                quantity: qty
             };
-            if (variantId) payload.variant_id = variantId;
             if (attributes) payload.attributes = attributes;
 
-            const res = await Api.post('/buy-now', payload);
-
-            if (res.success && res.redirect_url) {
-                window.location.href = res.redirect_url;
+            const res = await Api.post('/cart/add', payload);
+            if (res.success) {
+                const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : '/';
+                window.location.href = baseUrl + 'checkout.php';
             } else {
-                throw new Error(res.message || "Failed to initiate direct checkout.");
+                throw new Error(res.message || "Failed to add item to cart.");
             }
         } catch (err) {
             Utils.showToast(err.message || "Failed to initiate Buy Now.", "error");
