@@ -190,18 +190,26 @@ class CheckoutController {
                 // Reduce inventory stock
                 $stmtUpdateStock->execute([$item['quantity'], $item['product_id']]);
 
-                // Record inventory movement log
-                $stmtInvLog->execute([
-                    $item['product_id'],
-                    $userId,
-                    'removed',
-                    -((int)$item['quantity']),
-                    "Order Placed: $orderNumber"
-                ]);
+                // Record inventory movement log safely
+                try {
+                    $stmtInvLog->execute([
+                        $item['product_id'],
+                        $userId,
+                        'removed',
+                        -((int)$item['quantity']),
+                        "Order Placed: $orderNumber"
+                    ]);
+                } catch (Throwable $eInv) {
+                    error_log("Inventory log skipped: " . $eInv->getMessage());
+                }
             }
 
-            // Record initial order status history
-            $this->historyModel->log($orderId, 'pending', 'Order placed successfully via checkout.', $userId);
+            // Record initial order status history safely
+            try {
+                $this->historyModel->log($orderId, 'pending', 'Order placed successfully via checkout.', $userId);
+            } catch (Throwable $eHist) {
+                error_log("Order history log skipped: " . $eHist->getMessage());
+            }
 
             if (!$isOnlinePayment) {
                 // Increment coupon usage limit count if applied
@@ -507,21 +515,29 @@ class CheckoutController {
             $stmtUpdateStock = $this->db->prepare("UPDATE products SET stock_quantity = stock_quantity - ? WHERE id = ?");
             $stmtUpdateStock->execute([$quantity, $productId]);
 
-            // Inventory Movement Log
-            $stmtInvLog = $this->db->prepare("
-                INSERT INTO inventory_log (product_id, user_id, change_type, quantity_change, reason)
-                VALUES (?, ?, ?, ?, ?)
-            ");
-            $stmtInvLog->execute([
-                $productId,
-                $userId,
-                'removed',
-                -$quantity,
-                "Direct Buy Order Placed: $orderNumber"
-            ]);
+            // Inventory Movement Log safely
+            try {
+                $stmtInvLog = $this->db->prepare("
+                    INSERT INTO inventory_log (product_id, user_id, change_type, quantity_change, reason)
+                    VALUES (?, ?, ?, ?, ?)
+                ");
+                $stmtInvLog->execute([
+                    $productId,
+                    $userId,
+                    'removed',
+                    -$quantity,
+                    "Direct Buy Order Placed: $orderNumber"
+                ]);
+            } catch (Throwable $eInv) {
+                error_log("Direct order inventory log skipped: " . $eInv->getMessage());
+            }
 
-            // Status History Log
-            $this->historyModel->log($orderId, 'pending', 'Direct buy order placed successfully.', $userId);
+            // Status History Log safely
+            try {
+                $this->historyModel->log($orderId, 'pending', 'Direct buy order placed successfully.', $userId);
+            } catch (Throwable $eHist) {
+                error_log("Direct order history log skipped: " . $eHist->getMessage());
+            }
 
             if (!$isOnlinePayment) {
                 unset($_SESSION['direct_orders'][$token]);
