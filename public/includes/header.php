@@ -16,7 +16,36 @@ $wishlistIds = WishlistHelper::getWishlistProductIds();
     <link rel="icon" type="image/png" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trisha Utsav | Premium Indian Festival & Celebration Store</title>
+    <title><?php echo isset($pageTitle) ? $pageTitle : 'Trisha Utsav | Premium Indian Festival & Celebration Store'; ?></title>
+
+<?php if (isset($ogProduct) && !empty($ogProduct)): ?>
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="product" />
+    <meta property="og:title" content="<?php echo $ogTitle; ?>" />
+    <meta property="og:description" content="<?php echo $ogDesc; ?>" />
+    <meta property="og:url" content="<?php echo $ogUrl; ?>" />
+    <meta property="og:image" content="<?php echo $ogImage; ?>" />
+    <meta property="og:site_name" content="Trisha Utsav" />
+    <meta property="product:price:amount" content="<?php echo $ogPrice; ?>" />
+    <meta property="product:price:currency" content="INR" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="<?php echo $ogTitle; ?>" />
+    <meta name="twitter:description" content="<?php echo $ogDesc; ?>" />
+    <meta name="twitter:image" content="<?php echo $ogImage; ?>" />
+<?php else: ?>
+    <!-- Fallback Default Social Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo isset($pageTitle) ? $pageTitle : 'Trisha Utsav – Premium Indian Festival & Celebration Store'; ?>" />
+    <meta property="og:description" content="Explore handcrafted sweets, artisanal diyas, royal ethnic creations, and pure celebration attributes at Trisha Utsav." />
+    <meta property="og:image" content="https://trishautsav.in/favicon.png" />
+    <meta property="og:url" content="https://trishautsav.in/" />
+    <meta property="og:site_name" content="Trisha Utsav" />
+    <meta name="twitter:card" content="summary_large_image" />
+<?php endif; ?>
     
     <!-- Google Fonts: Fraunces (Display Serif) & Plus Jakarta Sans (Body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

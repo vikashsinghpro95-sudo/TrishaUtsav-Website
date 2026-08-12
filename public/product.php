@@ -1,5 +1,39 @@
 <?php
 require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/Database.php';
+require_once __DIR__ . '/../models/Product.php';
+
+$ogProduct = null;
+$productSlugOrId = $_GET['slug'] ?? $_GET['id'] ?? null;
+if ($productSlugOrId) {
+    try {
+        $pModel = new Product();
+        if (is_numeric($productSlugOrId)) {
+            $ogProduct = $pModel->find((int)$productSlugOrId);
+        } else {
+            $ogProduct = $pModel->findBySlug(trim($productSlugOrId));
+        }
+    } catch (Throwable $e) {}
+}
+
+if ($ogProduct) {
+    $pageTitle = htmlspecialchars($ogProduct['name']) . " | Trisha Utsav";
+    $ogTitle = htmlspecialchars($ogProduct['name']);
+    $ogDesc = htmlspecialchars(substr(trim(strip_tags($ogProduct['short_description'] ?? $ogProduct['description'] ?? '')), 0, 200));
+    
+    $slugVal = $ogProduct['slug'] ?? $ogProduct['id'];
+    $ogUrl = 'https://trishautsav.in/product?slug=' . urlencode($slugVal);
+    
+    $rawImg = $ogProduct['primary_image'] ?? (!empty($ogProduct['images']) ? $ogProduct['images'][0]['image_url'] : null);
+    if ($rawImg) {
+        $ogImage = (strpos($rawImg, 'http') === 0) ? $rawImg : ('https://trishautsav.in/' . ltrim($rawImg, '/'));
+    } else {
+        $ogImage = 'https://trishautsav.in/favicon.png';
+    }
+    $ogPrice = $ogProduct['sale_price'] ?? $ogProduct['price'] ?? 0;
+}
+
 include_once __DIR__ . '/includes/header.php';
 ?>
 
