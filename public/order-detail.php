@@ -362,6 +362,9 @@ include_once __DIR__ . '/includes/header.php';
                     <!-- Visual Order Progress Stepper -->
                     ${stepperHtml}
 
+                    <!-- Live Delhivery Tracking Card -->
+                    <div id="live-delhivery-tracking-card" class="mt-4"></div>
+
                     <!-- Grid Layout: Ordered Items (Left) & Delivery/Pricing Details (Right) -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
                         
@@ -447,6 +450,66 @@ include_once __DIR__ . '/includes/header.php';
 
                 ${shipmentHtml}
             `;
+
+            this.loadLiveTracking();
+        },
+
+        async loadLiveTracking() {
+            const container = document.getElementById('live-delhivery-tracking-card');
+            if (!container) return;
+
+            try {
+                const res = await Api.get('/orders/' + this.orderId + '/tracking');
+                if (res.success && res.tracked && res.data) {
+                    const trk = res.data;
+                    let scansHtml = '';
+                    if (trk.scans && trk.scans.length > 0) {
+                        scansHtml = `
+                            <div class="space-y-2 mt-3 pt-3 border-t border-amber-200/60">
+                                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Scan Log & Location History</span>
+                                ${trk.scans.slice(0, 5).map(s => `
+                                    <div class="flex items-start justify-between text-[11px] text-slate-600 space-x-2">
+                                        <span class="font-semibold text-slate-800">${s.status} ${s.location ? '— ' + s.location : ''}</span>
+                                        <span class="text-slate-400 shrink-0 font-mono">${s.timestamp || ''}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    }
+
+                    container.innerHTML = `
+                        <div class="bg-gradient-to-r from-amber-500/10 via-amber-50 to-orange-50 p-5 rounded-3xl border border-amber-200/80 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-sm font-extrabold text-amber-950 flex items-center">
+                                    <i class="fas fa-truck-fast mr-2 text-[#990024]"></i> Delhivery Live Shipment Tracking
+                                </h3>
+                                <span class="text-[10px] font-black uppercase tracking-wider bg-[#990024] text-white px-2.5 py-0.5 rounded-full">${trk.status || 'In Transit'}</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded-2xl border border-amber-200/60 text-xs">
+                                <div>
+                                    <span class="block text-slate-400 font-extrabold uppercase text-[10px]">Waybill / Tracking No.</span>
+                                    <span class="text-slate-900 font-black text-sm mt-0.5 block font-mono select-all">${trk.tracking_id}</span>
+                                </div>
+                                <div>
+                                    <span class="block text-slate-400 font-extrabold uppercase text-[10px]">Current Location / Est. Delivery</span>
+                                    <span class="text-[#990024] font-bold text-xs mt-0.5 block">${trk.location || 'In Transit'} ${trk.estimated_delivery ? '(' + trk.estimated_delivery + ')' : ''}</span>
+                                </div>
+                            </div>
+
+                            ${scansHtml}
+
+                            <div class="pt-2 flex justify-end">
+                                <a href="${trk.fallback_url}" target="_blank" class="inline-flex items-center text-[11px] font-bold text-[#990024] hover:underline">
+                                    Track on Delhivery Official Portal <i class="fas fa-external-link-alt ml-1.5 text-[9px]"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                // Keep default or fallback static tracker silently
+            }
         },
 
         async cancelOrder() {

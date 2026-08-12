@@ -95,8 +95,9 @@ class Order {
                 order_number, user_id, guest_email, shipping_address_id, billing_address_id,
                 subtotal, tax_amount, shipping_charge, discount, coupon_code, total,
                 payment_method, payment_status, order_status, notes,
-                razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at,
+                tracking_id, tracking_status, delhivery_pincode_verified, estimated_delivery_days
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
@@ -119,7 +120,11 @@ class Order {
             $data['razorpay_payment_id'] ?? null,
             $data['razorpay_signature'] ?? null,
             $data['attempts'] ?? 0,
-            $data['expires_at'] ?? null
+            $data['expires_at'] ?? null,
+            $data['tracking_id'] ?? null,
+            $data['tracking_status'] ?? null,
+            $data['delhivery_pincode_verified'] ?? 0,
+            $data['estimated_delivery_days'] ?? null
         ]);
 
         return (int)$this->db->lastInsertId();

@@ -222,9 +222,45 @@ const Orders = {
 
                 // Render shipment dispatches
                 this.renderShipments(shipments);
+
+                // Populate Delhivery Tracking ID if present
+                if (ord.tracking_id) {
+                    const waybillInput = document.getElementById('admin-delhivery-waybill');
+                    if (waybillInput) waybillInput.value = ord.tracking_id;
+                    const infoEl = document.getElementById('delhivery-tracking-status-info');
+                    if (infoEl) {
+                        infoEl.innerHTML = `<span class="text-emerald-600 font-bold flex items-center"><i class="ph ph-check-circle mr-1 text-sm"></i>Active Waybill: ${ord.tracking_id}</span>`;
+                    }
+                }
             }
         } catch (e) {
             Utils.showToast("Failed to fetch order details: " + e.message, "error");
+        }
+    },
+
+    async saveTrackingId() {
+        if (!this.currentOrderId) return;
+        const waybillInput = document.getElementById('admin-delhivery-waybill');
+        const trackingId = waybillInput ? waybillInput.value.trim() : '';
+
+        if (!trackingId) {
+            Utils.showToast("Please enter a valid tracking ID / waybill.", "warning");
+            return;
+        }
+
+        try {
+            const res = await Api.put('/admin/orders/' + this.currentOrderId + '/tracking', { tracking_id: trackingId });
+            if (res.success) {
+                Utils.showToast("Delhivery Tracking ID saved successfully!", "success");
+                const infoEl = document.getElementById('delhivery-tracking-status-info');
+                if (infoEl) {
+                    infoEl.innerHTML = `<span class="text-emerald-600 font-bold flex items-center"><i class="ph ph-check-circle mr-1 text-sm"></i>Active Waybill: ${trackingId}</span>`;
+                }
+            } else {
+                Utils.showToast(res.message || "Failed to update tracking ID.", "error");
+            }
+        } catch (e) {
+            Utils.showToast(e.message || "Error updating tracking ID.", "error");
         }
     },
 

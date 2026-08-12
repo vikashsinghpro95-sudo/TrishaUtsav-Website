@@ -164,6 +164,67 @@ const CheckoutPage = {
                 circle.innerHTML = '<div style="width:10px;height:10px;background:var(--crimson);border-radius:50%;"></div>';
             }
         }
+
+        const selected = this.addresses.find(a => a.id == id);
+        if (selected && selected.pincode) {
+            const input = document.getElementById('checkout-pincode-input');
+            if (input) input.value = selected.pincode;
+            this.checkPincode(selected.pincode);
+        }
+    },
+
+    /**
+     * Check pincode serviceability & rate via Delhivery Express
+     */
+    async checkPincode(pincodeToTest = null) {
+        const pincode = pincodeToTest || document.getElementById('checkout-pincode-input')?.value;
+        const statusEl = document.getElementById('pincode-status-badge');
+        if (!pincode || !/^[1-9][0-9]{5}$/.test(String(pincode).trim())) {
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-xs text-amber-600 font-bold"><i class="fas fa-exclamation-triangle mr-1"></i>Please enter a valid 6-digit Indian pincode.</span>`;
+            }
+            return;
+        }
+
+        if (statusEl) {
+            statusEl.innerHTML = `<span class="text-xs text-gray-500 font-bold inline-flex items-center"><i class="fas fa-spinner fa-spin mr-1.5 text-[#990024]"></i>Checking Delhivery Express serviceability...</span>`;
+        }
+
+        try {
+            const subtotal = this.cart?.summary?.subtotal || 0;
+            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(String(pincode).trim()) + '&amount=' + subtotal);
+            if (res.success && res.serviceable) {
+                if (statusEl) {
+                    statusEl.innerHTML = `
+                        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between text-xs">
+                            <span class="font-extrabold text-emerald-800 flex items-center">
+                                <i class="fas fa-check-circle text-emerald-600 text-sm mr-2"></i> Serviceable via Delhivery Express (${res.city || 'India'})
+                            </span>
+                            <span class="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">${res.estimated_days || '3-5 Days'}</span>
+                        </div>
+                    `;
+                }
+                
+                // Dynamically update shipping charge in summary
+                if (typeof res.shipping_charge !== 'undefined' && this.cart && this.cart.summary) {
+                    this.cart.summary.shipping = res.shipping_charge;
+                    this.cart.summary.total = Math.max(0, (this.cart.summary.subtotal + (this.cart.summary.tax || 0) - (this.cart.summary.discount || 0) + res.shipping_charge));
+                    this.renderSummary();
+                }
+            } else {
+                if (statusEl) {
+                    statusEl.innerHTML = `
+                        <div class="p-3 bg-red-50 border border-red-200 rounded-xl text-xs font-bold text-red-700 flex items-center">
+                            <i class="fas fa-times-circle text-red-500 text-sm mr-2"></i> ${res.message || 'Pincode not currently deliverable via Delhivery.'}
+                        </div>
+                    `;
+                }
+            }
+        } catch (e) {
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-xs text-gray-500 font-bold">Standard delivery applies.</span>`;
+            }
+        }
     },
 
     /**

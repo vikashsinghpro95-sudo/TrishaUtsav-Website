@@ -142,4 +142,64 @@ class OrderController {
             ], 400);
         }
     }
+
+    /**
+     * GET /api/orders/{id}/tracking
+     * Retrieve live Delhivery tracking status for an order
+     *
+     * @param string $id Order ID
+     */
+    public function getTracking(string $id): void {
+        $user = AuthMiddleware::handle();
+        $userId = (int)$user['id'];
+        $orderId = (int)$id;
+
+        try {
+            $order = $this->orderModel->find($orderId);
+
+            if (!$order || ((int)$order['user_id'] !== $userId && ($user['role_name'] ?? '') !== 'admin')) {
+                Helper::jsonResponse([
+                    'success' => false,
+                    'message' => 'Order not found or unauthorized.'
+                ], 404);
+            }
+
+            $trackingId = $order['tracking_id'] ?? null;
+
+            // Check shipments table fallback
+            if (empty($trackingId)) {
+                $db = Database::getInstance();
+                $stmt = $db->prepare("SELECT tracking_number FROM shipments WHERE order_id = ? AND tracking_number IS NOT NULL AND tracking_number != '' ORDER BY id DESC LIMIT 1");
+                $stmt->execute([$orderId]);
+                $shipment = $stmt->fetch();
+                if ($shipment) {
+                    $trackingId = $shipment['tracking_number'];
+                }
+            }
+
+            if (empty($trackingId)) {
+                Helper::jsonResponse([
+                    'success' => true,
+                    'tracked' => false,
+                    'message' => 'Shipment tracking ID has not been assigned yet.'
+                ], 200);
+                return;
+            }
+
+            $delhivery = new DelhiveryService();
+            $trackingData = $delhivery->trackShipment($trackingId);
+
+            Helper::jsonResponse([
+                'success' => true,
+                'tracked' => true,
+                'data' => $trackingData
+            ], 200);
+
+        } catch (Exception $e) {
+            Helper::jsonResponse([
+                'success' => false,
+                'message' => 'Failed to fetch tracking details: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

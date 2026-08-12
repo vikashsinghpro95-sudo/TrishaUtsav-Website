@@ -93,6 +93,11 @@ FILES = {
     "update_schema_wishlist.php":           "update_schema_wishlist.php",
     "public/assets/js/wishlist.js":         "public/assets/js/wishlist.js",
     "public/wishlist.php":                  "public/wishlist.php",
+    "includes/DelhiveryService.php":        "includes/DelhiveryService.php",
+    "controllers/ShippingController.php":   "controllers/ShippingController.php",
+    "controllers/AdminOrderController.php":  "controllers/AdminOrderController.php",
+    "controllers/OrderController.php":       "controllers/OrderController.php",
+    "update_schema_delhivery.php":          "update_schema_delhivery.php",
 }
 
 def ensure_remote_dir(ftp, remote_dir):

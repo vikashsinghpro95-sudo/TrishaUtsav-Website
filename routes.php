@@ -50,6 +50,7 @@ return [
         '/^\/api\/admin\/orders\/(\d+)\/cancel$/' => 'AdminOrderController@cancel',
         '/^\/api\/admin\/orders\/(\d+)\/refund$/' => 'AdminOrderController@refund',
         '/^\/api\/admin\/orders\/(\d+)\/shipment$/' => 'AdminOrderController@addShipment',
+        '/^\/api\/admin\/orders\/(\d+)\/tracking$/' => 'AdminOrderController@updateTracking',
         
         // Admin Coupons
         '/^\/api\/admin\/coupons$/' => 'CouponController@store',
@@ -110,9 +111,13 @@ return [
         // Public Settings
         '/^\/api\/settings$/' => 'SettingsController@show',
         
+        // Shipping & Delhivery
+        '/^\/api\/shipping\/check-pincode$/' => 'ShippingController@checkPincode',
+
         // Orders (customer)
         '/^\/api\/orders$/' => 'OrderController@index',
         '/^\/api\/orders\/(\d+)$/' => 'OrderController@show',
+        '/^\/api\/orders\/(\d+)\/tracking$/' => 'OrderController@getTracking',
         
         // Admin Orders
         '/^\/api\/admin\/orders$/' => 'AdminOrderController@index',
@@ -166,6 +171,7 @@ return [
         
         // Admin Coupons
         '/^\/api\/admin\/coupons\/(\d+)$/' => 'CouponController@update',
+        '/^\/api\/admin\/orders\/(\d+)\/tracking$/' => 'AdminOrderController@updateTracking',
 
         // Admin Settings & Homepage Layout
         '/^\/api\/admin\/settings$/' => 'AdminSettingsController@update',

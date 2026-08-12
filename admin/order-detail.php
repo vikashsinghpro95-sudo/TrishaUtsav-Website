@@ -202,6 +202,30 @@ include_once __DIR__ . '/includes/admin-header.php';
             </div>
         </div>
 
+        <!-- Delhivery Tracking Card -->
+        <div class="bg-white dark:bg-slate-850 rounded-xl border border-amber-200 dark:border-amber-900/50 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-amber-200 dark:border-amber-900/50 bg-amber-50/50 dark:bg-amber-950/20 flex items-center justify-between">
+                <h3 class="text-base font-semibold text-slate-900 dark:text-white flex items-center">
+                    <i class="ph ph-truck mr-2 text-amber-600"></i> Delhivery Tracking ID
+                </h3>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 rounded-full">Delhivery Express</span>
+            </div>
+            
+            <div class="p-5 space-y-4">
+                <div>
+                    <label for="admin-delhivery-waybill" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase mb-1">Waybill / Tracking No.</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="admin-delhivery-waybill" placeholder="e.g. 123456789012" class="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 sm:text-sm font-mono">
+                        <button type="button" onclick="Orders.saveTrackingId()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-lg transition-colors shrink-0">
+                            Save
+                        </button>
+                    </div>
+                </div>
+
+                <div id="delhivery-tracking-status-info" class="text-xs space-y-1"></div>
+            </div>
+        </div>
+
         <!-- Shipments Dispatch -->
         <div class="bg-white dark:bg-slate-850 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
             <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">

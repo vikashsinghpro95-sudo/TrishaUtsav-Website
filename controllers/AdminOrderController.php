@@ -349,4 +349,88 @@ class AdminOrderController {
             ], 400);
         }
     }
+
+    /**
+     * PUT or POST /api/admin/orders/{id}/tracking
+     * Admin method to set / update order tracking ID (waybill) and status
+     *
+     * @param string $id Order ID
+     */
+    public function updateTracking(string $id): void {
+        $user = AuthMiddleware::handle(true); // Admin auth
+        $adminId = (int)$user['id'];
+        $orderId = (int)$id;
+
+        $data = Helper::getRequestBody();
+        $trackingId = trim($data['tracking_id'] ?? '');
+
+        if (empty($trackingId)) {
+            Helper::jsonResponse([
+                'success' => false,
+                'message' => 'Tracking ID / Waybill is required.'
+            ], 422);
+        }
+
+        try {
+            $order = $this->orderModel->find($orderId);
+            if (!$order) {
+                Helper::jsonResponse([
+                    'success' => false,
+                    'message' => 'Order not found.'
+                ], 404);
+            }
+
+            // Update orders table with tracking_id & set status to shipped if currently processing/pending
+            $newStatus = in_array($order['order_status'], ['delivered', 'cancelled', 'returned']) ? $order['order_status'] : 'shipped';
+            
+            $stmt = $this->db->prepare("
+                UPDATE orders 
+                SET tracking_id = ?, tracking_status = 'In Transit', order_status = ? 
+                WHERE id = ?
+            ");
+            $stmt->execute([$trackingId, $newStatus, $orderId]);
+
+            // Also record entry in shipments table for backwards compatibility
+            try {
+                $stmtShip = $this->db->prepare("
+                    INSERT INTO shipments (order_id, courier_name, tracking_number, status, shipped_at)
+                    VALUES (?, 'Delhivery Express', ?, 'shipped', NOW())
+                    ON DUPLICATE KEY UPDATE tracking_number = VALUES(tracking_number)
+                ");
+                $stmtShip->execute([$orderId, $trackingId]);
+            } catch (Throwable $eShip) {}
+
+            // Log status history
+            $historyModel = new OrderStatusHistory();
+            $historyModel->log(
+                $orderId,
+                $newStatus,
+                "Delhivery Tracking ID assigned: " . $trackingId,
+                $adminId
+            );
+
+            // Audit log
+            Helper::logAction(
+                $adminId,
+                'update_tracking',
+                'orders',
+                $orderId,
+                ['tracking_id' => $order['tracking_id'] ?? null],
+                ['tracking_id' => $trackingId, 'order_status' => $newStatus]
+            );
+
+            Helper::jsonResponse([
+                'success' => true,
+                'message' => 'Tracking ID updated successfully.',
+                'tracking_id' => $trackingId,
+                'order_status' => $newStatus
+            ], 200);
+
+        } catch (Exception $e) {
+            Helper::jsonResponse([
+                'success' => false,
+                'message' => 'Failed to update tracking ID: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
