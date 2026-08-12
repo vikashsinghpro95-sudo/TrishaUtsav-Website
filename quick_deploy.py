@@ -26,6 +26,8 @@ FILES = {
     "admin/assets/js/customers.js":         "admin/assets/js/customers.js",
     "admin/assets/js/dashboard.js":         "admin/assets/js/dashboard.js",
     "admin/assets/js/settings.js":          "admin/assets/js/settings.js",
+    "admin/categories.php":                 "admin/categories.php",
+    "admin/brands.php":                     "admin/brands.php",
     "admin/order-detail.php":               "admin/order-detail.php",
     "admin/product-edit.php":               "admin/product-edit.php",
     "admin/products.php":                   "admin/products.php",

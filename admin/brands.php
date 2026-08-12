@@ -153,14 +153,22 @@ include_once __DIR__ . '/includes/admin-header.php';
                     statusClass = 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20';
                 }
                 
-                const logoImg = brand.logo ? (FRONTEND_BASE_URL + '/' + brand.logo.replace(/^\//, '')) : 'https://placehold.co/80x40/F8FAFC/94A3B8?text=Brand';
+                let logoImg = 'https://placehold.co/80x40/F8FAFC/94A3B8?text=Brand';
+                if (brand.logo && brand.logo.trim()) {
+                    const cleanLogo = brand.logo.trim();
+                    if (cleanLogo.startsWith('http://') || cleanLogo.startsWith('https://') || cleanLogo.startsWith('data:')) {
+                        logoImg = cleanLogo;
+                    } else {
+                        logoImg = '/' + cleanLogo.replace(/^\/+/, '');
+                    }
+                }
 
                 html += `
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="h-10 w-16 flex-shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded p-1 flex items-center justify-center">
-                                    <img class="max-h-full max-w-full object-contain" src="${logoImg}" alt="${brand.name}">
+                                    <img class="max-h-full max-w-full object-contain" src="${logoImg}" alt="${brand.name}" onerror="this.onerror=null;this.src='https://placehold.co/80x40/F8FAFC/94A3B8?text=Brand';">
                                 </div>
                                 <div class="ml-4 min-w-0">
                                     <div class="text-sm font-medium text-slate-900 dark:text-white truncate">${brand.name}</div>

@@ -74,13 +74,23 @@ include_once __DIR__ . '/includes/admin-header.php';
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Thumbnail</label>
-                    <div class="flex items-center space-x-3">
+                    <label for="cat-image" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Thumbnail (Image URL or File Upload)</label>
+                    <div class="flex items-center space-x-2 mb-2">
                         <input type="file" id="cat-image-file" accept="image/*" class="hidden" onchange="Categories.uploadImage(this)">
                         <button type="button" onclick="document.getElementById('cat-image-file').click()" class="inline-flex items-center px-3 py-2 border border-slate-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors whitespace-nowrap">
-                            <i class="ph ph-upload mr-2"></i> Upload
+                            <i class="ph ph-upload mr-1.5"></i> Upload File
                         </button>
-                        <input type="text" id="cat-image" readonly class="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 placeholder-slate-400 sm:text-sm transition-colors" placeholder="No image">
+                        <input type="text" id="cat-image" oninput="Categories.updatePreview()" class="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500 sm:text-sm transition-colors" placeholder="https://... or uploads/...">
+                    </div>
+                    <!-- Live Preview Box -->
+                    <div id="cat-preview-container" class="mt-2 flex items-center space-x-3 p-2 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
+                        <img id="cat-image-preview" src="https://placehold.co/100/F8FAFC/94A3B8?text=Cat" class="h-10 w-10 rounded object-cover border border-slate-200 dark:border-slate-700 shadow-sm flex-shrink-0" onerror="this.onerror=null;this.src='https://placehold.co/100/F8FAFC/94A3B8?text=Cat';">
+                        <div class="flex-grow text-xs text-slate-500 dark:text-slate-400 truncate" id="cat-image-status">
+                            No thumbnail set
+                        </div>
+                        <button type="button" onclick="Categories.clearImage()" class="text-xs text-red-500 hover:underline px-1.5 py-0.5 rounded">
+                            Clear
+                        </button>
                     </div>
                 </div>
 
@@ -169,7 +179,7 @@ include_once __DIR__ . '/includes/admin-header.php';
                         statusClass = 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/20';
                     }
                     
-                    const imgUrl = (cat.image || cat.image_url) ? (FRONTEND_BASE_URL + (cat.image || cat.image_url)) : 'https://placehold.co/100/F8FAFC/94A3B8?text=Cat';
+                    const imgUrl = Categories.getImageUrl(cat.image || cat.image_url);
 
                     let indentHtml = '';
                     if (level > 0) {
@@ -185,7 +195,7 @@ include_once __DIR__ . '/includes/admin-header.php';
                                     ${indentHtml}
                                     <div class="${level > 0 ? 'ml-2' : ''} flex items-center">
                                         <div class="h-10 w-10 flex-shrink-0">
-                                            <img class="h-10 w-10 rounded object-cover shadow-sm border border-slate-200 dark:border-slate-700" src="${imgUrl}" alt="${cat.name}">
+                                            <img class="h-10 w-10 rounded object-cover shadow-sm border border-slate-200 dark:border-slate-700" src="${imgUrl}" alt="${cat.name}" onerror="this.onerror=null;this.src='https://placehold.co/100/F8FAFC/94A3B8?text=Cat';">
                                         </div>
                                         <div class="ml-4 min-w-0">
                                             <div class="text-sm font-medium text-slate-900 dark:text-white">${cat.name}</div>
@@ -225,6 +235,39 @@ include_once __DIR__ . '/includes/admin-header.php';
             tbody.innerHTML = html;
         },
 
+        getImageUrl(path) {
+            if (!path || !path.trim()) {
+                return 'https://placehold.co/100/F8FAFC/94A3B8?text=Cat';
+            }
+            const clean = path.trim();
+            if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('data:')) {
+                return clean;
+            }
+            return '/' + clean.replace(/^\/+/, '');
+        },
+
+        updatePreview() {
+            const val = document.getElementById('cat-image').value;
+            const previewImg = document.getElementById('cat-image-preview');
+            const statusText = document.getElementById('cat-image-status');
+            if (!previewImg || !statusText) return;
+
+            const url = this.getImageUrl(val);
+            previewImg.src = url;
+            if (val && val.trim()) {
+                statusText.textContent = val.trim();
+            } else {
+                statusText.textContent = "No thumbnail set";
+            }
+        },
+
+        clearImage() {
+            document.getElementById('cat-image').value = '';
+            const fileInput = document.getElementById('cat-image-file');
+            if (fileInput) fileInput.value = '';
+            this.updatePreview();
+        },
+
         renderDropdown() {
             const select = document.getElementById('cat-parent');
             if (!select) return;
@@ -255,6 +298,7 @@ include_once __DIR__ . '/includes/admin-header.php';
                 const res = await Api.uploadFile('/admin/media/upload', formData);
                 if (res.success && res.path) {
                     document.getElementById('cat-image').value = res.path;
+                    this.updatePreview();
                     if(window.Utils && Utils.showToast) Utils.showToast("Image uploaded successfully!", "success");
                 }
             } catch (e) {
@@ -288,6 +332,7 @@ include_once __DIR__ . '/includes/admin-header.php';
             document.getElementById('cat-status').value = cat.status;
             document.getElementById('cat-desc').value = cat.description || '';
 
+            this.updatePreview();
             this.renderDropdown();
             
             // Scroll to form on mobile
@@ -350,6 +395,7 @@ include_once __DIR__ . '/includes/admin-header.php';
             document.getElementById('btn-cancel-edit-cat').classList.add('hidden');
             document.getElementById('frm-category-save').reset();
             document.getElementById('cat-image').value = '';
+            this.updatePreview();
             this.renderDropdown();
         }
     };
