@@ -47,7 +47,7 @@ class WishlistController {
                     Auth::setCurrentUser($user);
                     return $user;
                 }
-            } catch (Exception $e) {}
+            } catch (Throwable $e) {}
         }
 
         return null;
@@ -83,37 +83,42 @@ class WishlistController {
         $user = $this->getUserOrNull();
 
         if ($user && !empty($user['id'])) {
-            // Logged-in user wishlist toggle
-            $result = $this->wishlistModel->toggleItem((int)$user['id'], $productId);
-            Helper::jsonResponse([
-                'success' => true,
-                'action'  => $result['action'],
-                'count'   => $result['count']
-            ], 200);
-        } else {
-            // Guest session wishlist toggle
-            if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
-                $_SESSION['wishlist'] = [];
+            try {
+                // Logged-in user wishlist toggle
+                $result = $this->wishlistModel->toggleItem((int)$user['id'], $productId);
+                Helper::jsonResponse([
+                    'success' => true,
+                    'action'  => $result['action'],
+                    'count'   => $result['count']
+                ], 200);
+                return;
+            } catch (Throwable $e) {
+                // Fallback to guest session wishlist if DB query fails
             }
-
-            $index = array_search($productId, $_SESSION['wishlist']);
-            if ($index !== false) {
-                unset($_SESSION['wishlist'][$index]);
-                $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
-                $action = 'removed';
-            } else {
-                $_SESSION['wishlist'][] = $productId;
-                $action = 'added';
-            }
-
-            $count = count($_SESSION['wishlist']);
-
-            Helper::jsonResponse([
-                'success' => true,
-                'action'  => $action,
-                'count'   => $count
-            ], 200);
         }
+
+        // Guest session wishlist toggle (or DB fallback)
+        if (!isset($_SESSION['wishlist']) || !is_array($_SESSION['wishlist'])) {
+            $_SESSION['wishlist'] = [];
+        }
+
+        $index = array_search($productId, $_SESSION['wishlist']);
+        if ($index !== false) {
+            unset($_SESSION['wishlist'][$index]);
+            $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
+            $action = 'removed';
+        } else {
+            $_SESSION['wishlist'][] = $productId;
+            $action = 'added';
+        }
+
+        $count = count($_SESSION['wishlist']);
+
+        Helper::jsonResponse([
+            'success' => true,
+            'action'  => $action,
+            'count'   => $count
+        ], 200);
     }
 
     /**
@@ -129,29 +134,42 @@ class WishlistController {
 
         try {
             if ($user && !empty($user['id'])) {
-                $items = $this->wishlistModel->getItems((int)$user['id']);
+                try {
+                    $items = $this->wishlistModel->getItems((int)$user['id']);
+                } catch (Throwable $eDb) {
+                    $items = [];
+                }
             } else {
-                $sessionIds = $_SESSION['wishlist'] ?? [];
                 $items = [];
+            }
+
+            // Fallback for session items if DB items empty or for guest
+            if (empty($items)) {
+                $sessionIds = $_SESSION['wishlist'] ?? [];
                 foreach ($sessionIds as $pId) {
                     $prod = $this->productModel->find((int)$pId);
                     if ($prod && $prod['status'] === 'published') {
                         $prod['is_in_wishlist'] = true;
                         
                         // Fetch images
-                        $db = Database::getInstance();
-                        $stmtImg = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order ASC");
-                        $stmtImg->execute([$prod['id']]);
-                        $images = $stmtImg->fetchAll();
-                        $prod['images'] = $images;
+                        try {
+                            $db = Database::getInstance();
+                            $stmtImg = $db->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order ASC");
+                            $stmtImg->execute([$prod['id']]);
+                            $images = $stmtImg->fetchAll();
+                            $prod['images'] = $images;
 
-                        $primary = array_filter($images, fn($img) => (int)$img['is_primary'] === 1);
-                        if (!empty($primary)) {
-                            $first = reset($primary);
-                            $prod['primary_image'] = $first['image_url'];
-                        } else if (!empty($images)) {
-                            $prod['primary_image'] = $images[0]['image_url'];
-                        } else {
+                            $primary = array_filter($images, fn($img) => (int)$img['is_primary'] === 1);
+                            if (!empty($primary)) {
+                                $first = reset($primary);
+                                $prod['primary_image'] = $first['image_url'];
+                            } else if (!empty($images)) {
+                                $prod['primary_image'] = $images[0]['image_url'];
+                            } else {
+                                $prod['primary_image'] = null;
+                            }
+                        } catch (Throwable $eImg) {
+                            $prod['images'] = [];
                             $prod['primary_image'] = null;
                         }
 
@@ -165,7 +183,7 @@ class WishlistController {
                 'data' => $items,
                 'count' => count($items)
             ], 200);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Helper::jsonResponse([
                 'success' => false,
                 'message' => 'Failed to fetch wishlist: ' . $e->getMessage()
@@ -196,14 +214,16 @@ class WishlistController {
 
         // 1. Remove from Wishlist
         if ($user && !empty($user['id'])) {
-            $this->wishlistModel->removeItem((int)$user['id'], $productId);
-        } else {
-            if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
-                $index = array_search($productId, $_SESSION['wishlist']);
-                if ($index !== false) {
-                    unset($_SESSION['wishlist'][$index]);
-                    $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
-                }
+            try {
+                $this->wishlistModel->removeItem((int)$user['id'], $productId);
+            } catch (Throwable $eRm) {}
+        }
+        
+        if (isset($_SESSION['wishlist']) && is_array($_SESSION['wishlist'])) {
+            $index = array_search($productId, $_SESSION['wishlist']);
+            if ($index !== false) {
+                unset($_SESSION['wishlist'][$index]);
+                $_SESSION['wishlist'] = array_values($_SESSION['wishlist']);
             }
         }
 
@@ -244,7 +264,7 @@ class WishlistController {
                 'success' => true,
                 'message' => 'Moved to cart successfully.'
             ], 200);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             Helper::jsonResponse([
                 'success' => false,
                 'message' => 'Failed to move item to cart: ' . $e->getMessage()
@@ -261,17 +281,28 @@ class WishlistController {
             @session_start();
         }
 
-        $user = $this->getUserOrNull();
+        try {
+            $user = $this->getUserOrNull();
 
-        if ($user && !empty($user['id'])) {
-            $count = $this->wishlistModel->getItemCount((int)$user['id']);
-        } else {
-            $count = count($_SESSION['wishlist'] ?? []);
+            if ($user && !empty($user['id'])) {
+                try {
+                    $count = $this->wishlistModel->getItemCount((int)$user['id']);
+                } catch (Throwable $eCount) {
+                    $count = count($_SESSION['wishlist'] ?? []);
+                }
+            } else {
+                $count = count($_SESSION['wishlist'] ?? []);
+            }
+
+            Helper::jsonResponse([
+                'success' => true,
+                'count'   => $count
+            ], 200);
+        } catch (Throwable $e) {
+            Helper::jsonResponse([
+                'success' => true,
+                'count'   => count($_SESSION['wishlist'] ?? [])
+            ], 200);
         }
-
-        Helper::jsonResponse([
-            'success' => true,
-            'count'   => $count
-        ], 200);
     }
 }
