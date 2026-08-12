@@ -220,6 +220,72 @@ const Utils = {
                 btnElement.innerHTML = btnElement._origHtml;
             }
         }
+    },
+
+    /**
+     * Quick Add item to cart with 1 click
+     */
+    async quickAdd(productId, quantity = 1, btnElement = null) {
+        if (btnElement) {
+            btnElement.disabled = true;
+            btnElement._origHtml = btnElement.innerHTML;
+            btnElement.innerHTML = `<i class="fas fa-spinner fa-spin text-xs"></i>`;
+        }
+
+        try {
+            const pId = parseInt(productId);
+            const qty = parseInt(quantity) || 1;
+
+            if (typeof Auth !== 'undefined' && !Auth.isLoggedIn()) {
+                let guestCart = JSON.parse(localStorage.getItem('guest_cart')) || [];
+                try {
+                    const res = await Api.get('/products/' + pId);
+                    if (res.success && res.data) {
+                        const prod = res.data;
+                        const price = parseFloat(prod.price);
+                        const primaryImg = prod.primary_image || (prod.images && prod.images.length > 0 ? prod.images[0].image_url : '');
+                        
+                        const existingIndex = guestCart.findIndex(item => item.product_id === pId);
+                        if (existingIndex > -1) {
+                            guestCart[existingIndex].quantity += qty;
+                        } else {
+                            guestCart.push({
+                                id: Date.now() + Math.floor(Math.random() * 1000),
+                                product_id: pId,
+                                product_name: prod.name,
+                                product_image: primaryImg,
+                                sku: prod.sku,
+                                price: price,
+                                quantity: qty
+                            });
+                        }
+                        localStorage.setItem('guest_cart', JSON.stringify(guestCart));
+                    }
+                } catch (eG) {}
+                Utils.showToast("Product added to cart!", "success");
+                if (window.CartModule && typeof window.CartModule.updateCartBadge === 'function') {
+                    window.CartModule.updateCartBadge();
+                }
+                return;
+            }
+
+            const res = await Api.post('/cart/add', { product_id: pId, quantity: qty });
+            if (res.success) {
+                Utils.showToast("Product added to cart!", "success");
+                if (window.CartModule && typeof window.CartModule.updateCartBadge === 'function') {
+                    window.CartModule.updateCartBadge();
+                }
+            } else {
+                throw new Error(res.message || "Failed to add to cart.");
+            }
+        } catch (err) {
+            Utils.showToast(err.message || "Could not add to cart.", "error");
+        } finally {
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = btnElement._origHtml;
+            }
+        }
     }
 };
 

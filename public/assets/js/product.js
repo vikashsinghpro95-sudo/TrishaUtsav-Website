@@ -584,24 +584,37 @@ const ProductPage = {
                 const imgUrl = rawImg ? fixFn(rawImg) : placeholder;
 
                 html += `
-                    <div class="group bg-white rounded-2xl overflow-hidden relative transition-all duration-300 hover:-translate-y-1">
+                    <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
                         <!-- Wishlist Heart Button Overlay -->
                         ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(p.id) : ''}
-                        <a href="${BASE_URL}product?slug=${p.slug}" class="relative bg-gray-50 aspect-[4/5] overflow-hidden block rounded-2xl">
-                            <img src="${imgUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='${placeholder}';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-                            ${pDiscount > 0 ? `
-                                <span class="absolute top-3 left-3 bg-[#f59e0b] text-[#12090c] font-black text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm z-10">
-                                    -${pDiscount}%
-                                </span>
-                            ` : ''}
+                        <a href="${BASE_URL}product?slug=${p.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
+                            <img src="${imgUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='${placeholder}';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-110">
                         </a>
-                        <div class="py-4 flex flex-col space-y-1">
-                            <h3 class="font-sans font-bold text-sm text-[#12090c] leading-snug line-clamp-2 hover:text-[#990024] transition">
+
+                        <div class="p-3 sm:p-5 flex flex-col flex-grow">
+                            <div class="flex items-center space-x-0.5 text-[#f59e0b] text-[9px] sm:text-[10px] mb-1">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <span class="text-gray-400 font-bold ml-1">(4.9)</span>
+                            </div>
+
+                            <h3 class="font-display text-xs sm:text-sm font-bold text-[#12090c] line-clamp-2 hover:text-[#990024] transition flex-grow">
                                 <a href="${BASE_URL}product?slug=${p.slug}">${p.name}</a>
                             </h3>
-                            <div class="flex items-center gap-2 pt-1">
-                                <span class="text-sm font-black text-[#990024]">${Utils.formatCurrency(price)}</span>
-                                <span class="text-xs text-gray-400 line-through font-bold">${Utils.formatCurrency(pMrp)}</span>
+
+                            <div class="mt-2.5 pt-2 sm:pt-2.5 border-t border-gray-100 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <span class="text-xs sm:text-base font-black text-[#990024]">${Utils.formatCurrency(price)}</span>
+                                        ${pMrp ? `<span class="text-[9px] sm:text-[10px] text-gray-400 line-through block sm:inline sm:ml-1">${Utils.formatCurrency(pMrp)}</span>` : ''}
+                                    </div>
+                                    <button onclick="Utils.quickAdd(${p.id}, 1, this)" ${parseInt(p.stock_quantity) <= 0 ? 'disabled' : ''} class="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-[#990024] text-[#990024] hover:bg-[#990024] hover:text-white disabled:bg-gray-100 disabled:border-gray-200 disabled:text-gray-400 transition duration-200 flex items-center justify-center cursor-pointer shrink-0" title="Add to Cart">
+                                        <i class="fas fa-shopping-bag text-xs"></i>
+                                    </button>
+                                </div>
+                                <button onclick="Utils.buyNow(${p.id}, 1, null, this)" ${parseInt(p.stock_quantity) <= 0 ? 'disabled' : ''} class="w-full py-1.5 sm:py-2 px-3 rounded-xl bg-[#990024] hover:bg-[#7a001c] disabled:bg-gray-200 disabled:text-gray-400 text-white font-extrabold text-[10px] sm:text-xs shadow-2xs hover:shadow-xs transition duration-200 flex items-center justify-center space-x-1 cursor-pointer" title="Buy Now (Direct Checkout)">
+                                    <i class="fas fa-bolt text-[9px] text-amber-300"></i>
+                                    <span>Buy Now</span>
+                                </button>
                             </div>
                         </div>
                     </div>
