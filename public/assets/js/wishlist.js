@@ -151,30 +151,11 @@ const WishlistManager = {
                 el.setAttribute('aria-label', 'Remove from wishlist');
                 el.setAttribute('title', 'Remove from wishlist');
             } else {
-                icon.className = 'far fa-heart text-gray-600 hover:text-[#990024] transition-colors duration-200';
+                icon.className = 'far fa-heart text-gray-700 hover:text-[#990024] transition-colors duration-200';
                 el.setAttribute('aria-label', 'Add to wishlist');
                 el.setAttribute('title', 'Add to wishlist');
             }
         });
-
-        // Also update Product Detail page button text if present
-        const detailBtn = document.getElementById('pdp-wishlist-btn');
-        if (detailBtn) {
-            const pId = parseInt(detailBtn.getAttribute('data-wishlist-id'));
-            const isListed = this.isWishlisted(pId);
-            const textSpan = detailBtn.querySelector('.wishlist-btn-text');
-            const icon = detailBtn.querySelector('i');
-            
-            if (isListed) {
-                if (icon) icon.className = 'fas fa-heart text-[#990024]';
-                if (textSpan) textSpan.textContent = 'Remove from Wishlist';
-                detailBtn.className = 'w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full border-2 border-[#990024] text-[#990024] bg-red-50/50 hover:bg-red-100/50 font-bold text-xs uppercase tracking-wider transition duration-300 shadow-sm';
-            } else {
-                if (icon) icon.className = 'far fa-heart text-gray-700';
-                if (textSpan) textSpan.textContent = 'Add to Wishlist';
-                detailBtn.className = 'w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-full border-2 border-gray-300 hover:border-[#990024] text-gray-700 hover:text-[#990024] bg-white font-bold text-xs uppercase tracking-wider transition duration-300 shadow-sm';
-            }
-        }
     },
 
     /**
