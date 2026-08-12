@@ -28,6 +28,7 @@ FILES = {
     "admin/newsletter.php":                 "admin/newsletter.php",
     "admin/assets/js/newsletter.js":        "admin/assets/js/newsletter.js",
     "routes.php":                           "routes.php",
+    "config/database.php":                  "config/database.php",
     "models/Newsletter.php":                "models/Newsletter.php",
     "models/Product.php":                   "models/Product.php",
     "controllers/NewsletterController.php": "controllers/NewsletterController.php",

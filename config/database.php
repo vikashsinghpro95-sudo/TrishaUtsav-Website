@@ -8,4 +8,5 @@ if (!defined('DB_USER')) define('DB_USER', 'u445085246_Vikash');
 if (!defined('DB_PASS')) define('DB_PASS', 'TrishaUtsav@991625%^@$W');
 if (!defined('DB_NAME')) define('DB_NAME', 'u445085246_TrishaUtsav');
 if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
+if (!defined('BASE_URL')) define('BASE_URL', '/');
 

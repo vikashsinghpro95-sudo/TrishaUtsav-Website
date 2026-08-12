@@ -306,10 +306,12 @@ class CheckoutController {
             'expires_at'   => time() + 1800 // 30 minutes expiry
         ];
 
+        $baseUrl = defined('BASE_URL') ? BASE_URL : '/';
+
         Helper::jsonResponse([
             'success'      => true,
             'token'        => $token,
-            'redirect_url' => BASE_URL . 'checkout.php?direct_order=' . $token
+            'redirect_url' => $baseUrl . 'checkout.php?direct_order=' . $token
         ], 200);
     }
 
