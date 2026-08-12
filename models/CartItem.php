@@ -67,6 +67,33 @@ class CartItem {
     }
 
     /**
+     * Add product to cart or increment quantity if already present
+     *
+     * @param int $cartId
+     * @param int $productId
+     * @param int $quantity
+     * @param float|null $price
+     * @param array|null $attributes
+     * @return int Cart item ID
+     */
+    public function addOrUpdate(int $cartId, int $productId, int $quantity = 1, ?float $price = null, ?array $attributes = null): int {
+        $existing = $this->findItemInCart($cartId, $productId, $attributes);
+        if ($existing) {
+            $newQty = (int)$existing['quantity'] + $quantity;
+            $this->updateQuantity((int)$existing['id'], $newQty);
+            return (int)$existing['id'];
+        }
+
+        if ($price === null || $price <= 0) {
+            $productModel = new Product();
+            $product = $productModel->find($productId);
+            $price = $product ? (float)$product['price'] : 0.00;
+        }
+
+        return $this->create($cartId, $productId, $quantity, $price, $attributes);
+    }
+
+    /**
      * Update quantity for a cart item
      *
      * @param int $id

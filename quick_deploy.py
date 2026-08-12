@@ -85,6 +85,7 @@ FILES = {
     "models/Cart.php":                      "models/Cart.php",
     "models/Order.php":                     "models/Order.php",
     "models/OrderItem.php":                 "models/OrderItem.php",
+    "models/CartItem.php":                  "models/CartItem.php",
     "models/Wishlist.php":                  "models/Wishlist.php",
     "includes/WishlistHelper.php":          "includes/WishlistHelper.php",
     "controllers/WishlistController.php":    "controllers/WishlistController.php",
