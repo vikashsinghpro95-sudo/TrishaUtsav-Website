@@ -34,6 +34,7 @@ FILES = {
     "controllers/OccasionController.php":   "controllers/OccasionController.php",
     "controllers/CategoryController.php":   "controllers/CategoryController.php",
     "controllers/ProductController.php":    "controllers/ProductController.php",
+    "controllers/CheckoutController.php":   "controllers/CheckoutController.php",
     "controllers/SettingsController.php":   "controllers/SettingsController.php",
     "controllers/AdminSettingsController.php": "controllers/AdminSettingsController.php",
     "update_schema.php":                    "update_schema.php",
