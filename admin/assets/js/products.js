@@ -592,7 +592,18 @@ const Products = {
                 if (document.getElementById('edit-prod-occasion')) document.getElementById('edit-prod-occasion').value = prod.occasion_id || '';
                 document.getElementById('edit-prod-weight').value = prod.weight || '';
                 document.getElementById('edit-prod-dimensions').value = prod.dimensions || '';
-                document.getElementById('edit-prod-status').value = prod.status || 'draft';
+                const statusBadge = document.getElementById('prod-status-badge');
+                if (statusBadge && prod.status) {
+                    statusBadge.innerText = prod.status.toUpperCase();
+                    statusBadge.classList.remove('hidden');
+                    if (prod.status === 'published') {
+                        statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20";
+                    } else if (prod.status === 'draft') {
+                        statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20";
+                    } else {
+                        statusBadge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700";
+                    }
+                }
                 document.getElementById('edit-prod-featured').checked = parseInt(prod.featured) === 1;
                 if (document.getElementById('edit-prod-is-trending')) document.getElementById('edit-prod-is-trending').checked = parseInt(prod.is_trending) === 1;
                 if (document.getElementById('edit-prod-is-must-buy')) document.getElementById('edit-prod-is-must-buy').checked = parseInt(prod.is_must_buy) === 1;
