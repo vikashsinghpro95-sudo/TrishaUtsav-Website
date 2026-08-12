@@ -52,15 +52,33 @@ class ProductController {
 
             if (!$isAdminRequest) {
                 $filters['status'] = 'published';
+
+                if (session_status() === PHP_SESSION_NONE) {
+                    @session_start();
+                }
+                $cacheKey = 'prod_cache_' . md5(json_encode($filters));
+                if (isset($_SESSION[$cacheKey]) && is_array($_SESSION[$cacheKey]) && (time() - ($_SESSION[$cacheKey]['time'] ?? 0)) < 30) {
+                    Helper::jsonResponse($_SESSION[$cacheKey]['data'], 200);
+                    return;
+                }
             }
 
             $result = $this->productModel->searchAndFilter($filters);
             
-            Helper::jsonResponse([
+            $responsePayload = [
                 'success' => true,
                 'data' => $result['data'],
                 'pagination' => $result['pagination']
-            ], 200);
+            ];
+
+            if (!$isAdminRequest && isset($cacheKey)) {
+                $_SESSION[$cacheKey] = [
+                    'time' => time(),
+                    'data' => $responsePayload
+                ];
+            }
+
+            Helper::jsonResponse($responsePayload, 200);
 
         } catch (Exception $e) {
             Helper::jsonResponse([

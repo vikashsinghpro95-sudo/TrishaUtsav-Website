@@ -50,8 +50,8 @@ const ProductPage = {
                 }
 
                 this.renderDetails();
-                this.loadRelatedProducts();
                 this.initStickyBar();
+                setTimeout(() => this.loadRelatedProducts(), 50);
             } else {
                 window.location.href = BASE_URL + '404.php';
             }

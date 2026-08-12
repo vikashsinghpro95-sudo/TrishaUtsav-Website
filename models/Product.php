@@ -654,8 +654,7 @@ class Product {
         $query .= " LIMIT $perPage OFFSET $offset";
 
         $selectQuery = "
-            SELECT p.*, c.name as category_name, c.slug as category_slug, b.name as brand_name, b.slug as brand_slug,
-            (SELECT image_url FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image
+            SELECT p.*, c.name as category_name, c.slug as category_slug, b.name as brand_name, b.slug as brand_slug
             " . $query;
 
         $stmtSelect = $this->db->prepare($selectQuery);
@@ -687,6 +686,20 @@ class Product {
                 $pId = (int)$product['id'];
                 $product['images'] = $imagesByProduct[$pId] ?? [];
                 $product['attributes'] = $attrsByProduct[$pId] ?? [];
+
+                $primaryImg = null;
+                if (!empty($product['images'])) {
+                    foreach ($product['images'] as $img) {
+                        if (!empty($img['is_primary'])) {
+                            $primaryImg = $img['image_url'];
+                            break;
+                        }
+                    }
+                    if (!$primaryImg && isset($product['images'][0])) {
+                        $primaryImg = $product['images'][0]['image_url'];
+                    }
+                }
+                $product['primary_image'] = $primaryImg;
             }
             unset($product);
         }
