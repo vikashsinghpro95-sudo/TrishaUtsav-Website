@@ -589,6 +589,8 @@ const ProductPage = {
 
                 html += `
                     <div class="group bg-white rounded-2xl overflow-hidden relative transition-all duration-300 hover:-translate-y-1">
+                        <!-- Wishlist Heart Button Overlay -->
+                        ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(p.id) : ''}
                         <a href="${BASE_URL}product?slug=${p.slug}" class="relative bg-gray-50 aspect-[4/5] overflow-hidden block rounded-2xl">
                             <img src="${imgUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='${placeholder}';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
                             ${pDiscount > 0 ? `
