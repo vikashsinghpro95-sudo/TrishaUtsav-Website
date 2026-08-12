@@ -8,14 +8,20 @@
     </FilesMatch>
 
     # ----------------------------------------------------------------------
-    # 1. PRESERVE ASSETS, UPLOADS & API ENDPOINTS
+    # 1. PRESERVE API ENDPOINTS & SERVE PUBLIC ASSETS / UPLOADS
     # ----------------------------------------------------------------------
     # Route /api/... requests to root index.php
     RewriteRule ^api(/.*)?$ index.php [QSA,L]
 
-    # Exclude direct asset and upload directories
-    RewriteCond %{REQUEST_URI} ^/(uploads|assets)/ [NC]
-    RewriteRule ^ - [L]
+    # Map /assets/... -> public/assets/... if file/dir exists in public/assets/
+    RewriteCond %{DOCUMENT_ROOT}/public/assets/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/assets/$1 -d
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
+    # Map /uploads/... -> public/uploads/... if file/dir exists in public/uploads/
+    RewriteCond %{DOCUMENT_ROOT}/public/uploads/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/public/uploads/$1 -d
+    RewriteRule ^uploads/(.*)$ public/uploads/$1 [L]
 
     # ----------------------------------------------------------------------
     # 2. 301 PERMANENT REDIRECTS FOR DIRECT .php REQUESTS TO CLEAN URLs
