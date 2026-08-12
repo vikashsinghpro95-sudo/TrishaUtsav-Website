@@ -71,6 +71,8 @@ FILES = {
     "public/assets/js/cart.js":             "public/assets/js/cart.js",
     "public/assets/js/auth.js":             "public/assets/js/auth.js",
     "public/assets/js/checkout.js":         "public/assets/js/checkout.js",
+    "public/product.php":                   "public/product.php",
+    "public/assets/js/product.js":          "public/assets/js/product.js",
     "public/login.php":                     "public/login.php",
     "public/account.php":                   "public/account.php",
     "public/assets/js/utils.js":            "public/assets/js/utils.js",
