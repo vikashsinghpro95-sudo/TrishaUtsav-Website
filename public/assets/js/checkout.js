@@ -276,12 +276,6 @@ const CheckoutPage = {
             }
         }
     },
-        } catch (e) {
-            if (statusEl) {
-                statusEl.innerHTML = `<span class="text-xs text-gray-500 font-bold">Standard delivery applies.</span>`;
-            }
-        }
-    },
 
     /**
      * Toggle address form visibility
