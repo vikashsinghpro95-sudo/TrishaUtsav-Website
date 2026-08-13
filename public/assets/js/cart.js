@@ -122,7 +122,6 @@ const CartPage = {
                             <div class="text-right flex-shrink-0">
                                 <span class="text-lg font-black text-[#12090c] block">${Utils.formatCurrency(item.price * item.quantity)}</span>
                                 ${item.quantity > 1 ? `<span class="text-xs text-gray-500 font-bold">${Utils.formatCurrency(item.price)} each</span>` : ''}
-                                <span class="block text-[10px] text-gray-400 font-bold mt-1">Shipping: ${item.shipping_charge > 0 ? Utils.formatCurrency(item.shipping_charge) : 'FREE'}</span>
                             </div>
                         </div>
 
@@ -189,8 +188,8 @@ const CartPage = {
                     </div>` : ''}
                     <div class="summary-row">
                         <span>Shipping Charges</span>
-                        <span class="font-bold text-[#12090c]">
-                            ${summary.shipping > 0 ? Utils.formatCurrency(summary.shipping) : '<span class="text-green-700 uppercase tracking-widest text-[10px] font-black">FREE</span>'}
+                        <span class="font-bold text-gray-500 text-[10px] tracking-wide uppercase">
+                            Calculated at checkout
                         </span>
                     </div>
                     <div class="summary-row">
