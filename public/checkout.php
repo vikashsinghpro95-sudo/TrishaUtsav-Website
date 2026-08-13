@@ -348,13 +348,13 @@ include_once __DIR__ . '/includes/header.php';
                             <!-- Loaded via JS -->
                         </div>
 
-                        <!-- Delhivery Pincode Serviceability & Live Rate Check -->
+                        <!-- Ekart Express Pincode Serviceability & Live Rate Check -->
                         <div class="my-4 p-3.5 bg-white rounded-xl border border-amber-200/80 shadow-2xs space-y-2">
                             <div class="flex items-center justify-between">
                                 <label for="checkout-pincode-input" class="text-xs font-black text-[#12090c] uppercase tracking-wider flex items-center">
                                     <i class="fas fa-truck-fast text-[#990024] mr-1.5"></i> Delivery Pincode
                                 </label>
-                                <span class="text-[10px] font-bold text-gray-400">Delhivery Express</span>
+                                <span class="text-[10px] font-bold text-gray-400">Ekart Express</span>
                             </div>
                             <div class="flex gap-2">
                                 <input type="text" id="checkout-pincode-input" placeholder="Enter 6-digit Pincode" maxlength="6" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs outline-none focus:border-[#990024] font-bold" oninput="this.value = this.value.replace(/[^0-9]/g, '')">

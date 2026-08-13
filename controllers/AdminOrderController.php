@@ -394,7 +394,7 @@ class AdminOrderController {
             try {
                 $stmtShip = $this->db->prepare("
                     INSERT INTO shipments (order_id, courier_name, tracking_number, status, shipped_at)
-                    VALUES (?, 'Delhivery Express', ?, 'shipped', NOW())
+                    VALUES (?, 'Ekart Express', ?, 'shipped', NOW())
                     ON DUPLICATE KEY UPDATE tracking_number = VALUES(tracking_number)
                 ");
                 $stmtShip->execute([$orderId, $trackingId]);
@@ -405,7 +405,7 @@ class AdminOrderController {
             $historyModel->log(
                 $orderId,
                 $newStatus,
-                "Delhivery Tracking ID assigned: " . $trackingId,
+                "Ekart Tracking ID assigned: " . $trackingId,
                 $adminId
             );
 

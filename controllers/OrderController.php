@@ -145,7 +145,7 @@ class OrderController {
 
     /**
      * GET /api/orders/{id}/tracking
-     * Retrieve live Delhivery tracking status for an order
+     * Retrieve live Ekart Logistics tracking status for an order
      *
      * @param string $id Order ID
      */
@@ -186,8 +186,8 @@ class OrderController {
                 return;
             }
 
-            $delhivery = new DelhiveryService();
-            $trackingData = $delhivery->trackShipment($trackingId);
+            $ekart = new EkartService();
+            $trackingData = $ekart->trackShipment($trackingId);
 
             Helper::jsonResponse([
                 'success' => true,

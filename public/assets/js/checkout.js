@@ -174,7 +174,7 @@ const CheckoutPage = {
     },
 
     /**
-     * Check pincode serviceability & rate via Delhivery Express
+     * Check pincode serviceability & rate via Ekart Express
      */
     async checkPincode(pincodeToTest = null) {
         const pincode = pincodeToTest || document.getElementById('checkout-pincode-input')?.value;
@@ -194,7 +194,7 @@ const CheckoutPage = {
             statusEl.innerHTML = `
                 <div class="mt-2.5 p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between text-xs text-slate-600">
                     <span class="font-bold inline-flex items-center">
-                        <i class="fas fa-circle-notch fa-spin mr-2 text-[#990024]"></i> Checking Delhivery Express serviceability...
+                        <i class="fas fa-circle-notch fa-spin mr-2 text-[#990024]"></i> Checking Ekart Express serviceability...
                     </span>
                 </div>
             `;
@@ -215,7 +215,7 @@ const CheckoutPage = {
                                     <div class="min-w-0">
                                         <div class="flex items-center gap-1.5 flex-wrap">
                                             <span class="text-xs font-black text-emerald-950 tracking-tight">Express Delivery Available</span>
-                                            <span class="text-[9px] font-extrabold uppercase bg-emerald-200/70 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300/60">Delhivery</span>
+                                            <span class="text-[9px] font-extrabold uppercase bg-emerald-200/70 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300/60">Ekart</span>
                                         </div>
                                         <p class="text-[11px] font-bold text-emerald-800/90 mt-0.5 truncate">
                                             <i class="fas fa-location-dot text-emerald-600 mr-1 text-[10px]"></i>${res.city || 'Serviceable Area'}${res.state ? ', ' + res.state : ''}
@@ -247,7 +247,7 @@ const CheckoutPage = {
                                 </div>
                                 <div>
                                     <span class="text-xs font-black text-red-950 block">Pincode Not Deliverable</span>
-                                    <p class="text-[11px] font-semibold text-red-800 mt-0.5 leading-relaxed">${res.message || 'Delivery is currently unavailable to this pincode via Delhivery.'}</p>
+                                    <p class="text-[11px] font-semibold text-red-800 mt-0.5 leading-relaxed">${res.message || 'Delivery is currently unavailable to this pincode via Ekart Express.'}</p>
                                 </div>
                             </div>
                         </div>

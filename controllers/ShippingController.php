@@ -1,14 +1,14 @@
 <?php
 /**
  * Shipping Controller
- * API endpoint for checking pincode serviceability and live shipping charges via Delhivery
+ * API endpoint for checking pincode serviceability and live shipping charges via Ekart Logistics
  */
 
 class ShippingController {
-    private DelhiveryService $delhivery;
+    private EkartService $ekart;
 
     public function __construct() {
-        $this->delhivery = new DelhiveryService();
+        $this->ekart = new EkartService();
     }
 
     /**
@@ -40,7 +40,7 @@ class ShippingController {
         }
 
         try {
-            $rateInfo = $this->delhivery->calculateShippingCharge($pincode, $weight, 'Prepaid', $amount);
+            $rateInfo = $this->ekart->checkServiceabilityAndRate($pincode, $weight, 'Prepaid', $amount);
 
             Helper::jsonResponse([
                 'success' => true,
@@ -51,8 +51,8 @@ class ShippingController {
                 'cod_available' => $rateInfo['cod_available'] ?? false,
                 'city' => $rateInfo['city'] ?? '',
                 'state' => $rateInfo['state'] ?? '',
-                'is_fallback' => $rateInfo['is_fallback'] ?? false,
-                'message' => $rateInfo['message'] ?? ($rateInfo['serviceable'] ? 'Pincode serviceable via Delhivery Express.' : 'Delivery currently unavailable to this pincode.')
+                'estimate_id' => $rateInfo['estimate_id'] ?? '',
+                'message' => $rateInfo['message'] ?? ($rateInfo['serviceable'] ? 'Pincode serviceable via Ekart Express.' : 'Delivery currently unavailable to this pincode.')
             ], 200);
 
         } catch (Throwable $e) {
@@ -63,7 +63,7 @@ class ShippingController {
                 'shipping_charge' => ($amount >= 499.0) ? 0.0 : 49.0,
                 'estimated_days' => '3-5 Business Days',
                 'is_fallback' => true,
-                'message' => 'Standard delivery applicable.'
+                'message' => 'Standard Ekart Express delivery applicable.'
             ], 200);
         }
     }

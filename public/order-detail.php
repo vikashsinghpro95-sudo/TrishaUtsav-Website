@@ -481,7 +481,7 @@ include_once __DIR__ . '/includes/header.php';
                         <div class="bg-gradient-to-r from-amber-500/10 via-amber-50 to-orange-50 p-5 rounded-3xl border border-amber-200/80 shadow-sm space-y-3">
                             <div class="flex items-center justify-between">
                                 <h3 class="text-sm font-extrabold text-amber-950 flex items-center">
-                                    <i class="fas fa-truck-fast mr-2 text-[#990024]"></i> Delhivery Live Shipment Tracking
+                                    <i class="fas fa-truck-fast mr-2 text-[#990024]"></i> Ekart Express Live Shipment Tracking
                                 </h3>
                                 <span class="text-[10px] font-black uppercase tracking-wider bg-[#990024] text-white px-2.5 py-0.5 rounded-full">${trk.status || 'In Transit'}</span>
                             </div>
@@ -500,8 +500,8 @@ include_once __DIR__ . '/includes/header.php';
                             ${scansHtml}
 
                             <div class="pt-2 flex justify-end">
-                                <a href="${trk.fallback_url}" target="_blank" class="inline-flex items-center text-[11px] font-bold text-[#990024] hover:underline">
-                                    Track on Delhivery Official Portal <i class="fas fa-external-link-alt ml-1.5 text-[9px]"></i>
+                                <a href="${trk.tracking_url || 'https://ekartlogistics.com/shipmenttrack/' + encodeURIComponent(trk.tracking_id)}" target="_blank" class="inline-flex items-center text-[11px] font-bold text-[#990024] hover:underline">
+                                    Track on Ekart Official Portal <i class="fas fa-external-link-alt ml-1.5 text-[9px]"></i>
                                 </a>
                             </div>
                         </div>

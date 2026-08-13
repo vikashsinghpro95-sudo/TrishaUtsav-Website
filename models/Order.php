@@ -90,9 +90,9 @@ class Order {
      * @return int Created order ID
      */
     /**
-     * Ensure optional Delhivery tracking columns exist in orders table
+     * Ensure optional Ekart tracking columns exist in orders table
      */
-    private function ensureDelhiveryColumns(): void {
+    private function ensureEkartColumns(): void {
         static $checked = false;
         if ($checked) return;
         $checked = true;
@@ -102,7 +102,8 @@ class Order {
                 'tracking_id' => "VARCHAR(50) DEFAULT NULL",
                 'tracking_status' => "VARCHAR(50) DEFAULT NULL",
                 'delhivery_pincode_verified' => "TINYINT(1) DEFAULT 0",
-                'estimated_delivery_days' => "VARCHAR(50) DEFAULT NULL"
+                'estimated_delivery_days' => "VARCHAR(50) DEFAULT NULL",
+                'ekart_estimate_id' => "VARCHAR(100) DEFAULT NULL"
             ];
             foreach ($cols as $col => $def) {
                 try {
@@ -122,7 +123,7 @@ class Order {
      * @return int Created order ID
      */
     public function create(array $data): int {
-        $this->ensureDelhiveryColumns();
+        $this->ensureEkartColumns();
 
         try {
             $stmt = $this->db->prepare("
@@ -131,8 +132,8 @@ class Order {
                     subtotal, tax_amount, shipping_charge, discount, coupon_code, total,
                     payment_method, payment_status, order_status, notes,
                     razorpay_order_id, razorpay_payment_id, razorpay_signature, attempts, expires_at,
-                    tracking_id, tracking_status, delhivery_pincode_verified, estimated_delivery_days
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    tracking_id, tracking_status, delhivery_pincode_verified, estimated_delivery_days, ekart_estimate_id
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
 
             $stmt->execute([
@@ -158,8 +159,9 @@ class Order {
                 $data['expires_at'] ?? null,
                 $data['tracking_id'] ?? null,
                 $data['tracking_status'] ?? null,
-                $data['delhivery_pincode_verified'] ?? 0,
-                $data['estimated_delivery_days'] ?? null
+                $data['delhivery_pincode_verified'] ?? 1,
+                $data['estimated_delivery_days'] ?? null,
+                $data['ekart_estimate_id'] ?? null
             ]);
 
             return (int)$this->db->lastInsertId();
