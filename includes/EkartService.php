@@ -14,11 +14,11 @@ class EkartService {
     private string $baseUrl;
 
     public function __construct() {
-        $this->clientId = $_ENV['EKART_CLIENT_ID'] ?? 'EKART_6a7816f54688037ea68911d3';
-        $this->username = $_ENV['EKART_USERNAME'] ?? 'trishautsav_api';
-        $this->password = $_ENV['EKART_PASSWORD'] ?? 'TrishaUtsav@2026';
-        $this->originPincode = (int)($_ENV['EKART_ORIGIN_PINCODE'] ?? 411046);
-        $this->baseUrl = rtrim($_ENV['EKART_BASE_URL'] ?? 'https://app.elite.ekartlogistics.in', '/');
+        $this->clientId = getenv('EKART_CLIENT_ID') ?: ($_ENV['EKART_CLIENT_ID'] ?? 'EKART_6a7816f54688037ea68911d3');
+        $this->username = getenv('EKART_USERNAME') ?: ($_ENV['EKART_USERNAME'] ?? 'trishautsaventerprises@gmail.com');
+        $this->password = getenv('EKART_PASSWORD') ?: ($_ENV['EKART_PASSWORD'] ?? 'Balaji@2026');
+        $this->originPincode = (int)(getenv('EKART_ORIGIN_PINCODE') ?: ($_ENV['EKART_ORIGIN_PINCODE'] ?? 411046));
+        $this->baseUrl = rtrim(getenv('EKART_BASE_URL') ?: ($_ENV['EKART_BASE_URL'] ?? 'https://app.elite.ekartlogistics.in'), '/');
     }
 
     /**
@@ -164,6 +164,7 @@ class EkartService {
                     'height' => 10,
                     'width' => 10,
                     'serviceType' => 'SURFACE',
+                    'shippingDirection' => 'FORWARD',
                     'codAmount' => (strtoupper($paymentMode) === 'COD') ? (float)$orderAmount : 0,
                     'packages' => []
                 ];
