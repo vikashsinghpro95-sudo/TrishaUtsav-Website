@@ -202,7 +202,8 @@ class Product {
             $updatable = [
                 'category_id', 'brand_id', 'occasion_id', 'name', 'slug', 'sku', 'short_description', 
                 'description', 'price', 'mrp', 'tax_rate', 'shipping_charge', 'stock_quantity', 
-                'low_stock_threshold', 'weight', 'dimensions', 'status', 'featured', 'is_trending', 'is_must_buy'
+                'low_stock_threshold', 'weight', 'dimensions', 'status', 'featured', 'is_trending', 'is_must_buy',
+                'meta_title', 'meta_keywords', 'meta_description'
             ];
 
             foreach ($updatable as $field) {

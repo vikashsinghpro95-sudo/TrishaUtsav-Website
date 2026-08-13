@@ -156,6 +156,14 @@ class ProductController {
             $data['slug'] = Helper::slugify($data['slug']);
         }
 
+        // Convert empty string for nullable fields to null
+        $nullableFields = ['sku', 'brand_id', 'occasion_id', 'mrp', 'weight', 'dimensions', 'meta_title', 'meta_keywords', 'meta_description', 'short_description'];
+        foreach ($nullableFields as $nField) {
+            if (array_key_exists($nField, $data) && ($data[$nField] === '' || $data[$nField] === 'null')) {
+                $data[$nField] = null;
+            }
+        }
+
         $validator = new Validator($data);
         $errors = $validator->validate([
             'category_id'    => ['required', 'numeric'],
@@ -176,6 +184,13 @@ class ProductController {
 
         try {
             $productId = $this->productModel->create($data);
+
+            // Invalidate transient API response cache
+            if (session_status() === PHP_SESSION_NONE) { @session_start(); }
+            foreach ($_SESSION as $k => $v) {
+                if (strpos($k, 'prod_cache_') === 0) { unset($_SESSION[$k]); }
+            }
+
             Helper::jsonResponse([
                 'success' => true,
                 'message' => 'Product created successfully.',
@@ -211,9 +226,19 @@ class ProductController {
 
         $data = Helper::getRequestBody();
 
-        // Standardize slug if sent
+        // Standardize or generate slug if sent
         if (!empty($data['slug'])) {
             $data['slug'] = Helper::slugify($data['slug']);
+        } elseif (!empty($data['name'])) {
+            $data['slug'] = Helper::slugify($data['name']);
+        }
+
+        // Convert empty string for nullable fields to null
+        $nullableFields = ['sku', 'brand_id', 'occasion_id', 'mrp', 'weight', 'dimensions', 'meta_title', 'meta_keywords', 'meta_description', 'short_description'];
+        foreach ($nullableFields as $nField) {
+            if (array_key_exists($nField, $data) && ($data[$nField] === '' || $data[$nField] === 'null')) {
+                $data[$nField] = null;
+            }
         }
 
         $validator = new Validator($data);
@@ -225,10 +250,10 @@ class ProductController {
         if (array_key_exists('name', $data)) {
             $rules['name'] = ['required', 'maxLength:255'];
         }
-        if (array_key_exists('slug', $data)) {
+        if (array_key_exists('slug', $data) && !empty($data['slug'])) {
             $rules['slug'] = ['required', "unique:products,slug,$productId", 'maxLength:255'];
         }
-        if (array_key_exists('sku', $data)) {
+        if (array_key_exists('sku', $data) && !empty($data['sku'])) {
             $rules['sku'] = ["unique:products,sku,$productId", 'maxLength:100'];
         }
         if (array_key_exists('price', $data)) {
@@ -246,6 +271,13 @@ class ProductController {
 
         try {
             $this->productModel->update($productId, $data);
+
+            // Invalidate transient API response cache
+            if (session_status() === PHP_SESSION_NONE) { @session_start(); }
+            foreach ($_SESSION as $k => $v) {
+                if (strpos($k, 'prod_cache_') === 0) { unset($_SESSION[$k]); }
+            }
+
             Helper::jsonResponse([
                 'success' => true,
                 'message' => 'Product updated successfully.'
