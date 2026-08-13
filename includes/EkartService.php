@@ -196,6 +196,17 @@ class EkartService {
                         if (isset($rateData['rid']) || isset($rateData['rSnapshotId'])) {
                             $estimateId = (string)($rateData['rid'] ?? $rateData['rSnapshotId']);
                         }
+                        if (isset($rateData['zone'])) {
+                            $zone = strtoupper(trim($rateData['zone']));
+                            switch ($zone) {
+                                case 'A': $estimatedDays = "1-2 Business Days"; break;
+                                case 'B': $estimatedDays = "2-3 Business Days"; break;
+                                case 'C': $estimatedDays = "3-5 Business Days"; break;
+                                case 'D': $estimatedDays = "4-6 Business Days"; break;
+                                case 'E': $estimatedDays = "6-8 Business Days"; break;
+                                default:  $estimatedDays = "3-5 Business Days"; break;
+                            }
+                        }
                         $apiSuccess = true;
                     }
                 }

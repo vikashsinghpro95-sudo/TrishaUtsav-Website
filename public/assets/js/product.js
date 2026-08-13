@@ -669,7 +669,8 @@ const ProductPage = {
 
         try {
             const price = this.product ? parseFloat(this.product.price) : 0;
-            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(pincode) + '&amount=' + price);
+            const weight = this.product && this.product.weight ? parseFloat(this.product.weight) : 0.5;
+            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(pincode) + '&amount=' + price + '&weight=' + weight);
             if (res.success && res.serviceable) {
                 const chargeText = res.shipping_charge === 0 ? 'FREE Shipping' : `Shipping Charge: ${Utils.formatCurrency(res.shipping_charge)}`;
                 resEl.innerHTML = `

@@ -70,11 +70,14 @@ class Cart {
 
         $subtotal = 0.00;
         $totalShippingCharge = 0.00;
+        $totalWeight = 0.0;
         foreach ($items as &$item) {
             $item['price'] = (float)$item['price'];
             $item['quantity'] = (int)$item['quantity'];
+            $item['weight'] = isset($item['weight']) ? (float)$item['weight'] : 0.5;
             $item['item_subtotal'] = round($item['price'] * $item['quantity'], 2);
             $subtotal += $item['item_subtotal'];
+            $totalWeight += ($item['weight'] * $item['quantity']);
             $item['attributes'] = $item['attributes'] ? json_decode($item['attributes'], true) : null;
             
             $itemShipping = isset($item['shipping_charge']) ? (float)$item['shipping_charge'] : 0.00;
@@ -143,6 +146,7 @@ class Cart {
                 'tax'      => $tax,
                 'shipping' => $shipping,
                 'total'    => $total,
+                'total_weight' => round($totalWeight, 3),
                 'applied_coupon' => $appliedCoupon
             ]
         ];

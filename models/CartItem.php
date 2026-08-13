@@ -127,7 +127,7 @@ class CartItem {
      */
     public function getByCart(int $cartId): array {
         $stmt = $this->db->prepare("
-            SELECT ci.*, p.name as product_name, p.slug as product_slug, p.sku, p.tax_rate, p.shipping_charge, p.stock_quantity as available_stock, p.status as product_status,
+            SELECT ci.*, p.name as product_name, p.slug as product_slug, p.sku, p.tax_rate, p.shipping_charge, p.weight, p.stock_quantity as available_stock, p.status as product_status,
                    (SELECT image_url FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order ASC, id ASC LIMIT 1) as primary_image
             FROM cart_items ci
             INNER JOIN products p ON ci.product_id = p.id

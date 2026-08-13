@@ -226,7 +226,8 @@ const CheckoutPage = {
 
         try {
             const subtotal = this.cart?.summary?.subtotal || 0;
-            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(cleanPin) + '&amount=' + subtotal);
+            const weight = this.cart?.summary?.total_weight || 0.5;
+            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(cleanPin) + '&amount=' + subtotal + '&weight=' + weight);
             if (res.success && res.serviceable) {
                 if (badge) {
                     const chargeLabel = Utils.formatCurrency(res.shipping_charge || 49);
