@@ -109,15 +109,13 @@ class EkartService {
 
         $token = $this->getAccessToken();
         $isServiceable = true;
-        $shippingCharge = 0.00;
+        $shippingCharge = 49.00; // Default fallback shipping
         $estimatedDays = "3-5 Business Days";
         $codAvailable = true;
         $city = '';
         $state = '';
         $estimateId = 'EKART_EST_' . time() . '_' . rand(100, 999);
         $apiSuccess = false;
-
-        $isFreeOrder = ($orderAmount >= 499.00);
 
         try {
             // 1. GET /api/v2/serviceability/{pincode}
@@ -193,11 +191,7 @@ class EkartService {
                     $rateData = json_decode($rateResp, true);
                     if (isset($rateData['total']) || isset($rateData['shippingCharge'])) {
                         $rawTotal = (float)($rateData['total'] ?? $rateData['shippingCharge'] ?? 0);
-                        if ($isFreeOrder) {
-                            $shippingCharge = 0.00;
-                        } else {
-                            $shippingCharge = max(0.00, $rawTotal > 0 ? $rawTotal : 49.00);
-                        }
+                        $shippingCharge = $rawTotal > 0 ? $rawTotal : 49.00;
                         if (isset($rateData['rid']) || isset($rateData['rSnapshotId'])) {
                             $estimateId = (string)($rateData['rid'] ?? $rateData['rSnapshotId']);
                         }
@@ -212,7 +206,7 @@ class EkartService {
 
         if (!$apiSuccess) {
             $isServiceable = true;
-            $shippingCharge = $isFreeOrder ? 0.00 : 49.00;
+            $shippingCharge = 49.00;
             $estimatedDays = "3-5 Business Days";
             $message = "Deliverable via Ekart Express (Pune Hub)";
         } else {

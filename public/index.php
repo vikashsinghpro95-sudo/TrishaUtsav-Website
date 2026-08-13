@@ -989,7 +989,7 @@ include_once __DIR__ . '/includes/header.php';
                             </div>
                             <div>
                                 <h4 class="font-display text-xs sm:text-sm font-bold text-[#12090c]">Pan-India Express</h4>
-                                <p class="text-[10px] sm:text-xs text-gray-500">Free shipping on ₹499+</p>
+                                <p class="text-[10px] sm:text-xs text-gray-500">Ekart Express | 3-5 Business Days</p>
                             </div>
                         </div>
 

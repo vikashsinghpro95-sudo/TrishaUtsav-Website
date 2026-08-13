@@ -229,7 +229,7 @@ const CheckoutPage = {
             const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(cleanPin) + '&amount=' + subtotal);
             if (res.success && res.serviceable) {
                 if (badge) {
-                    const chargeLabel = res.shipping_charge === 0 ? 'FREE' : Utils.formatCurrency(res.shipping_charge);
+                    const chargeLabel = Utils.formatCurrency(res.shipping_charge || 49);
                     badge.innerHTML = `
                         <div class="p-3.5 bg-gradient-to-r from-emerald-50/90 via-emerald-50/50 to-teal-50/80 border border-emerald-200/90 rounded-2xl shadow-2xs">
                             <div class="flex items-start justify-between gap-3">
@@ -395,8 +395,8 @@ const CheckoutPage = {
         document.getElementById('co-discount').innerText = '-' + Utils.formatCurrency(summary.discount);
         document.getElementById('co-tax').innerText = Utils.formatCurrency(summary.tax);
 
-        const ship = summary.shipping;
-        document.getElementById('co-shipping').innerHTML = ship > 0 ? Utils.formatCurrency(ship) : '<span class="text-emerald-600 font-bold">Free</span>';
+        const ship = summary.shipping || 0;
+        document.getElementById('co-shipping').innerHTML = Utils.formatCurrency(ship);
 
         document.getElementById('co-total').innerText = Utils.formatCurrency(summary.total);
 

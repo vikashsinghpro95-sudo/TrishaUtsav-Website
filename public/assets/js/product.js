@@ -292,8 +292,8 @@ const ProductPage = {
                     <div class="trust-badge">
                         <div class="trust-icon"><i class="fas fa-truck-fast"></i></div>
                         <div>
-                            <div class="trust-title">Free Delivery</div>
-                            <div class="trust-desc">On orders ₹499+</div>
+                            <div class="trust-title">Fast Delivery</div>
+                            <div class="trust-desc">3-5 Business Days</div>
                         </div>
                     </div>
                     <div class="trust-badge">
@@ -355,7 +355,7 @@ const ProductPage = {
                         </button>
                         <div class="pdp-accordion-body">
                             <div class="pdp-accordion-content space-y-2">
-                                <p><strong>Free shipping</strong> on orders above ₹499. Standard delivery within 5-7 business days.</p>
+                                <p>Delivered via <strong>Ekart Express</strong> from Pune Hub. Standard delivery within <strong>3-5 business days</strong>.</p>
                                 <p>Easy <strong>7-day return policy</strong>. Items must be unused and in original packaging.</p>
                                 <p>For queries, contact our <strong>24/7 support team</strong>.</p>
                             </div>

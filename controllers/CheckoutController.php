@@ -151,8 +151,7 @@ class CheckoutController {
             $summary = $cartDetails['summary'];
 
             // Override shipping with live Ekart estimate if provided by frontend
-            // Free shipping still applies for orders >= ₹499 (takes priority)
-            if ($ekartShippingCharge !== null && $summary['subtotal'] < 499.0) {
+            if ($ekartShippingCharge !== null) {
                 $summary['shipping'] = $ekartShippingCharge;
                 $summary['total'] = round(
                     $summary['subtotal'] - $summary['discount'] + $summary['tax'] + $ekartShippingCharge,
@@ -495,11 +494,8 @@ class CheckoutController {
 
             $subtotal = $unitPrice * $quantity;
 
-            // Use Ekart shipping if provided; free shipping for orders >= ₹499
-            $ekartShippingDirect = isset($data['ekart_shipping_charge']) ? max(0.0, (float)$data['ekart_shipping_charge']) : null;
-            if ($subtotal >= 499.0) {
-                $shippingCharge = 0.0;
-            } elseif ($ekartShippingDirect !== null) {
+            // Use Ekart shipping if provided by frontend
+            if ($ekartShippingDirect !== null) {
                 $shippingCharge = $ekartShippingDirect;
             } else {
                 $shippingCharge = (float)($prod['shipping_charge'] ?? 0) * $quantity;

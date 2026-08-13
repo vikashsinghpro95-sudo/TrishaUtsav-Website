@@ -374,7 +374,7 @@ $wishlistIds = WishlistHelper::getWishlistProductIds();
         <div class="max-w-[1800px] mx-auto px-4 md:px-[50px] flex justify-between items-center">
             <div class="flex items-center space-x-2 text-[10px] sm:text-xs truncate mx-auto sm:mx-0">
                 <span class="bg-[#f59e0b] text-[#12090c] font-black uppercase text-[8px] sm:text-[9px] px-2 py-0.5 rounded-full tracking-widest shadow-sm flex-shrink-0 animate-pulse">Offer</span>
-                <span class="truncate">✨ Free Shipping ₹499+</span>
+                <span class="truncate">🚚 Ekart Express Delivery | 3-5 Business Days Pan India</span>
             </div>
             <div class="hidden sm:flex items-center space-x-6 text-[11px] text-[#fffdf7]/80">
                 <a href="<?php echo BASE_URL; ?>contact" class="hover:text-[#f59e0b] transition"><i class="fas fa-headset mr-1 text-[#f59e0b]"></i> 24/7 Support</a>

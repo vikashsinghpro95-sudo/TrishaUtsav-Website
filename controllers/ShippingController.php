@@ -60,7 +60,7 @@ class ShippingController {
                 'success' => true,
                 'serviceable' => true,
                 'pincode' => $pincode,
-                'shipping_charge' => ($amount >= 499.0) ? 0.0 : 49.0,
+                'shipping_charge' => 49.0,
                 'estimated_days' => '3-5 Business Days',
                 'is_fallback' => true,
                 'message' => 'Standard Ekart Express delivery applicable.'

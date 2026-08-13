@@ -125,11 +125,6 @@ class Cart {
         $subtotal = round($subtotal, 2);
         $discount = round($discount, 2);
         $tax = round($tax, 2);
-        
-        if ($subtotal >= 499) {
-            $shipping = 0.00;
-        }
-        
         $shipping = round($shipping, 2);
         $total = round($subtotal - $discount + $tax + $shipping, 2);
 
