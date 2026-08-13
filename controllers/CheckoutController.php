@@ -54,6 +54,9 @@ class CheckoutController {
         $notes = $data['notes'] ?? null;
         $couponCode = isset($data['coupon_code']) ? trim($data['coupon_code']) : null;
 
+        // Ekart live shipping charge provided by frontend after real-time API estimation
+        $ekartShippingCharge = isset($data['ekart_shipping_charge']) ? max(0.0, (float)$data['ekart_shipping_charge']) : null;
+
         // Check if this is a direct "Buy Now" checkout
         $directToken = $data['direct_order'] ?? $_GET['direct_order'] ?? null;
         if (!empty($directToken)) {
@@ -146,7 +149,20 @@ class CheckoutController {
             // Step 5: Save Order Record
             // ----------------------------------------------------
             $summary = $cartDetails['summary'];
-            
+
+            // Override shipping with live Ekart estimate if provided by frontend
+            // Free shipping still applies for orders >= ₹499 (takes priority)
+            if ($ekartShippingCharge !== null && $summary['subtotal'] < 499.0) {
+                $summary['shipping'] = $ekartShippingCharge;
+                $summary['total'] = round(
+                    $summary['subtotal'] - $summary['discount'] + $summary['tax'] + $ekartShippingCharge,
+                    2
+                );
+                if ($summary['total'] < 0) {
+                    $summary['total'] = 0.0;
+                }
+            }
+
             $isOnlinePayment = in_array($paymentMethod, ['razorpay', 'upi']);
 
             $orderId = $this->orderModel->create([
@@ -478,8 +494,17 @@ class CheckoutController {
             }
 
             $subtotal = $unitPrice * $quantity;
-            $shippingCharge = (float)($prod['shipping_fee'] ?? 0) * $quantity;
-            $grandTotal = $subtotal + $shippingCharge;
+
+            // Use Ekart shipping if provided; free shipping for orders >= ₹499
+            $ekartShippingDirect = isset($data['ekart_shipping_charge']) ? max(0.0, (float)$data['ekart_shipping_charge']) : null;
+            if ($subtotal >= 499.0) {
+                $shippingCharge = 0.0;
+            } elseif ($ekartShippingDirect !== null) {
+                $shippingCharge = $ekartShippingDirect;
+            } else {
+                $shippingCharge = (float)($prod['shipping_charge'] ?? 0) * $quantity;
+            }
+            $grandTotal = round($subtotal + $shippingCharge, 2);
 
             $isOnlinePayment = in_array($paymentMethod, ['razorpay', 'upi']);
 

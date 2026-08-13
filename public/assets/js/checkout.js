@@ -6,6 +6,7 @@ const CheckoutPage = {
     cart: null,
     addresses: [],
     selectedAddressId: null,
+    ekartShippingCharge: null,  // Ekart live estimated shipping charge (null = not yet checked)
 
     /**
      * Initializer
@@ -255,11 +256,14 @@ const CheckoutPage = {
                     `;
                 }
 
-                // Update summary calculations dynamically
-                if (typeof res.shipping_charge !== 'undefined' && this.cart && this.cart.summary) {
-                    this.cart.summary.shipping = res.shipping_charge;
-                    this.cart.summary.total = Math.max(0, (this.cart.summary.subtotal + (this.cart.summary.tax || 0) - (this.cart.summary.discount || 0) + res.shipping_charge));
-                    this.renderSummary();
+                // Store Ekart charge and update summary calculations dynamically
+                if (typeof res.shipping_charge !== 'undefined') {
+                    this.ekartShippingCharge = parseFloat(res.shipping_charge) || 0;
+                    if (this.cart && this.cart.summary) {
+                        this.cart.summary.shipping = this.ekartShippingCharge;
+                        this.cart.summary.total = Math.max(0, (this.cart.summary.subtotal + (this.cart.summary.tax || 0) - (this.cart.summary.discount || 0) + this.ekartShippingCharge));
+                        this.renderSummary();
+                    }
                 }
             } else {
                 if (badge) {
@@ -438,6 +442,11 @@ const CheckoutPage = {
                 notes: notes,
                 coupon_code: this.cart.summary.applied_coupon ? this.cart.summary.applied_coupon.code : null
             };
+
+            // Pass Ekart shipping charge to backend so stored order uses live estimate
+            if (this.ekartShippingCharge !== null) {
+                payload.ekart_shipping_charge = this.ekartShippingCharge;
+            }
 
             if (this.directOrderToken) {
                 payload.direct_order = this.directOrderToken;
