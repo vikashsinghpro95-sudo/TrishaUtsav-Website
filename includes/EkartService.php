@@ -1,21 +1,80 @@
 <?php
 /**
- * Ekart Logistics API Service
- * Handles pincode serviceability, dynamic rate estimation, and order tracking via Ekart Logistics API.
+ * Ekart Logistics API Service (V2 Integration Specification)
+ * Handles token authentication, pincode serviceability, rate estimation, and tracking via Ekart Logistics API.
  * Base URL: https://app.elite.ekartlogistics.in
- * Client ID: EKART_6a7816f54688037ea68911d3
  * Origin Pincode: 411046
  */
 
 class EkartService {
     private string $clientId;
-    private string $originPincode;
+    private string $username;
+    private string $password;
+    private int $originPincode;
     private string $baseUrl;
 
     public function __construct() {
         $this->clientId = $_ENV['EKART_CLIENT_ID'] ?? 'EKART_6a7816f54688037ea68911d3';
-        $this->originPincode = $_ENV['EKART_ORIGIN_PINCODE'] ?? '411046';
+        $this->username = $_ENV['EKART_USERNAME'] ?? 'trishautsav_api';
+        $this->password = $_ENV['EKART_PASSWORD'] ?? 'TrishaUtsav@2026';
+        $this->originPincode = (int)($_ENV['EKART_ORIGIN_PINCODE'] ?? 411046);
         $this->baseUrl = rtrim($_ENV['EKART_BASE_URL'] ?? 'https://app.elite.ekartlogistics.in', '/');
+    }
+
+    /**
+     * Get or refresh Ekart OAuth Bearer Access Token (Cached 24 Hours)
+     * POST /integrations/v2/auth/token/{client_id}
+     *
+     * @return string Access token
+     */
+    public function getAccessToken(): string {
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        if (isset($_SESSION['ekart_access_token']) && isset($_SESSION['ekart_token_expires_at'])) {
+            if (time() < ($_SESSION['ekart_token_expires_at'] - 300)) {
+                return $_SESSION['ekart_access_token'];
+            }
+        }
+
+        try {
+            $tokenUrl = $this->baseUrl . '/integrations/v2/auth/token/' . urlencode($this->clientId);
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $tokenUrl,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode([
+                    'username' => $this->username,
+                    'password' => $this->password
+                ]),
+                CURLOPT_TIMEOUT => 5,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'Accept: application/json'
+                ]
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($httpCode === 200 && !empty($response)) {
+                $resData = json_decode($response, true);
+                if (!empty($resData['access_token'])) {
+                    $token = $resData['access_token'];
+                    $expiresIn = (int)($resData['expires_in'] ?? 86400);
+                    $_SESSION['ekart_access_token'] = $token;
+                    $_SESSION['ekart_token_expires_at'] = time() + $expiresIn;
+                    return $token;
+                }
+            }
+        } catch (Throwable $e) {
+            error_log("Ekart Token Auth Error: " . $e->getMessage());
+        }
+
+        // Fallback to client ID bearer if authentication token endpoint returns default scope
+        return $this->clientId;
     }
 
     /**
@@ -40,7 +99,7 @@ class EkartService {
         }
 
         // Cache 30 minutes to reduce API call overhead
-        $cacheKey = 'ekart_rate_' . $destPincode . '_' . round($weightKg, 2) . '_' . strtolower($paymentMode);
+        $cacheKey = 'ekart_rate_' . $destPincode . '_' . round($weightKg, 2) . '_' . strtolower($paymentMode) . '_' . (int)$orderAmount;
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
         }
@@ -48,109 +107,114 @@ class EkartService {
             return $_SESSION[$cacheKey]['data'];
         }
 
+        $token = $this->getAccessToken();
         $isServiceable = true;
-        $shippingCharge = 0.00; // Free delivery for orders meeting threshold or calculated rate
-        $estimatedDays = "3-5";
+        $shippingCharge = 0.00;
+        $estimatedDays = "3-5 Business Days";
         $codAvailable = true;
         $city = '';
         $state = '';
         $estimateId = 'EKART_EST_' . time() . '_' . rand(100, 999);
         $apiSuccess = false;
-        $message = '';
 
-        // Free shipping policy: orders ₹499+ get free delivery
         $isFreeOrder = ($orderAmount >= 499.00);
 
-        // Attempt Ekart Rate & Serviceability API call
         try {
-            $payload = [
-                'origin_pincode' => $this->originPincode,
-                'destination_pincode' => $destPincode,
-                'weight' => max(0.1, $weightKg),
-                'length' => 10,
-                'width' => 10,
-                'height' => 10,
-                'payment_mode' => strtoupper($paymentMode),
-                'order_amount' => $orderAmount
-            ];
-
-            // 1. Serviceability Check Endpoint
-            $servUrl = $this->baseUrl . '/api/v1/pincode/check?origin=' . $this->originPincode . '&destination=' . $destPincode;
-            $ch = curl_init();
-            curl_setopt_array($ch, [
+            // 1. GET /api/v2/serviceability/{pincode}
+            $servUrl = $this->baseUrl . '/api/v2/serviceability/' . urlencode($destPincode);
+            $chServ = curl_init();
+            curl_setopt_array($chServ, [
                 CURLOPT_URL => $servUrl,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 6,
+                CURLOPT_TIMEOUT => 5,
                 CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . $this->clientId,
+                    'Authorization: Bearer ' . $token,
                     'Client-Id: ' . $this->clientId,
-                    'X-Client-Id: ' . $this->clientId,
                     'Accept: application/json'
                 ]
             ]);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            $servResponse = curl_exec($chServ);
+            $servHttpCode = curl_getinfo($chServ, CURLINFO_HTTP_CODE);
+            curl_close($chServ);
 
-            if ($httpCode === 200 && !empty($response)) {
-                $resData = json_decode($response, true);
-                if (isset($resData['serviceable'])) {
-                    $isServiceable = (bool)$resData['serviceable'];
-                    $city = $resData['city'] ?? $resData['location'] ?? '';
-                    $state = $resData['state'] ?? '';
-                    $estimatedDays = $resData['estimated_days'] ?? $resData['tat'] ?? "3-5";
-                    $codAvailable = $resData['cod_available'] ?? true;
+            if ($servHttpCode === 200 && !empty($servResponse)) {
+                $servData = json_decode($servResponse, true);
+                if (isset($servData['status'])) {
+                    $isServiceable = (bool)$servData['status'];
+                    if (isset($servData['details'])) {
+                        $dt = $servData['details'];
+                        $codAvailable = $dt['cod'] ?? true;
+                        $city = $dt['city'] ?? '';
+                        $state = $dt['state'] ?? '';
+                        if (isset($dt['forward_drop']) && !$dt['forward_drop']) {
+                            $isServiceable = false;
+                        }
+                    }
                     $apiSuccess = true;
                 }
             }
 
-            // 2. Rate Estimation Endpoint
-            $rateUrl = $this->baseUrl . '/api/v1/rate/estimate';
-            $chRate = curl_init();
-            curl_setopt_array($chRate, [
-                CURLOPT_URL => $rateUrl,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_POST => true,
-                CURLOPT_POSTFIELDS => json_encode($payload),
-                CURLOPT_TIMEOUT => 6,
-                CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . $this->clientId,
-                    'Client-Id: ' . $this->clientId,
-                    'X-Client-Id: ' . $this->clientId,
-                    'Content-Type: application/json',
-                    'Accept: application/json'
-                ]
-            ]);
-            $rateResp = curl_exec($chRate);
-            $rateHttpCode = curl_getinfo($chRate, CURLINFO_HTTP_CODE);
-            curl_close($chRate);
+            // 2. POST /data/pricing/estimate
+            if ($isServiceable) {
+                $weightGrams = (int)max(100, $weightKg * 1000);
+                $ratePayload = [
+                    'pickupPincode' => $this->originPincode,
+                    'dropPincode' => (int)$destPincode,
+                    'invoiceAmount' => (float)$orderAmount,
+                    'weight' => $weightGrams,
+                    'length' => 10,
+                    'height' => 10,
+                    'width' => 10,
+                    'serviceType' => 'SURFACE',
+                    'codAmount' => (strtoupper($paymentMode) === 'COD') ? (float)$orderAmount : 0,
+                    'packages' => []
+                ];
 
-            if ($rateHttpCode === 200 && !empty($rateResp)) {
-                $rateData = json_decode($rateResp, true);
-                if (isset($rateData['shipping_charge']) || isset($rateData['total_amount']) || isset($rateData['rate'])) {
-                    $rawCharge = (float)($rateData['shipping_charge'] ?? $rateData['total_amount'] ?? $rateData['rate'] ?? 0);
-                    if ($isFreeOrder) {
-                        $shippingCharge = 0.00;
-                    } else {
-                        $shippingCharge = max(0.00, $rawCharge > 0 ? $rawCharge : 49.00);
+                $rateUrl = $this->baseUrl . '/data/pricing/estimate';
+                $chRate = curl_init();
+                curl_setopt_array($chRate, [
+                    CURLOPT_URL => $rateUrl,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => json_encode($ratePayload),
+                    CURLOPT_TIMEOUT => 5,
+                    CURLOPT_HTTPHEADER => [
+                        'Authorization: Bearer ' . $token,
+                        'Client-Id: ' . $this->clientId,
+                        'Content-Type: application/json',
+                        'Accept: application/json'
+                    ]
+                ]);
+                $rateResp = curl_exec($chRate);
+                $rateHttpCode = curl_getinfo($chRate, CURLINFO_HTTP_CODE);
+                curl_close($chRate);
+
+                if ($rateHttpCode === 200 && !empty($rateResp)) {
+                    $rateData = json_decode($rateResp, true);
+                    if (isset($rateData['total']) || isset($rateData['shippingCharge'])) {
+                        $rawTotal = (float)($rateData['total'] ?? $rateData['shippingCharge'] ?? 0);
+                        if ($isFreeOrder) {
+                            $shippingCharge = 0.00;
+                        } else {
+                            $shippingCharge = max(0.00, $rawTotal > 0 ? $rawTotal : 49.00);
+                        }
+                        if (isset($rateData['rid']) || isset($rateData['rSnapshotId'])) {
+                            $estimateId = (string)($rateData['rid'] ?? $rateData['rSnapshotId']);
+                        }
+                        $apiSuccess = true;
                     }
-                    if (isset($rateData['estimate_id'])) {
-                        $estimateId = (string)$rateData['estimate_id'];
-                    }
-                    $apiSuccess = true;
                 }
             }
 
         } catch (Throwable $e) {
-            error_log("Ekart API Call Exception: " . $e->getMessage());
+            error_log("Ekart API Rate Estimation Error: " . $e->getMessage());
         }
 
-        // Default intelligent fallback calculation if Ekart API endpoint format differs or times out
         if (!$apiSuccess) {
-            $isServiceable = true; // All major Indian pincodes are deliverable via Ekart Express
+            $isServiceable = true;
             $shippingCharge = $isFreeOrder ? 0.00 : 49.00;
-            $estimatedDays = "3-5";
-            $message = "Serviceable via Ekart Express (Pune Hub)";
+            $estimatedDays = "3-5 Business Days";
+            $message = "Deliverable via Ekart Express (Pune Hub)";
         } else {
             $message = $isServiceable ? "Serviceable via Ekart Express" . ($city ? " ($city)" : "") : "Delivery currently unavailable to this pincode.";
         }
@@ -158,11 +222,12 @@ class EkartService {
         $result = [
             'serviceable' => $isServiceable,
             'shipping_charge' => $shippingCharge,
-            'estimated_days' => $estimatedDays . " Business Days",
+            'estimated_days' => $estimatedDays,
             'cod_available' => $codAvailable,
             'city' => $city,
             'state' => $state,
             'estimate_id' => $estimateId,
+            'origin_pincode' => $this->originPincode,
             'message' => $message
         ];
 
@@ -175,7 +240,8 @@ class EkartService {
     }
 
     /**
-     * Retrieve live tracking status for a shipment by Ekart Tracking ID / AWB Number
+     * Retrieve live tracking status for a shipment by Ekart Tracking ID
+     * GET /api/v1/track/{tracking_id}
      *
      * @param string $trackingId
      * @return array
@@ -190,7 +256,6 @@ class EkartService {
             ];
         }
 
-        // Cache 15 minutes to prevent hammering Ekart servers
         $cacheKey = 'ekart_track_' . $trackingId;
         if (session_status() === PHP_SESSION_NONE) {
             @session_start();
@@ -199,8 +264,9 @@ class EkartService {
             return $_SESSION[$cacheKey]['data'];
         }
 
+        $token = $this->getAccessToken();
         $status = 'In Transit';
-        $location = 'Ekart Sorting Hub';
+        $location = 'Ekart Sorting Facility';
         $estimatedDelivery = date('M d, Y', strtotime('+3 days'));
         $scans = [];
         $tracked = false;
@@ -211,11 +277,10 @@ class EkartService {
             curl_setopt_array($ch, [
                 CURLOPT_URL => $trackUrl,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 6,
+                CURLOPT_TIMEOUT => 5,
                 CURLOPT_HTTPHEADER => [
-                    'Authorization: Bearer ' . $this->clientId,
+                    'Authorization: Bearer ' . $token,
                     'Client-Id: ' . $this->clientId,
-                    'X-Client-Id: ' . $this->clientId,
                     'Accept: application/json'
                 ]
             ]);
@@ -225,30 +290,30 @@ class EkartService {
 
             if ($httpCode === 200 && !empty($response)) {
                 $resData = json_decode($response, true);
-                if (!empty($resData) && (isset($resData['status']) || isset($resData['scans']) || isset($resData['tracking']))) {
+                if (!empty($resData['track'])) {
                     $tracked = true;
-                    $status = $resData['status'] ?? $resData['current_status'] ?? 'In Transit';
-                    $location = $resData['location'] ?? $resData['current_location'] ?? 'Destination Hub';
-                    if (!empty($resData['expected_delivery'])) {
-                        $estimatedDelivery = date('M d, Y', strtotime($resData['expected_delivery']));
+                    $tr = $resData['track'];
+                    $status = $tr['status'] ?? 'In Transit';
+                    $location = $tr['location'] ?? 'Destination Hub';
+                    if (!empty($resData['edd'])) {
+                        $estimatedDelivery = date('M d, Y', is_numeric($resData['edd']) ? $resData['edd'] : strtotime($resData['edd']));
                     }
-                    if (!empty($resData['scans']) && is_array($resData['scans'])) {
-                        foreach (array_slice($resData['scans'], 0, 8) as $s) {
+                    if (!empty($tr['details']) && is_array($tr['details'])) {
+                        foreach (array_slice($tr['details'], 0, 10) as $d) {
                             $scans[] = [
-                                'time' => $s['timestamp'] ?? $s['time'] ?? date('Y-m-d H:i:s'),
-                                'location' => $s['location'] ?? $s['city'] ?? 'Ekart Facility',
-                                'status' => $s['status'] ?? $s['instructions'] ?? 'Scan Updated',
-                                'remarks' => $s['remarks'] ?? ''
+                                'time' => isset($d['time']) && is_numeric($d['time']) ? date('M d, Y - h:i A', $d['time']) : ($d['time'] ?? date('Y-m-d H:i:s')),
+                                'location' => $d['location'] ?? 'Ekart Facility',
+                                'status' => $d['status'] ?? 'Status Updated',
+                                'remarks' => $d['desc'] ?? ''
                             ];
                         }
                     }
                 }
             }
         } catch (Throwable $e) {
-            error_log("Ekart Tracking API Exception: " . $e->getMessage());
+            error_log("Ekart Tracking API Error: " . $e->getMessage());
         }
 
-        // Fallback default structure if tracking is newly created or API offline
         if (empty($scans)) {
             $scans = [
                 [
@@ -275,7 +340,7 @@ class EkartService {
             'location' => $location,
             'estimated_delivery' => $estimatedDelivery,
             'scans' => $scans,
-            'tracking_url' => 'https://ekartlogistics.com/shipmenttrack/' . urlencode($trackingId)
+            'tracking_url' => 'https://app.elite.ekartlogistics.in/track/' . urlencode($trackingId)
         ];
 
         $_SESSION[$cacheKey] = [

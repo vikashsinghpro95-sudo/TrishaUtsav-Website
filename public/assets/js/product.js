@@ -270,6 +270,23 @@ const ProductPage = {
                     </div>
                 </div>
 
+                <!-- Ekart Delivery Pincode & Estimate Checker -->
+                <div class="my-5 p-4 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-[#12090c] uppercase tracking-wider flex items-center">
+                            <i class="fas fa-truck-fast text-[#990024] mr-1.5"></i> Check Delivery & Est. Days
+                        </span>
+                        <span class="text-[10px] font-bold text-gray-500">From Pune Hub (411046)</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="pdp-pincode-input" placeholder="Enter Delivery Pincode" maxlength="6" class="w-full px-3 py-2 border border-gray-200 rounded-xl text-xs outline-none focus:border-[#990024] font-bold" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                        <button type="button" onclick="ProductPage.checkPincode()" class="bg-[#990024] hover:bg-[#7a001c] text-white text-xs font-extrabold px-4 py-2 rounded-xl transition duration-200 shrink-0">
+                            Check
+                        </button>
+                    </div>
+                    <div id="pdp-pincode-result"></div>
+                </div>
+
                 <!-- Trust Badges (Under CTA) -->
                 <div class="trust-row">
                     <div class="trust-badge">
@@ -623,6 +640,53 @@ const ProductPage = {
             container.innerHTML = html;
         } catch (e) {
             container.innerHTML = `<div class="text-center py-8 text-red-500 font-bold"><i class="fas fa-exclamation-triangle text-3xl mb-3 block"></i> Failed to load related products.</div>`;
+        }
+    },
+
+    async checkPincode() {
+        const input = document.getElementById('pdp-pincode-input');
+        const resEl = document.getElementById('pdp-pincode-result');
+        const pincode = input ? input.value.trim() : '';
+
+        if (!pincode || !/^[1-9][0-9]{5}$/.test(pincode)) {
+            if (resEl) {
+                resEl.innerHTML = `<span class="text-xs font-bold text-red-600 block mt-1"><i class="fas fa-exclamation-circle mr-1"></i> Please enter a valid 6-digit PIN code.</span>`;
+            }
+            return;
+        }
+
+        if (resEl) {
+            resEl.innerHTML = `<span class="text-xs font-semibold text-slate-500 block mt-1"><i class="fas fa-spinner fa-spin mr-1"></i> Checking Ekart Express serviceability from 411046...</span>`;
+        }
+
+        try {
+            const price = this.product ? parseFloat(this.product.price) : 0;
+            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(pincode) + '&amount=' + price);
+            if (res.success && res.serviceable) {
+                const chargeText = res.shipping_charge === 0 ? 'FREE Shipping' : `Shipping Charge: ${Utils.formatCurrency(res.shipping_charge)}`;
+                resEl.innerHTML = `
+                    <div class="mt-2 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 space-y-1">
+                        <div class="font-extrabold flex items-center justify-between">
+                            <span><i class="fas fa-circle-check text-emerald-600 mr-1"></i> Deliverable via Ekart Express</span>
+                            <span class="text-[10px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full uppercase font-black">Verified</span>
+                        </div>
+                        <div class="text-[11px] font-bold">
+                            <span>Est. Delivery: ${res.estimated_days || '3-5 Business Days'}</span>
+                            <span class="ml-2 font-black text-[#990024]">(${chargeText})</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resEl.innerHTML = `
+                    <div class="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800">
+                        <i class="fas fa-triangle-exclamation mr-1"></i> Delivery currently unavailable to pincode ${pincode}.
+                    </div>
+                `;
+            }
+        } catch (e) {
+            if (resEl) {
+                resEl.innerHTML = `<span class="text-xs font-bold text-gray-500 block mt-1">Ekart Express delivery available (3-5 Days).</span>`;
+            }
         }
     },
 

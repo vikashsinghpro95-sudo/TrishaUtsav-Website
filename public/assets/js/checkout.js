@@ -109,6 +109,26 @@ const CheckoutPage = {
             preselected = this.addresses.find(a => a.type === 'shipping') || this.addresses[0];
         }
         this.selectedAddressId = preselected ? preselected.id : null;
+
+        if (preselected && preselected.pincode) {
+            this.autoCalculateEkartShipping(preselected.pincode);
+        } else {
+            this.renderEkartPromptBadge();
+        }
+
+        // Attach auto listener to new address pincode input
+        setTimeout(() => {
+            const pinInput = document.getElementById('addr-pincode');
+            if (pinInput) {
+                pinInput.addEventListener('input', (e) => {
+                    const p = e.target.value.replace(/[^0-9]/g, '');
+                    if (p.length === 6) {
+                        CheckoutPage.autoCalculateEkartShipping(p);
+                    }
+                });
+            }
+        }, 300);
+
         let html = '<div class="space-y-3 stagger-children">';
         this.addresses.forEach(addr => {
             const isChecked = this.selectedAddressId == addr.id;
@@ -167,46 +187,50 @@ const CheckoutPage = {
 
         const selected = this.addresses.find(a => a.id == id);
         if (selected && selected.pincode) {
-            const input = document.getElementById('checkout-pincode-input');
-            if (input) input.value = selected.pincode;
-            this.checkPincode(selected.pincode);
+            this.autoCalculateEkartShipping(selected.pincode);
         }
     },
 
+    renderEkartPromptBadge() {
+        const badge = document.getElementById('ekart-auto-delivery-badge');
+        if (!badge) return;
+        badge.innerHTML = `
+            <div class="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-center gap-2">
+                <i class="fas fa-info-circle text-amber-600 shrink-0"></i>
+                <span>Enter delivery PIN code to automatically calculate Ekart Express shipping charge and delivery days from Pune Hub (411046).</span>
+            </div>
+        `;
+    },
+
     /**
-     * Check pincode serviceability & rate via Ekart Express
+     * Automatically calculate Ekart shipping rate and delivery estimate for a pincode
      */
-    async checkPincode(pincodeToTest = null) {
-        const pincode = pincodeToTest || document.getElementById('checkout-pincode-input')?.value;
-        const statusEl = document.getElementById('pincode-status-badge');
-        if (!pincode || !/^[1-9][0-9]{5}$/.test(String(pincode).trim())) {
-            if (statusEl) {
-                statusEl.innerHTML = `
-                    <div class="mt-2 p-2.5 bg-amber-50 border border-amber-200/80 rounded-xl text-[11px] font-bold text-amber-800 flex items-center">
-                        <i class="fas fa-exclamation-circle text-amber-600 text-xs mr-2"></i> Please enter a valid 6-digit Indian pincode.
-                    </div>
-                `;
-            }
+    async autoCalculateEkartShipping(pincode) {
+        const badge = document.getElementById('ekart-auto-delivery-badge');
+        const cleanPin = String(pincode).replace(/[^0-9]/g, '').trim();
+
+        if (!cleanPin || cleanPin.length !== 6) {
+            this.renderEkartPromptBadge();
             return;
         }
 
-        if (statusEl) {
-            statusEl.innerHTML = `
-                <div class="mt-2.5 p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between text-xs text-slate-600">
-                    <span class="font-bold inline-flex items-center">
-                        <i class="fas fa-circle-notch fa-spin mr-2 text-[#990024]"></i> Checking Ekart Express serviceability...
-                    </span>
+        if (badge) {
+            badge.innerHTML = `
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 flex items-center gap-2 font-bold">
+                    <i class="fas fa-circle-notch fa-spin text-[#990024]"></i>
+                    <span>Calculating Ekart Express shipping from 411046...</span>
                 </div>
             `;
         }
 
         try {
             const subtotal = this.cart?.summary?.subtotal || 0;
-            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(String(pincode).trim()) + '&amount=' + subtotal);
+            const res = await Api.get('/shipping/check-pincode?pincode=' + encodeURIComponent(cleanPin) + '&amount=' + subtotal);
             if (res.success && res.serviceable) {
-                if (statusEl) {
-                    statusEl.innerHTML = `
-                        <div class="mt-2.5 p-3.5 bg-gradient-to-r from-emerald-50/90 via-emerald-50/50 to-teal-50/80 border border-emerald-200/90 rounded-2xl shadow-2xs transition-all duration-300">
+                if (badge) {
+                    const chargeLabel = res.shipping_charge === 0 ? 'FREE' : Utils.formatCurrency(res.shipping_charge);
+                    badge.innerHTML = `
+                        <div class="p-3.5 bg-gradient-to-r from-emerald-50/90 via-emerald-50/50 to-teal-50/80 border border-emerald-200/90 rounded-2xl shadow-2xs">
                             <div class="flex items-start justify-between gap-3">
                                 <div class="flex items-start gap-2.5 min-w-0">
                                     <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs shrink-0 shadow-xs mt-0.5">
@@ -214,46 +238,44 @@ const CheckoutPage = {
                                     </div>
                                     <div class="min-w-0">
                                         <div class="flex items-center gap-1.5 flex-wrap">
-                                            <span class="text-xs font-black text-emerald-950 tracking-tight">Express Delivery Available</span>
-                                            <span class="text-[9px] font-extrabold uppercase bg-emerald-200/70 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300/60">Ekart</span>
+                                            <span class="text-xs font-black text-emerald-950 tracking-tight">Ekart Express Delivery</span>
+                                            <span class="text-[9px] font-extrabold uppercase bg-emerald-200/70 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-300/60">From 411046</span>
                                         </div>
                                         <p class="text-[11px] font-bold text-emerald-800/90 mt-0.5 truncate">
-                                            <i class="fas fa-location-dot text-emerald-600 mr-1 text-[10px]"></i>${res.city || 'Serviceable Area'}${res.state ? ', ' + res.state : ''}
+                                            Est. Delivery to <span class="font-black text-slate-900">${cleanPin}</span>: <span class="text-[#990024] font-extrabold">${res.estimated_days || '3-5 Business Days'}</span>
                                         </p>
                                     </div>
                                 </div>
                                 <div class="text-right shrink-0 bg-white/90 px-2.5 py-1.5 rounded-xl border border-emerald-200/80 shadow-2xs">
-                                    <span class="block text-[9px] font-extrabold uppercase text-slate-400 tracking-wider">Est. Delivery</span>
-                                    <span class="block text-xs font-black text-[#990024] mt-0.5">${res.estimated_days || '3-5 Days'}</span>
+                                    <span class="block text-[9px] font-extrabold uppercase text-slate-400 tracking-wider">Shipping</span>
+                                    <span class="block text-xs font-black text-[#990024] mt-0.5">${chargeLabel}</span>
                                 </div>
                             </div>
                         </div>
                     `;
                 }
-                
-                // Dynamically update shipping charge in summary
+
+                // Update summary calculations dynamically
                 if (typeof res.shipping_charge !== 'undefined' && this.cart && this.cart.summary) {
                     this.cart.summary.shipping = res.shipping_charge;
                     this.cart.summary.total = Math.max(0, (this.cart.summary.subtotal + (this.cart.summary.tax || 0) - (this.cart.summary.discount || 0) + res.shipping_charge));
                     this.renderSummary();
                 }
             } else {
-                if (statusEl) {
-                    statusEl.innerHTML = `
-                        <div class="mt-2.5 p-3.5 bg-gradient-to-r from-red-50 via-rose-50/60 to-red-50 border border-red-200/90 rounded-2xl shadow-2xs text-xs">
-                            <div class="flex items-start gap-2.5">
-                                <div class="w-8 h-8 rounded-xl bg-red-500 text-white flex items-center justify-center text-xs shrink-0 shadow-xs mt-0.5">
-                                    <i class="fas fa-triangle-exclamation"></i>
-                                </div>
-                                <div>
-                                    <span class="text-xs font-black text-red-950 block">Pincode Not Deliverable</span>
-                                    <p class="text-[11px] font-semibold text-red-800 mt-0.5 leading-relaxed">${res.message || 'Delivery is currently unavailable to this pincode via Ekart Express.'}</p>
-                                </div>
-                            </div>
+                if (badge) {
+                    badge.innerHTML = `
+                        <div class="p-3.5 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-800">
+                            <i class="fas fa-triangle-exclamation mr-1"></i> Delivery currently unavailable to pincode ${cleanPin} via Ekart Express.
                         </div>
                     `;
                 }
             }
+        } catch (e) {
+            if (badge) {
+                badge.innerHTML = `<span class="text-xs text-gray-500 font-bold">Ekart Express standard shipping applied.</span>`;
+            }
+        }
+    },
         } catch (e) {
             if (statusEl) {
                 statusEl.innerHTML = `<span class="text-xs text-gray-500 font-bold">Standard delivery applies.</span>`;
