@@ -338,7 +338,7 @@ const OccasionPage = {
             const productUrl = `${BASE_URL}product?slug=${p.slug}`;
 
             return `
-                <div class="product-card group bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-2xs hover:shadow-xl hover:border-[#990024]/30 transition-all duration-300 flex flex-col justify-between overflow-hidden relative animate-fade-in">
+                <div class="product-card group bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-2xs hover:shadow-xl hover:border-[#990024]/30 transition-all duration-300 flex flex-col justify-between overflow-hidden relative animate-fade-in ${p.stock_quantity <= 0 ? 'grayscale opacity-70 pointer-events-none' : ''}">
                     <!-- Wishlist Heart Button -->
                     ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(p.id) : ''}
 
@@ -364,9 +364,12 @@ const OccasionPage = {
 
 
                         ${p.stock_quantity <= 0 ? `
-                            <span class="absolute top-2.5 right-2.5 bg-gray-900/90 text-white font-black text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md z-10">
-                                Out of Stock
-                            </span>
+                            <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                <div class="bg-white/90 border border-gray-200 rounded-2xl px-4 py-2.5 shadow-xl flex flex-col items-center gap-1">
+                                    <i class="fas fa-clock text-gray-500 text-sm"></i>
+                                    <span class="text-[11px] font-black text-gray-800 uppercase tracking-widest">Coming Soon</span>
+                                </div>
+                            </div>
                         ` : ''}
                     </div>
 

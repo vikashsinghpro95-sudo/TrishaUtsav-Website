@@ -601,11 +601,19 @@ const ProductPage = {
                 const imgUrl = rawImg ? fixFn(rawImg) : placeholder;
 
                 html += `
-                    <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
+                    <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative ${parseInt(p.stock_quantity) <= 0 ? 'grayscale opacity-70 pointer-events-none' : ''}">
                         <!-- Wishlist Heart Button Overlay -->
                         ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(p.id) : ''}
                         <a href="${BASE_URL}product?slug=${p.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
                             <img src="${imgUrl}" alt="${p.name}" onerror="this.onerror=null;this.src='${placeholder}';" loading="lazy" decoding="async" class="w-full h-full object-cover transition-all duration-700 ease-out transform group-hover:scale-110">
+                            ${parseInt(p.stock_quantity) <= 0 ? `
+                                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                    <div class="bg-white/90 border border-gray-200 rounded-2xl px-4 py-2.5 shadow-xl flex flex-col items-center gap-1">
+                                        <i class="fas fa-clock text-gray-500 text-sm"></i>
+                                        <span class="text-[11px] font-black text-gray-800 uppercase tracking-widest">Coming Soon</span>
+                                    </div>
+                                </div>
+                            ` : ''}
                         </a>
 
                         <div class="p-3 sm:p-5 flex flex-col flex-grow">

@@ -600,7 +600,7 @@ include_once __DIR__ . '/includes/header.php';
                         const imgUrl2 = rawImg2 ? fixFn(rawImg2) : null;
 
                         html += `
-                            <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
+                            <div class="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative ${parseInt(prod.stock_quantity) <= 0 ? 'grayscale opacity-70 pointer-events-none' : ''}">
                                 <!-- Wishlist Heart Button Overlay -->
                                 ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(prod.id) : ''}
                                 <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
@@ -612,6 +612,14 @@ include_once __DIR__ . '/includes/header.php';
                                     <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#990024] text-[#fffdf7] text-[8px] sm:text-[9px] font-black px-2 py-0.5 sm:py-1 rounded-full uppercase tracking-wider shadow-md flex items-center z-10">
                                         <i class="fas fa-fire mr-1 text-white"></i> HOT
                                     </span>
+                                    ${parseInt(prod.stock_quantity) <= 0 ? `
+                                        <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                            <div class="bg-white/90 border border-gray-200 rounded-2xl px-4 py-2.5 shadow-xl flex flex-col items-center gap-1">
+                                                <i class="fas fa-clock text-gray-500 text-sm"></i>
+                                                <span class="text-[11px] font-black text-gray-800 uppercase tracking-widest">Coming Soon</span>
+                                            </div>
+                                        </div>
+                                    ` : ''}
                                 </a>
 
                                 <div class="p-3 sm:p-5 flex flex-col flex-grow">
@@ -701,7 +709,7 @@ include_once __DIR__ . '/includes/header.php';
                         const imgUrl2 = rawImg2 ? fixFn(rawImg2) : null;
 
                         html += `
-                            <div class="bg-white rounded-2xl sm:rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative">
+                            <div class="bg-white rounded-2xl sm:rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl overflow-hidden flex flex-col group transition duration-300 relative ${parseInt(prod.stock_quantity) <= 0 ? 'grayscale opacity-70 pointer-events-none' : ''}">
                                 <!-- Wishlist Heart Button Overlay -->
                                 ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(prod.id) : ''}
                                 <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
@@ -712,6 +720,14 @@ include_once __DIR__ . '/includes/header.php';
                                     <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#f59e0b] text-[#12090c] text-[8px] sm:text-[9px] font-black px-2 py-0.5 sm:py-1 rounded-full uppercase tracking-wider shadow-md flex items-center z-10">
                                         <i class="fas fa-star mr-1 text-[#990024]"></i> MUST BUY
                                     </span>
+                                    ${parseInt(prod.stock_quantity) <= 0 ? `
+                                        <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                            <div class="bg-white/90 border border-gray-200 rounded-2xl px-4 py-2.5 shadow-xl flex flex-col items-center gap-1">
+                                                <i class="fas fa-clock text-gray-500 text-sm"></i>
+                                                <span class="text-[11px] font-black text-gray-800 uppercase tracking-widest">Coming Soon</span>
+                                            </div>
+                                        </div>
+                                    ` : ''}
                                 </a>
                                 <div class="p-3 sm:p-5 flex flex-col flex-grow">
                                     <h3 class="font-display text-xs sm:text-sm font-bold text-[#12090c] line-clamp-2 hover:text-[#990024] transition flex-grow">

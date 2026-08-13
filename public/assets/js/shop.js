@@ -272,7 +272,7 @@ const Shop = {
                     const imgUrl2 = rawImg2 ? fixFn(rawImg2) : null;
 
                     html += `
-                        <div class="product-card group bg-white rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl hover:border-[#990024]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative">
+                        <div class="product-card group bg-white rounded-3xl border border-[#f59e0b]/20 shadow-sm hover:shadow-xl hover:border-[#990024]/40 transition-all duration-300 flex flex-col justify-between overflow-hidden relative ${parseInt(prod.stock_quantity) <= 0 ? 'grayscale opacity-70 pointer-events-none' : ''}">
                             <!-- Wishlist Heart Icon Overlay -->
                             ${typeof WishlistManager !== 'undefined' ? WishlistManager.renderHeartButton(prod.id) : ''}
                             <a href="${BASE_URL}product?slug=${prod.slug}" class="relative bg-gray-50 aspect-square overflow-hidden block">
@@ -281,9 +281,12 @@ const Shop = {
                                     <img src="${imgUrl2}" alt="${prod.name}" onerror="this.onerror=null;this.src='${BASE_URL}assets/images/product_placeholder.jpg';" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-0 scale-100 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 ease-out">
                                 ` : ''}
                                 ${parseInt(prod.stock_quantity) <= 0 ? `
-                                    <span class="absolute top-3 left-3 bg-gray-900/90 text-white font-black text-[9px] uppercase tracking-wider px-2.5 py-1 rounded-full shadow-md z-10">
-                                        Out of Stock
-                                    </span>
+                                    <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                                        <div class="bg-white/90 border border-gray-200 rounded-2xl px-4 py-2.5 shadow-xl flex flex-col items-center gap-1">
+                                            <i class="fas fa-clock text-gray-500 text-sm"></i>
+                                            <span class="text-[11px] font-black text-gray-800 uppercase tracking-widest">Coming Soon</span>
+                                        </div>
+                                    </div>
                                 ` : ''}
                             </a>
                             <div class="p-4 sm:p-5 flex flex-col flex-grow justify-between space-y-3">
