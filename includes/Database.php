@@ -24,6 +24,8 @@ class Database {
                     PDO::ATTR_EMULATE_PREPARES   => false,
                 ];
                 self::$instance = new PDO($dsn, DB_USER, DB_PASS, $options);
+                // Set the database session timezone to IST
+                self::$instance->exec("SET time_zone = '+05:30'");
             } catch (PDOException $e) {
                 throw new Exception("Database Connection Error: " . $e->getMessage());
             }

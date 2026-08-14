@@ -3,6 +3,9 @@
  * Application Front Controller & Bootstrapper
  */
 
+// Set Default Timezone to IST (Indian Standard Time)
+date_default_timezone_set('Asia/Kolkata');
+
 // Error & Upload configuration for REST API (suppress display, log errors)
 error_reporting(E_ALL);
 ini_set('display_errors', '0');

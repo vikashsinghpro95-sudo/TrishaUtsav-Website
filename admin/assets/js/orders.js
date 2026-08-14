@@ -52,8 +52,9 @@ const Orders = {
 
                 let html = '';
                 res.data.forEach(ord => {
-                    const date = new Date(ord.created_at).toLocaleDateString('en-IN', {
-                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                    const dateStr = (ord.created_at || '').replace(' ', 'T') + '+05:30';
+                    const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
                     });
 
                     let statusClass = 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
@@ -154,8 +155,9 @@ const Orders = {
                 document.getElementById('ord-customer-email').innerText = ord.email || ord.guest_email || 'N/A';
                 document.getElementById('ord-customer-phone').innerText = ord.shipping_address ? ord.shipping_address.phone : (ord.phone || 'N/A');
 
-                const date = new Date(ord.created_at).toLocaleDateString('en-IN', {
-                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                const dateStr = (ord.created_at || '').replace(' ', 'T') + '+05:30';
+                const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
                 });
                 document.getElementById('ord-date').innerText = date;
 
@@ -306,8 +308,9 @@ const Orders = {
 
         let html = '<div class="flow-root"><ul role="list" class="-mb-8">';
         logs.forEach((log, idx) => {
-            const date = new Date(log.created_at).toLocaleDateString('en-IN', {
-                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            const dateStr = (log.created_at || '').replace(' ', 'T') + '+05:30';
+            const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
             });
             const isLast = idx === logs.length - 1;
 
@@ -357,8 +360,9 @@ const Orders = {
 
         let html = '<ul role="list" class="divide-y divide-slate-200 dark:divide-slate-800">';
         payments.forEach(pay => {
-            const date = new Date(pay.created_at).toLocaleDateString('en-IN', {
-                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            const dateStr = (pay.created_at || '').replace(' ', 'T') + '+05:30';
+            const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
             });
 
             let statusClass = 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300';
@@ -395,8 +399,9 @@ const Orders = {
 
         let html = '<ul role="list" class="divide-y divide-slate-200 dark:divide-slate-800">';
         shipments.forEach(ship => {
-            const shipDate = ship.shipped_at ? new Date(ship.shipped_at).toLocaleDateString('en-IN', {
-                year: 'numeric', month: 'short', day: 'numeric'
+            const shipDateStr = ship.shipped_at ? ship.shipped_at.replace(' ', 'T') + '+05:30' : '';
+            const shipDate = shipDateStr ? new Date(shipDateStr).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
             }) : 'Pending';
 
             html += `

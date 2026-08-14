@@ -198,8 +198,9 @@ include_once __DIR__ . '/includes/header.php';
             const container = document.getElementById('order-detail-container');
             const ord = this.order;
 
-            const date = new Date(ord.created_at).toLocaleDateString('en-IN', {
-                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            const dateStr = (ord.created_at || '').replace(' ', 'T') + '+05:30';
+            const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
             });
 
             // Status badges styling

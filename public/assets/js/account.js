@@ -503,8 +503,9 @@ const Account = {
         `;
 
         orders.forEach(ord => {
-            const date = new Date(ord.created_at).toLocaleDateString('en-IN', {
-                year: 'numeric', month: 'short', day: 'numeric'
+            const dateStr = (ord.created_at || '').replace(' ', 'T') + '+05:30';
+            const date = new Date(dateStr).toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
             });
 
             // Status pills
