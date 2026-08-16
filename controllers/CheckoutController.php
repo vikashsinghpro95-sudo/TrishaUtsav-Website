@@ -135,9 +135,13 @@ class CheckoutController {
             $orderExists = true;
             $stmtCheckORD = $this->db->prepare("SELECT COUNT(*) FROM orders WHERE order_number = ?");
             
+            $countStmt = $this->db->query("SELECT COUNT(*) FROM orders");
+            $orderCount = (int)$countStmt->fetchColumn() + 1;
+            $productId = $items[0]['product_id'] ?? 0;
+            
             while ($orderExists) {
                 $rand = strtoupper(bin2hex(random_bytes(2))); // 4 chars
-                $orderNumber = 'ORD-' . date('Ymd') . '-' . $rand;
+                $orderNumber = "INV-P{$productId}-{$orderCount}-{$rand}";
                 
                 $stmtCheckORD->execute([$orderNumber]);
                 if ((int)$stmtCheckORD->fetchColumn() === 0) {
@@ -483,9 +487,13 @@ class CheckoutController {
             $orderNumber = '';
             $orderExists = true;
             $stmtCheckORD = $this->db->prepare("SELECT COUNT(*) FROM orders WHERE order_number = ?");
+            
+            $countStmt = $this->db->query("SELECT COUNT(*) FROM orders");
+            $orderCount = (int)$countStmt->fetchColumn() + 1;
+            
             while ($orderExists) {
                 $rand = strtoupper(bin2hex(random_bytes(2)));
-                $orderNumber = 'ORD-' . date('Ymd') . '-' . $rand;
+                $orderNumber = "INV-P{$productId}-{$orderCount}-{$rand}";
                 $stmtCheckORD->execute([$orderNumber]);
                 if ((int)$stmtCheckORD->fetchColumn() === 0) {
                     $orderExists = false;

@@ -278,20 +278,9 @@ include_once __DIR__ . '/includes/header.php';
                     </div>
 
                     <div class="payment-methods-grid" id="payment-methods">
-                        <!-- COD -->
-                        <label class="pm-card active" data-method="cod" onclick="CheckoutPage.selectPayment(this, 'cod')">
-                            <input type="radio" name="payment_method" value="cod" checked class="sr-only">
-                            <div class="pm-radio"></div>
-                            <div class="pm-icon"><i class="fas fa-box"></i></div>
-                            <div class="pm-details">
-                                <h4>Cash on Delivery</h4>
-                                <p>Pay when you receive the order</p>
-                            </div>
-                        </label>
-
                         <!-- Razorpay -->
-                        <label class="pm-card" data-method="razorpay" onclick="CheckoutPage.selectPayment(this, 'razorpay')">
-                            <input type="radio" name="payment_method" value="razorpay" class="sr-only">
+                        <label class="pm-card active" data-method="razorpay" onclick="CheckoutPage.selectPayment(this, 'razorpay')">
+                            <input type="radio" name="payment_method" value="razorpay" checked class="sr-only">
                             <div class="pm-radio"></div>
                             <div class="pm-icon"><i class="fas fa-credit-card"></i></div>
                             <div class="pm-details">
