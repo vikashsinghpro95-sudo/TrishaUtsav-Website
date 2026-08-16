@@ -71,11 +71,16 @@ return [
         // Admin Reels & Occasions
         '/^\/api\/admin\/reels$/' => 'ReelController@create',
         '/^\/api\/admin\/occasions$/' => 'OccasionController@create',
+        // Admin Settings
+        '/^\/api\/admin\/settings$/' => 'SettingsController@update',
         // Newsletter
         '/^\/api\/newsletter\/subscribe$/' => 'NewsletterController@subscribe',
     ],
     'GET' => [
+        '/^\/api\/generate-invoices$/' => 'OrderController@generatePastInvoices',
+        
         '/^\/api\/auth\/me$/' => 'AuthController@me',
+        '/^\/api\/auth\/admin\/me$/' => 'AuthController@adminMe',
         '/^\/api\/categories$/' => 'CategoryController@index',
         '/^\/api\/categories-products$/' => 'CategoryController@products',
         '/^\/api\/categories\/([a-zA-Z0-9\-_]+)$/' => 'CategoryController@show',
